@@ -6,6 +6,8 @@ FROM node:20-alpine AS assets
 WORKDIR /app
 
 COPY package.json package-lock.json ./
+# The desktop app's Electron tooling is in devDependencies; the web build does not need its large download.
+ENV ELECTRON_SKIP_BINARY_DOWNLOAD=1
 RUN npm ci
 
 COPY vite.config.js tailwind.config.js postcss.config.js ./

@@ -1,9 +1,18 @@
 {
+    "name": "cove",
+    "version": "1.0.0",
+    "description": "Notes, tasks and commands that stay on your computer.",
+    "author": "Cove",
     "private": true,
     "type": "module",
+    "main": "desktop/main.cjs",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "desktop:icons": "node desktop/make-icons.cjs",
+        "desktop:stage": "vite build && node desktop/prepare.cjs",
+        "desktop": "npm run desktop:stage && electron .",
+        "desktop:dist": "npm run desktop:stage && electron-builder --win"
     },
     "devDependencies": {
         "autoprefixer": "^10.5.4",
@@ -11,9 +20,73 @@
         "laravel-vite-plugin": "^1.0.0",
         "postcss": "^8.5.26",
         "tailwindcss": "^3.4.19",
-        "vite": "^5.0.0"
+        "vite": "^5.0.0",
+        "electron": "33.4.11",
+        "electron-builder": "25.1.8"
     },
     "dependencies": {
         "alpinejs": "^3.16.1"
+    },
+    "build": {
+        "appId": "com.cove.app",
+        "productName": "Cove",
+        "copyright": "Copyright (c) 2026 Cove",
+        "directories": {
+            "output": "release",
+            "buildResources": "build"
+        },
+        "files": [
+            "desktop/main.cjs",
+            "package.json"
+        ],
+        "extraResources": [
+            {
+                "from": "build-stage/php",
+                "to": "php"
+            },
+            {
+                "from": "build-stage/app",
+                "to": "app"
+            },
+            {
+                "from": "build/icon.ico",
+                "to": "icon.ico"
+            }
+        ],
+        "win": {
+            "icon": "build/icon.ico",
+            "artifactName": "Cove-${version}-win.${ext}",
+            "target": [
+                {
+                    "target": "msi",
+                    "arch": [
+                        "x64"
+                    ]
+                },
+                {
+                    "target": "zip",
+                    "arch": [
+                        "x64"
+                    ]
+                },
+                {
+                    "target": "portable",
+                    "arch": [
+                        "x64"
+                    ]
+                }
+            ]
+        },
+        "msi": {
+            "oneClick": false,
+            "perMachine": false,
+            "createDesktopShortcut": true,
+            "createStartMenuShortcut": true,
+            "runAfterFinish": true,
+            "artifactName": "Cove-Setup-${version}.${ext}"
+        },
+        "portable": {
+            "artifactName": "Cove-Portable-${version}.${ext}"
+        }
     }
 }

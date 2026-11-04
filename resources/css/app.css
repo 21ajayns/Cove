@@ -1,8 +1,137 @@
+@import './fonts.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Theme variables are RGB triplets so Tailwind can add opacity. Dark is the original look; light is "Eucalyptus". */
 @layer base {
+    :root {
+        color-scheme: dark;
+
+        --ink-950: 18 14 10;
+        --ink-900: 23 19 15;
+        --ink-850: 28 23 18;
+        --ink-800: 34 28 22;
+        --ink-700: 43 32 25;
+        --ink-600: 54 44 33;
+        --ink-500: 168 154 134;
+        --ink-400: 194 182 164;
+        --ink-300: 216 205 190;
+        --ink-100: 245 239 230;
+
+        --fg: 255 255 255;
+        --fg-boost: 1;
+        --surface: 23 19 15;
+        --surface-2: 28 23 18;
+
+        --accent: 162 62 76;
+        --accent-deep: 138 47 60;
+        --accent-hover: 181 80 94;
+        --accent-deep-hover: 156 63 77;
+        --accent-soft: 217 138 150;
+
+        --tab-on: 54 44 33;
+        --tab-icon: 232 164 85;
+        --tabs-track: rgba(0, 0, 0, 0.28);
+        --cmd: 243 201 139;
+        --folder-accent: 245 158 11;
+
+        --amber-400: 251 191 36;
+        --amber-500: 245 158 11;
+        --amber-600: 217 119 6;
+        --amber-700: 180 83 9;
+        --red-300: 252 165 165;
+        --red-400: 248 113 113;
+        --red-500: 239 68 68;
+        --emerald-400: 52 211 153;
+        --emerald-500: 16 185 129;
+        --blue-400: 96 165 250;
+        --blue-500: 59 130 246;
+
+        --btn-from: var(--amber-600);
+        --btn-to: var(--amber-700);
+        --btn-hover-from: var(--amber-500);
+        --btn-hover-to: var(--amber-600);
+
+        --st-critical: 239 68 68;
+        --st-active: 96 165 250;
+        --st-upcoming: 251 191 36;
+        --st-completed: 52 211 153;
+
+        --logo-a: 232 164 85;
+        --logo-b: 162 62 76;
+        --logo-wave2: 201 86 106;
+        --splash-1: #2a1a12;
+        --splash-2: #120e0a;
+
+        --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
+        --shadow-popover: 0 12px 32px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    :root[data-theme='light'] {
+        color-scheme: light;
+
+        --ink-950: 247 251 250;
+        --ink-900: 224 239 235;
+        --ink-850: 255 255 255;
+        --ink-800: 238 246 244;
+        --ink-700: 220 235 230;
+        --ink-600: 184 207 201;
+        --ink-500: 76 107 105;
+        --ink-400: 53 82 80;
+        --ink-300: 38 64 63;
+        --ink-100: 19 41 42;
+
+        --fg: 19 41 42;
+        --fg-boost: 2.2;
+        --surface: 255 255 255;
+        --surface-2: 238 246 244;
+
+        --accent: 31 122 107;
+        --accent-deep: 22 94 82;
+        --accent-hover: 39 143 126;
+        --accent-deep-hover: 28 114 98;
+        --accent-soft: 22 94 82;
+
+        --tab-on: 255 255 255;
+        --tab-icon: 31 122 107;
+        --tabs-track: #d4e7e2;
+        --cmd: 138 100 16;
+        --folder-accent: 138 100 16;
+
+        --amber-400: 138 100 16;
+        --amber-500: 138 100 16;
+        --amber-600: 31 122 107;
+        --amber-700: 22 94 82;
+        --red-300: 154 52 38;
+        --red-400: 179 64 47;
+        --red-500: 179 64 47;
+        --emerald-400: 22 120 80;
+        --emerald-500: 22 120 80;
+        --blue-400: 37 87 184;
+        --blue-500: 37 87 184;
+
+        --btn-from: 31 122 107;
+        --btn-to: 22 94 82;
+        --btn-hover-from: 39 143 126;
+        --btn-hover-to: 31 122 107;
+
+        --st-critical: 185 28 28;
+        --st-active: 37 99 235;
+        --st-upcoming: 161 98 7;
+        --st-completed: 21 128 61;
+
+        --logo-a: 85 184 165;
+        --logo-b: 31 122 107;
+        --logo-wave2: 31 122 107;
+        --splash-1: #e3f1ed;
+        --splash-2: #f7fbfa;
+
+        --shadow-card: 0 1px 2px rgba(19, 41, 42, 0.08);
+        --shadow-popover: 0 12px 32px rgba(19, 41, 42, 0.16), 0 2px 8px rgba(19, 41, 42, 0.08);
+    }
+
     html,
     body {
         height: 100%;
@@ -23,11 +152,11 @@
     }
 
     ::-webkit-scrollbar-thumb {
-        @apply bg-white/10 rounded-full;
+        @apply bg-fg/10 rounded-full;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-        @apply bg-white/20;
+        @apply bg-fg/20;
     }
 }
 
@@ -37,77 +166,55 @@
     }
 
     .btn-primary {
-        @apply btn bg-gradient-to-b from-amber-600 to-amber-700 text-white px-5 py-2.5 shadow-[0_1px_0_0_rgba(255,255,255,0.16)_inset,0_1px_3px_rgba(0,0,0,0.5)] hover:from-amber-500 hover:to-amber-600;
+        @apply btn text-white px-5 py-2.5 shadow-[0_1px_0_0_rgba(255,255,255,0.16)_inset,0_1px_3px_rgba(0,0,0,0.5)];
+        background-image: linear-gradient(to bottom, rgb(var(--btn-from)), rgb(var(--btn-to)));
+    }
+
+    .btn-primary:hover {
+        background-image: linear-gradient(to bottom, rgb(var(--btn-hover-from)), rgb(var(--btn-hover-to)));
     }
 
     .btn-secondary {
-        @apply btn bg-white/[0.06] text-ink-100 border border-white/10 px-5 py-2.5 hover:bg-white/[0.1];
+        @apply btn bg-fg/[0.06] text-ink-100 border border-fg/10 px-5 py-2.5 hover:bg-fg/[0.1];
     }
 
     .btn-ghost {
-        @apply btn text-ink-400 hover:bg-white/[0.06] hover:text-ink-100 px-3.5 py-2;
+        @apply btn text-ink-400 hover:bg-fg/[0.06] hover:text-ink-100 px-3.5 py-2;
     }
 
     .input-field {
-        @apply w-full rounded-xl bg-white/[0.04] border border-white/10 px-3.5 py-2.5 text-sm text-ink-100 placeholder-ink-500 outline-none transition duration-150 focus:border-amber-600/60 focus:ring-4 focus:ring-amber-600/10;
+        @apply w-full rounded-xl bg-fg/[0.04] border border-fg/10 px-3.5 py-2.5 text-sm text-ink-100 placeholder-ink-500 outline-none transition duration-150 focus:border-amber-600/60 focus:ring-4 focus:ring-amber-600/10;
     }
 
     .card {
-        @apply rounded-2xl bg-ink-850 border border-white/[0.06] shadow-card transition-all duration-150;
+        @apply rounded-2xl bg-ink-850 border border-fg/[0.06] shadow-card transition-all duration-150;
     }
 
     .tile {
-        @apply relative cursor-pointer p-5 flex flex-col gap-2.5 bg-ink-850 border border-white/[0.07] transition-colors duration-150 hover:bg-ink-800 hover:border-white/[0.16];
+        @apply relative cursor-pointer p-5 flex flex-col gap-2.5 bg-ink-850 border border-fg/[0.07] transition-colors duration-150 hover:bg-ink-800 hover:border-fg/[0.16];
     }
 
     .tile-folder {
-        @apply tile shadow-[inset_0_2px_0_0_rgba(245,158,11,0.7)];
+        @apply tile;
+        box-shadow: inset 0 2px 0 0 rgb(var(--folder-accent) / 0.7);
     }
 
     .tile-note {
-        @apply tile shadow-[inset_3px_0_0_0_rgba(162,62,76,0.8)];
+        @apply tile;
+        box-shadow: inset 3px 0 0 0 rgb(var(--accent) / 0.8);
     }
 
     .tile-action {
         @apply w-7 h-7 flex items-center justify-center text-ink-500;
     }
 
-    .ledger-stat {
-        @apply flex flex-col items-start gap-1 px-4 py-3.5 text-left bg-ink-900 border-r border-white/[0.07] last:border-r-0 transition-colors duration-150 hover:bg-ink-850;
-        box-shadow: inset 0 2px 0 0 transparent;
-    }
-
-    .ledger-stat-active {
-        @apply bg-ink-850;
-        box-shadow: inset 0 2px 0 0 var(--c);
-    }
-
-    .ledger-row {
-        @apply relative grid items-center gap-3 pl-5 pr-3 min-h-[48px] bg-ink-900 border-b border-white/[0.07] last:border-b-0 transition-colors duration-150 hover:bg-ink-850;
-        grid-template-columns: 18px 24px minmax(0, 1fr) 130px 44px 28px;
-    }
-
-    .ledger-row::before {
-        content: '';
-        @apply absolute left-0 top-0 bottom-0 w-[3px];
-        background: var(--c);
-    }
-
-    .ledger-head {
-        @apply min-h-[34px] bg-ink-850 text-[10px] font-semibold uppercase tracking-widest text-ink-500 hover:bg-ink-850;
-    }
-
-    .ledger-head::before {
-        display: none;
-    }
-
     .cmd-row {
-        @apply grid items-center gap-3 px-4 min-h-[46px] bg-ink-900 border-b border-white/[0.07] last:border-b-0 transition-colors duration-150 hover:bg-ink-850;
+        @apply grid items-center gap-3 px-4 min-h-[46px] bg-surface border-b border-fg/[0.07] last:border-b-0 transition-colors duration-150 hover:bg-surface-2;
         grid-template-columns: 28px minmax(130px, 1fr) minmax(0, 1.8fr) 72px;
     }
 
     .cmd-list-row {
-        @apply relative grid items-center gap-3 pl-5 pr-3 min-h-[50px] bg-ink-900 border-b border-white/[0.07] last:border-b-0 transition-colors duration-150 hover:bg-ink-850;
+        @apply relative grid items-center gap-3 pl-5 pr-3 min-h-[50px] bg-surface border-b border-fg/[0.07] last:border-b-0 transition-colors duration-150 hover:bg-surface-2;
         grid-template-columns: 18px minmax(160px, 1fr) minmax(0, 1.6fr) 44px 64px;
     }
 
@@ -118,45 +225,25 @@
     }
 
     .cmd-head {
-        @apply min-h-[34px] bg-ink-850 text-[10px] font-semibold uppercase tracking-widest text-ink-500 hover:bg-ink-850;
+        @apply min-h-[34px] bg-surface-2 text-[10px] font-semibold uppercase tracking-widest text-ink-500 hover:bg-surface-2;
     }
 
     .ledger-kbd {
-        @apply font-mono text-[11px] leading-none px-1.5 py-1 border border-white/[0.16] text-ink-400;
+        @apply font-mono text-[11px] leading-none px-1.5 py-1 border border-fg/[0.16] text-ink-400;
     }
 
-    .flip-card {
-        perspective: 800px;
+    .tabs-track {
+        background: var(--tabs-track);
     }
 
-    .flip-card-inner {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
-        transform-style: preserve-3d;
+    .theme-sun,
+    .theme-moon {
+        display: none;
     }
 
-    .flip-card-flipped {
-        transform: rotateY(180deg);
-    }
-
-    .flip-face {
-        position: absolute;
-        inset: 0;
-        backface-visibility: hidden;
-        border-radius: 0.75rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        font-weight: 600;
-        color: white;
-        font-size: 0.875rem;
-    }
-
-    .flip-face-back {
-        transform: rotateY(180deg);
+    :root[data-theme='dark'] .theme-sun,
+    :root[data-theme='light'] .theme-moon {
+        display: block;
     }
 
     .pill {
@@ -172,14 +259,20 @@
     }
 
     .sidebar-item {
-        @apply flex items-center gap-2 rounded-lg text-[13px] font-medium text-ink-400 transition-colors duration-100 hover:bg-white/[0.05] hover:text-ink-100;
+        @apply flex items-center gap-2 rounded-lg text-[13px] font-medium text-ink-400 transition-colors duration-100 hover:bg-fg/[0.05] hover:text-ink-100;
     }
 
     .sidebar-item-active {
-        @apply bg-white/[0.08] text-white;
+        @apply bg-fg/[0.08] text-fg;
     }
 
     .icon-chip {
-        @apply w-5 h-5 flex items-center justify-center rounded-md bg-white/[0.05] text-ink-400 shrink-0;
+        @apply w-5 h-5 flex items-center justify-center rounded-md bg-fg/[0.05] text-ink-400 shrink-0;
     }
+}
+
+/* In light mode the active sidebar row is a raised white chip, like the active tab */
+:root[data-theme='light'] .sidebar-item-active {
+    background-color: rgb(var(--surface));
+    box-shadow: var(--shadow-card);
 }

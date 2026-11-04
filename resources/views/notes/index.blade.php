@@ -5,15 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Cove</title>
-    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg?v=2">
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png?v=2">
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png?v=2">
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-180.png?v=2">
-    <link rel="manifest" href="/manifest.json?v=2">
-    <meta name="theme-color" content="#120e0a">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Silkscreen:wght@400;700&family=Orbitron:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg?v=3">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png?v=3">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png?v=3">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-180.png?v=3">
+    <link rel="manifest" href="/manifest.json?v=3">
+    <meta name="theme-color" content="#f7fbfa">
+    @include('partials.theme-init')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-ink-950 text-ink-100 antialiased font-sans text-sm">
@@ -31,15 +29,15 @@
         @click="showSplash = false"
         @keydown.window="showSplash = false"
         class="fixed inset-0 z-[100] flex flex-col items-center justify-center cursor-pointer select-none"
-        style="background: radial-gradient(circle at 50% 42%, #2a1a12 0%, #120e0a 65%);"
+        style="background: radial-gradient(circle at 50% 42%, var(--splash-1) 0%, var(--splash-2) 65%);"
     >
         <div class="relative w-28 h-28 sm:w-36 sm:h-36 flex items-center justify-center">
-            <div class="absolute inset-0 rounded-full animate-[spin_9s_linear_infinite]" style="border:1px solid rgba(232,164,85,0.18); border-top-color:#E8A455; border-right-color:#A23E4C;"></div>
+            <div class="absolute inset-0 rounded-full animate-[spin_9s_linear_infinite]" style="border:1px solid rgb(var(--logo-a) / 0.18); border-top-color:rgb(var(--logo-a)); border-right-color:rgb(var(--logo-b));"></div>
             <svg viewBox="0 0 64 64" class="w-14 h-14 sm:w-16 sm:h-16" role="img" aria-label="Cove">
                 <defs>
                     <linearGradient id="coveGradSplash" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#E8A455"/>
-                        <stop offset="100%" stop-color="#A23E4C"/>
+                        <stop offset="0%" style="stop-color: rgb(var(--logo-a))"/>
+                        <stop offset="100%" style="stop-color: rgb(var(--logo-b))"/>
                     </linearGradient>
                     <filter id="coveGlowSplash" x="-60%" y="-60%" width="220%" height="220%">
                         <feGaussianBlur stdDeviation="2.6" result="blur"/>
@@ -49,15 +47,14 @@
                         </feMerge>
                     </filter>
                 </defs>
-                <line x1="32" y1="10" x2="32" y2="3" stroke="url(#coveGradSplash)" stroke-width="2" stroke-linecap="round" filter="url(#coveGlowSplash)"/>
-                <path d="M43 13 A22 22 0 1 0 43 51" fill="none" stroke="url(#coveGradSplash)" stroke-width="4" stroke-linecap="round" filter="url(#coveGlowSplash)"/>
-                <circle cx="43" cy="13" r="3" fill="#E8A455" filter="url(#coveGlowSplash)"/>
-                <circle cx="43" cy="51" r="3" fill="#A23E4C" filter="url(#coveGlowSplash)"/>
+                <path d="M44 12 A23 23 0 1 0 44 52" fill="none" stroke="url(#coveGradSplash)" stroke-width="4" stroke-linecap="round" filter="url(#coveGlowSplash)"/>
+                <path d="M24 27 q4.5 -5 9 0 t9 0" fill="none" style="stroke: rgb(var(--logo-a))" stroke-width="3" stroke-linecap="round" filter="url(#coveGlowSplash)"/>
+                <path d="M24 37 q4.5 -5 9 0 t9 0" fill="none" style="stroke: rgb(var(--logo-wave2))" stroke-width="3" stroke-linecap="round" filter="url(#coveGlowSplash)"/>
             </svg>
         </div>
         <span
             class="mt-6 text-3xl sm:text-4xl font-bold tracking-[0.3em]"
-            style="font-family: 'Orbitron', sans-serif; background: linear-gradient(135deg, #E8A455, #A23E4C); -webkit-background-clip: text; background-clip: text; color: transparent;"
+            style="font-family: 'Orbitron', sans-serif; background: linear-gradient(135deg, rgb(var(--logo-a)), rgb(var(--logo-b))); -webkit-background-clip: text; background-clip: text; color: transparent;"
         >COVE</span>
         <div class="mt-10 flex flex-col items-center gap-2 text-ink-500">
             <span class="text-xs font-semibold uppercase tracking-[0.2em]">Press anywhere to continue</span>
@@ -67,16 +64,16 @@
         </div>
     </div>
 
-    <!-- Icon rail -->
-    <div class="w-16 shrink-0 bg-ink-950 border-r border-white/[0.06] flex flex-col items-center py-4 gap-3">
-        <div class="w-9 h-9 flex items-center justify-center">
-            <svg viewBox="0 0 64 64" class="w-full h-full" role="img" aria-label="Cove">
+    <!-- Sidebar -->
+    <aside class="w-72 shrink-0 bg-ink-900 border-r border-fg/[0.06] flex flex-col">
+        <div class="px-4 pt-4 flex items-center gap-2.5">
+            <svg viewBox="0 0 64 64" class="w-8 h-8 shrink-0" role="img" aria-label="Cove">
                 <defs>
-                    <linearGradient id="coveGradRail" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#E8A455"/>
-                        <stop offset="100%" stop-color="#A23E4C"/>
+                    <linearGradient id="coveGradSide" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" style="stop-color: rgb(var(--logo-a))"/>
+                        <stop offset="100%" style="stop-color: rgb(var(--logo-b))"/>
                     </linearGradient>
-                    <filter id="coveGlowRail" x="-60%" y="-60%" width="220%" height="220%">
+                    <filter id="coveGlowSide" x="-60%" y="-60%" width="220%" height="220%">
                         <feGaussianBlur stdDeviation="1.6" result="blur"/>
                         <feMerge>
                             <feMergeNode in="blur"/>
@@ -84,79 +81,63 @@
                         </feMerge>
                     </filter>
                 </defs>
-                <line x1="32" y1="10" x2="32" y2="3" stroke="url(#coveGradRail)" stroke-width="2" stroke-linecap="round" filter="url(#coveGlowRail)"/>
-                <path d="M43 13 A22 22 0 1 0 43 51" fill="none" stroke="url(#coveGradRail)" stroke-width="4" stroke-linecap="round" filter="url(#coveGlowRail)"/>
-                <circle cx="43" cy="13" r="3" fill="#E8A455" filter="url(#coveGlowRail)"/>
-                <circle cx="43" cy="51" r="3" fill="#A23E4C" filter="url(#coveGlowRail)"/>
+                <path d="M44 12 A23 23 0 1 0 44 52" fill="none" stroke="url(#coveGradSide)" stroke-width="4" stroke-linecap="round" filter="url(#coveGlowSide)"/>
+                <path d="M24 27 q4.5 -5 9 0 t9 0" fill="none" style="stroke: rgb(var(--logo-a))" stroke-width="3" stroke-linecap="round" filter="url(#coveGlowSide)"/>
+                <path d="M24 37 q4.5 -5 9 0 t9 0" fill="none" style="stroke: rgb(var(--logo-wave2))" stroke-width="3" stroke-linecap="round" filter="url(#coveGlowSide)"/>
             </svg>
+            <span
+                class="text-sm font-bold tracking-[0.14em]"
+                style="font-family: 'Orbitron', sans-serif; background: linear-gradient(135deg, rgb(var(--logo-a)), rgb(var(--logo-b))); -webkit-background-clip: text; background-clip: text; color: transparent;"
+            >COVE</span>
         </div>
 
-        <div class="w-8 border-t border-white/[0.06]"></div>
-
-        <button
-            @click="switchApp('notes')"
-            class="w-10 h-10 rounded-xl flex items-center justify-center transition-all"
-            :class="activeApp === 'notes' ? 'bg-white/[0.08] text-white' : 'text-ink-500 hover:bg-white/[0.05] hover:text-ink-200'"
-            title="Notes"
-        >
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 3a1 1 0 011-1h6l4 4v11a1 1 0 01-1 1H5a1 1 0 01-1-1V3z"/><path d="M11 2v4h4"/></svg>
-        </button>
-
-        <button
-            @click="switchApp('task')"
-            class="w-10 h-10 rounded-xl flex items-center justify-center transition-all"
-            :class="activeApp === 'task' ? 'bg-white/[0.08] text-white' : 'text-ink-500 hover:bg-white/[0.05] hover:text-ink-200'"
-            title="Tasks"
-        >
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="14" height="14" rx="3"/><path d="M7 10l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-
-        <button
-            @click="switchApp('command')"
-            class="w-10 h-10 rounded-xl flex items-center justify-center transition-all"
-            :class="activeApp === 'command' ? 'bg-white/[0.08] text-white' : 'text-ink-500 hover:bg-white/[0.05] hover:text-ink-200'"
-            title="Commands"
-        >
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 6L3.5 10 7 14M13 6l3.5 4-3.5 4M11.5 4l-3 12"/></svg>
-        </button>
-
-        <div class="mt-auto flex flex-col items-center gap-3">
-            <div
-                class="w-9 h-9 flex items-center justify-center bg-white/[0.06] border border-white/[0.08] text-xs font-semibold text-ink-100 select-none"
-                title="{{ auth()->user()->name }} · {{ auth()->user()->email }}"
-            >{{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}</div>
-
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button
-                    type="submit"
-                    title="Log out"
-                    class="w-10 h-10 flex items-center justify-center text-ink-500 hover:bg-red-500/10 hover:text-red-400 transition-colors"
-                >
-                    <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4H4v12h4M13 6l4 4-4 4M17 10H8"/></svg>
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Sidebar -->
-    <aside class="w-72 shrink-0 bg-ink-900 border-r border-white/[0.06] flex flex-col">
-        <div class="px-4 pt-4">
+        <div class="px-4 pt-3">
             <button
                 type="button"
                 @click="toggleCategory()"
-                class="flip-card w-full h-12 block"
+                class="w-full h-12 flex items-center gap-3 pl-[9px] pr-3 rounded-xl bg-fg/[0.04] border border-fg/[0.06] hover:bg-fg/[0.07] text-left transition-colors"
             >
-                <div class="flip-card-inner" :class="activeCategory === 'personal' ? 'flip-card-flipped' : ''">
-                    <div class="flip-face flip-face-front bg-gradient-to-br from-[#A23E4C] to-[#8A2F3C] shadow-card" style="font-family: 'Silkscreen', cursive; font-weight: 400; letter-spacing: 0.02em;">
-                        Work
-                    </div>
-                    <div class="flip-face flip-face-back bg-gradient-to-br from-[#A23E4C] to-[#8A2F3C] shadow-card" style="font-family: 'Silkscreen', cursive; font-weight: 400; letter-spacing: 0.02em;">
-                        Personal
-                    </div>
-                </div>
+                <span
+                    class="w-[30px] h-[30px] shrink-0 flex items-center justify-center rounded-lg bg-gradient-to-br from-accent to-accent-deep text-white text-sm"
+                    style="font-family: 'Silkscreen', cursive;"
+                    x-text="activeCategory === 'office' ? 'W' : 'P'"
+                ></span>
+                <span class="flex-1 min-w-0 flex flex-col leading-tight">
+                    <span class="text-[13px] font-semibold text-ink-100" x-text="activeCategory === 'office' ? 'Work' : 'Personal'"></span>
+                    <span class="text-[10.5px] text-ink-500" x-text="'Switch to ' + (activeCategory === 'office' ? 'Personal' : 'Work')"></span>
+                </span>
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-ink-500 shrink-0"><path d="M4 7h11l-3-3M16 13H5l3 3"/></svg>
             </button>
         </div>
+
+        <nav class="mx-4 mt-3 p-1 grid grid-cols-3 gap-1 rounded-xl tabs-track border border-fg/[0.06]">
+            <button
+                @click="switchApp('task')"
+                class="h-[64px] rounded-[9px] flex flex-col items-center justify-center gap-1.5 text-xs font-medium transition-colors"
+                :class="activeApp === 'task' ? 'bg-tab-on text-fg shadow-card [&>svg]:text-tab-icon' : 'text-ink-400 hover:text-ink-100'"
+            >
+                <svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" class="shrink-0"><rect x="3" y="3" width="14" height="14" rx="3"/><path d="M7 10l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Tasks
+            </button>
+
+            <button
+                @click="switchApp('command')"
+                class="h-[64px] rounded-[9px] flex flex-col items-center justify-center gap-1.5 text-xs font-medium transition-colors"
+                :class="activeApp === 'command' ? 'bg-tab-on text-fg shadow-card [&>svg]:text-tab-icon' : 'text-ink-400 hover:text-ink-100'"
+            >
+                <svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M7 6L3.5 10 7 14M13 6l3.5 4-3.5 4M11.5 4l-3 12"/></svg>
+                Comms
+            </button>
+
+            <button
+                @click="switchApp('notes')"
+                class="h-[64px] rounded-[9px] flex flex-col items-center justify-center gap-1.5 text-xs font-medium transition-colors"
+                :class="activeApp === 'notes' ? 'bg-tab-on text-fg shadow-card [&>svg]:text-tab-icon' : 'text-ink-400 hover:text-ink-100'"
+            >
+                <svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" class="shrink-0"><path d="M4 3a1 1 0 011-1h6l4 4v11a1 1 0 01-1 1H5a1 1 0 01-1-1V3z"/><path d="M11 2v4h4"/></svg>
+                Notes
+            </button>
+        </nav>
 
         <template x-if="activeApp === 'notes'">
             <div class="flex flex-col flex-1 overflow-hidden">
@@ -174,7 +155,7 @@
                     </div>
                 </div>
 
-                <div class="mx-4 mt-3 border-t border-white/[0.06]"></div>
+                <div class="mx-4 mt-3 border-t border-fg/[0.06]"></div>
 
                 <nav class="flex-1 overflow-y-auto py-3">
                     <button
@@ -216,7 +197,7 @@
                     </div>
                 </div>
 
-                <div class="mx-4 mt-3 border-t border-white/[0.06]"></div>
+                <div class="mx-4 mt-3 border-t border-fg/[0.06]"></div>
 
                 <nav class="flex-1 overflow-y-auto py-3">
                     <button
@@ -226,7 +207,7 @@
                         :class="selectedFolderId === null ? 'sidebar-item-active' : ''"
                     >
                         <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor" class="text-ink-500 shrink-0"><path d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0013.414 6L10 2.586A2 2 0 008.586 2H4z"/></svg>
-                        All Commands
+                        All Comms
                     </button>
 
                     <div class="pt-4 pb-1.5 px-5 text-[10px] font-semibold uppercase tracking-widest text-ink-500">
@@ -242,39 +223,52 @@
             </div>
         </template>
 
-        <template x-if="activeApp === 'task'">
-            <div class="flex flex-col flex-1 overflow-hidden">
-                <div class="mx-4 mt-4 border-t border-white/[0.06]"></div>
+        {{-- Tasks filter lives at the top of the Tasks page, so the sidebar only keeps the space --}}
+        <div x-show="activeApp === 'task'" class="flex-1"></div>
 
-                <nav class="flex-1 overflow-y-auto py-3">
-                    <div class="pb-1.5 px-5 text-[10px] font-semibold uppercase tracking-widest text-ink-500">
-                        Filter
-                    </div>
+        <div class="mx-4 border-t border-fg/[0.06] py-3 flex items-center gap-2.5">
+            <div
+                class="w-8 h-8 shrink-0 flex items-center justify-center bg-fg/[0.06] border border-fg/[0.08] text-xs font-semibold text-ink-100 select-none"
+                title="{{ auth()->user()->email }}"
+            >{{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}</div>
 
-                    <template x-for="filter in [{key: null, label: 'All'}, {key: 'active', label: 'Active'}, {key: 'upcoming', label: 'Upcoming'}, {key: 'critical', label: 'Critical'}, {key: 'completed', label: 'Completed'}]" :key="filter.label">
-                        <button
-                            @click="filterTasks(filter.key)"
-                            class="sidebar-item mx-3 px-2.5 py-2"
-                            style="width: calc(100% - 24px)"
-                            :class="taskStatusFilter === filter.key ? 'sidebar-item-active' : ''"
-                        >
-                            <span x-text="filter.label"></span>
-                        </button>
-                    </template>
-                </nav>
-            </div>
-        </template>
+            <span class="flex-1 min-w-0 truncate text-[13px] text-ink-400">{{ auth()->user()->name }}</span>
+
+            <button
+                type="button"
+                onclick="toggleTheme()"
+                title="Switch light / dark"
+                aria-label="Switch light or dark theme"
+                class="w-9 h-9 flex items-center justify-center text-ink-500 hover:bg-fg/[0.06] hover:text-ink-100 transition-colors"
+            >
+                <svg class="theme-sun" width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="10" cy="10" r="3.5"/><path d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.7 4.7l1.4 1.4M13.9 13.9l1.4 1.4M4.7 15.3l1.4-1.4M13.9 6.1l1.4-1.4"/></svg>
+                <svg class="theme-moon" width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 11.5A6.5 6.5 0 018.5 3.5a6.5 6.5 0 108 8z"/></svg>
+            </button>
+
+            @unless (config('cove.local'))
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button
+                        type="submit"
+                        title="Log out"
+                        class="w-9 h-9 flex items-center justify-center text-ink-500 hover:bg-red-500/10 hover:text-red-400 transition-colors"
+                    >
+                        <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4H4v12h4M13 6l4 4-4 4M17 10H8"/></svg>
+                    </button>
+                </form>
+            @endunless
+        </div>
     </aside>
 
     <!-- Main: Notes -->
     <main x-show="activeApp === 'notes'" x-cloak class="flex-1 flex flex-col overflow-hidden bg-ink-950">
-        <header class="border-b border-white/[0.06] px-8 py-5 flex items-center gap-4">
+        <header class="border-b border-fg/[0.06] px-8 py-5 flex items-center gap-4">
             <div class="flex items-center gap-2.5 shrink-0" x-show="!selectedNote" x-cloak>
                 <button
                     @click="startNewNote()"
                     title="New note"
                     class="w-11 h-11 rounded-xl flex items-center justify-center text-white shadow-[0_1px_0_0_rgba(255,255,255,0.16)_inset,0_1px_3px_rgba(0,0,0,0.5)] transition-all duration-150 active:scale-[0.95]"
-                    :class="'bg-gradient-to-b from-[#A23E4C] to-[#8A2F3C] hover:from-[#B5505E] hover:to-[#9C3F4D]'"
+                    :class="'bg-gradient-to-b from-accent to-accent-deep hover:from-accent-hover hover:to-accent-deep-hover'"
                 >
                     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 3a1 1 0 00-1 1v16a1 1 0 001 1h12a1 1 0 001-1V8l-5-5H6z"/>
@@ -285,7 +279,7 @@
                 <button
                     @click="openFolderModal()"
                     title="New folder"
-                    class="w-11 h-11 rounded-xl flex items-center justify-center bg-white/[0.04] border border-amber-500/25 text-amber-400 hover:bg-amber-500/10 hover:border-amber-500/40 transition-all duration-150 active:scale-[0.95]"
+                    class="w-11 h-11 rounded-xl flex items-center justify-center bg-fg/[0.04] border border-amber-500/25 text-amber-400 hover:bg-amber-500/10 hover:border-amber-500/40 transition-all duration-150 active:scale-[0.95]"
                 >
                     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 7a2 2 0 012-2h4l2 2h6a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
@@ -295,13 +289,13 @@
             </div>
 
             <div class="flex items-center gap-1.5 text-sm text-ink-500 min-w-0">
-                <button @click="selectFolder(null)" class="hover:text-white transition-colors font-medium shrink-0">All Notes</button>
+                <button @click="selectFolder(null)" class="hover:text-fg transition-colors font-medium shrink-0">All Notes</button>
                 <template x-for="(crumb, index) in breadcrumbs" :key="crumb.id">
                     <div class="flex items-center gap-1.5 min-w-0">
                         <span class="shrink-0 text-ink-600">/</span>
                         <button
                             @click="selectFolder(crumb.id)"
-                            class="hover:text-white transition-colors truncate"
+                            class="hover:text-fg transition-colors truncate"
                             x-text="crumb.name"
                         ></button>
                     </div>
@@ -309,7 +303,7 @@
                 <template x-if="selectedNote">
                     <div class="flex items-center gap-1.5 min-w-0">
                         <span class="shrink-0 text-ink-600">/</span>
-                        <span class="text-white truncate font-medium" x-text="selectedNote.title || 'New Note'"></span>
+                        <span class="text-fg truncate font-medium" x-text="selectedNote.title || 'New Note'"></span>
                     </div>
                 </template>
             </div>
@@ -349,7 +343,7 @@
                                     </button>
                                 </div>
                                 <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" class="text-amber-400/80"><path d="M2 6a2 2 0 012-2h4.5l1.5 2H16a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/></svg>
-                                <h3 class="font-semibold text-sm leading-snug text-white tracking-tight pr-12" x-text="folder.name"></h3>
+                                <h3 class="font-semibold text-sm leading-snug text-fg tracking-tight pr-12" x-text="folder.name"></h3>
                             </div>
                         </template>
 
@@ -367,14 +361,14 @@
                                         <path d="M4 6h12M8 6V4a1 1 0 011-1h2a1 1 0 011 1v2m3 0-.7 9.1a2 2 0 01-2 1.9H7.7a2 2 0 01-2-1.9L5 6h10z"/>
                                     </svg>
                                 </button>
-                                <h3 class="font-semibold text-sm leading-snug text-white tracking-tight pr-6" x-text="note.title"></h3>
+                                <h3 class="font-semibold text-sm leading-snug text-fg tracking-tight pr-6" x-text="note.title"></h3>
                                 <p class="text-sm text-ink-400 line-clamp-4 whitespace-pre-line leading-relaxed" x-text="note.content"></p>
                             </div>
                         </template>
                     </div>
 
                     <div x-show="!loading && notes.length === 0 && subfolders.length === 0" class="flex flex-col items-center justify-center py-24 text-center">
-                        <div class="w-14 h-14 rounded-2xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center mb-4">
+                        <div class="w-14 h-14 rounded-2xl bg-fg/[0.04] border border-fg/[0.06] flex items-center justify-center mb-4">
                             <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" class="text-ink-500"><path d="M4 3a1 1 0 011-1h6l4 4v11a1 1 0 01-1 1H5a1 1 0 01-1-1V3z"/><path d="M11 2v4h4"/></svg>
                         </div>
                         <p class="text-sm text-ink-500">Nothing here yet. Create a note or a folder to get started.</p>
@@ -384,7 +378,7 @@
 
             <template x-if="selectedNote">
                 <div class="max-w-2xl">
-                    <button @click="selectedNote = null; isEditingDetail = false; isNewNote = false;" class="flex items-center gap-1.5 text-sm text-ink-500 hover:text-white transition-colors mb-6">
+                    <button @click="selectedNote = null; isEditingDetail = false; isNewNote = false;" class="flex items-center gap-1.5 text-sm text-ink-500 hover:text-fg transition-colors mb-6">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
                         Back
                     </button>
@@ -392,7 +386,7 @@
                     <!-- View mode -->
                     <template x-if="!isEditingDetail">
                         <div>
-                            <h1 class="text-2xl font-bold text-white tracking-tight mb-5" x-text="selectedNote.title"></h1>
+                            <h1 class="text-2xl font-bold text-fg tracking-tight mb-5" x-text="selectedNote.title"></h1>
                             <p class="text-sm text-ink-300 whitespace-pre-line leading-relaxed" x-text="selectedNote.content"></p>
 
                             <div class="mt-10 flex items-center gap-2">
@@ -418,7 +412,7 @@
                                     type="text"
                                     x-model="detailForm.title"
                                     placeholder="Untitled"
-                                    class="w-full bg-transparent text-2xl font-bold text-white tracking-tight placeholder-ink-600 outline-none border-b border-white/10 focus:border-amber-600/60 pb-2 transition-colors"
+                                    class="w-full bg-transparent text-2xl font-bold text-fg tracking-tight placeholder-ink-600 outline-none border-b border-fg/10 focus:border-amber-600/60 pb-2 transition-colors"
                                 >
                                 <p class="text-xs text-red-400 mt-1.5" x-show="errors.title" x-text="errors.title?.[0]"></p>
                             </div>
@@ -436,7 +430,7 @@
                                 <button
                                     type="submit"
                                     class="btn-primary"
-                                    :class="'from-[#A23E4C] to-[#8A2F3C] hover:from-[#B5505E] hover:to-[#9C3F4D]'"
+                                    :class="'from-accent to-accent-deep hover:from-accent-hover hover:to-accent-deep-hover'"
                                 >Save</button>
                                 <button type="button" @click="cancelEditDetail()" class="btn-ghost">Cancel</button>
                             </div>
@@ -449,20 +443,20 @@
 
     <!-- Main: Commands -->
     <main x-show="activeApp === 'command'" x-cloak class="flex-1 flex flex-col overflow-hidden bg-ink-950">
-        <header class="border-b border-white/[0.06] px-8 py-5 flex items-center gap-4">
+        <header class="border-b border-fg/[0.06] px-8 py-5 flex items-center gap-4">
             <div class="flex items-center gap-2.5 shrink-0" x-show="!selectedCommand" x-cloak>
                 <button
                     @click="startNewCommand()"
                     title="New command set"
                     class="w-11 h-11 rounded-xl flex items-center justify-center text-white shadow-[0_1px_0_0_rgba(255,255,255,0.16)_inset,0_1px_3px_rgba(0,0,0,0.5)] transition-all duration-150 active:scale-[0.95]"
-                    :class="'bg-gradient-to-b from-[#A23E4C] to-[#8A2F3C] hover:from-[#B5505E] hover:to-[#9C3F4D]'"
+                    :class="'bg-gradient-to-b from-accent to-accent-deep hover:from-accent-hover hover:to-accent-deep-hover'"
                 >
                     <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 6L3.5 10 7 14M13 6l3.5 4-3.5 4M11.5 4l-3 12"/></svg>
                 </button>
                 <button
                     @click="openFolderModal()"
                     title="New folder"
-                    class="w-11 h-11 rounded-xl flex items-center justify-center bg-white/[0.04] border border-amber-500/25 text-amber-400 hover:bg-amber-500/10 hover:border-amber-500/40 transition-all duration-150 active:scale-[0.95]"
+                    class="w-11 h-11 rounded-xl flex items-center justify-center bg-fg/[0.04] border border-amber-500/25 text-amber-400 hover:bg-amber-500/10 hover:border-amber-500/40 transition-all duration-150 active:scale-[0.95]"
                 >
                     <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 7a2 2 0 012-2h4l2 2h6a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
@@ -472,13 +466,13 @@
             </div>
 
             <div class="flex items-center gap-1.5 text-sm text-ink-500 min-w-0">
-                <button @click="selectFolder(null)" class="hover:text-white transition-colors font-medium shrink-0">All Commands</button>
+                <button @click="selectFolder(null)" class="hover:text-fg transition-colors font-medium shrink-0">All Comms</button>
                 <template x-for="(crumb, index) in breadcrumbs" :key="crumb.id">
                     <div class="flex items-center gap-1.5 min-w-0">
                         <span class="shrink-0 text-ink-600">/</span>
                         <button
                             @click="selectFolder(crumb.id)"
-                            class="hover:text-white transition-colors truncate"
+                            class="hover:text-fg transition-colors truncate"
                             x-text="crumb.name"
                         ></button>
                     </div>
@@ -486,7 +480,7 @@
                 <template x-if="selectedCommand">
                     <div class="flex items-center gap-1.5 min-w-0">
                         <span class="shrink-0 text-ink-600">/</span>
-                        <span class="text-white truncate font-medium" x-text="selectedCommand.title || 'New Command Set'"></span>
+                        <span class="text-fg truncate font-medium" x-text="selectedCommand.title || 'New Command Set'"></span>
                     </div>
                 </template>
             </div>
@@ -499,7 +493,7 @@
 
                     <div
                         x-show="!loading && (subfolders.length > 0 || commands.length > 0)"
-                        class="max-w-5xl border border-white/[0.07]"
+                        class="max-w-5xl border border-fg/[0.07]"
                     >
                         <div class="cmd-list-row cmd-head">
                             <span></span>
@@ -513,10 +507,10 @@
                             <div
                                 @click="selectFolder(folder.id)"
                                 class="cmd-list-row group cursor-pointer"
-                                style="--c: rgba(245, 158, 11, 0.7)"
+                                style="--c: rgb(var(--folder-accent) / 0.7)"
                             >
                                 <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" class="text-amber-400/80"><path d="M2 6a2 2 0 012-2h4.5l1.5 2H16a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/></svg>
-                                <span class="text-sm font-semibold text-white truncate" :title="folder.name" x-text="folder.name"></span>
+                                <span class="text-sm font-semibold text-fg truncate" :title="folder.name" x-text="folder.name"></span>
                                 <span class="text-xs text-ink-500">Folder</span>
                                 <span></span>
                                 <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
@@ -544,13 +538,13 @@
                             <div
                                 @click="viewCommand(cmd)"
                                 class="cmd-list-row group cursor-pointer"
-                                style="--c: rgba(162, 62, 76, 0.8)"
+                                style="--c: rgb(var(--accent) / 0.8)"
                             >
                                 <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="text-ink-500"><path d="M4 6l4 4-4 4M10 15h6"/></svg>
-                                <span class="text-sm font-semibold text-white truncate" :title="cmd.title" x-text="cmd.title"></span>
+                                <span class="text-sm font-semibold text-fg truncate" :title="cmd.title" x-text="cmd.title"></span>
                                 <code
                                     class="font-mono text-[12px] truncate"
-                                    :class="cmd.rows.length ? 'text-[#f3c98b]/80' : 'text-ink-500'"
+                                    :class="cmd.rows.length ? 'text-cmd/80' : 'text-ink-500'"
                                     :title="cmd.rows[0]?.value || ''"
                                     x-text="cmd.rows[0]?.value || 'Empty'"
                                 ></code>
@@ -571,7 +565,7 @@
                     </div>
 
                     <div x-show="!loading && commands.length === 0 && subfolders.length === 0" class="flex flex-col items-center justify-center py-24 text-center">
-                        <div class="w-14 h-14 bg-white/[0.04] border border-white/[0.06] flex items-center justify-center mb-4">
+                        <div class="w-14 h-14 bg-fg/[0.04] border border-fg/[0.06] flex items-center justify-center mb-4">
                             <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" class="text-ink-500"><path d="M7 6L3.5 10 7 14M13 6l3.5 4-3.5 4M11.5 4l-3 12"/></svg>
                         </div>
                         <p class="text-sm text-ink-500">Nothing here yet. Create a command set or a folder to get started.</p>
@@ -581,7 +575,7 @@
 
             <template x-if="selectedCommand">
                 <div class="max-w-5xl">
-                    <button @click="selectedCommand = null; isEditingCommandDetail = false; isNewCommand = false;" class="flex items-center gap-1.5 text-sm text-ink-500 hover:text-white transition-colors mb-6">
+                    <button @click="selectedCommand = null; isEditingCommandDetail = false; isNewCommand = false;" class="flex items-center gap-1.5 text-sm text-ink-500 hover:text-fg transition-colors mb-6">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
                         Back
                     </button>
@@ -589,9 +583,9 @@
                     <!-- View mode -->
                     <template x-if="!isEditingCommandDetail">
                         <div>
-                            <h1 class="text-2xl font-bold text-white tracking-tight mb-5" x-text="selectedCommand.title"></h1>
+                            <h1 class="text-2xl font-bold text-fg tracking-tight mb-5" x-text="selectedCommand.title"></h1>
 
-                            <div class="border border-white/[0.07]">
+                            <div class="border border-fg/[0.07]">
                                 <div x-show="selectedCommand.rows.length > 0" class="cmd-row cmd-head">
                                     <span>#</span>
                                     <span>What</span>
@@ -602,13 +596,13 @@
                                 <template x-for="(row, idx) in selectedCommand.rows" :key="idx">
                                     <div x-data="{ copied: false }" class="cmd-row">
                                         <span class="font-mono text-[11px] text-ink-500" x-text="String(idx + 1).padStart(2, '0')"></span>
-                                        <span class="text-sm text-white truncate" :title="row.label" x-text="row.label"></span>
-                                        <code class="font-mono text-[12.5px] text-[#f3c98b] truncate" :title="row.value" x-text="row.value"></code>
+                                        <span class="text-sm text-fg truncate" :title="row.label" x-text="row.label"></span>
+                                        <code class="font-mono text-[12.5px] text-cmd truncate" :title="row.value" x-text="row.value"></code>
                                         <button
                                             type="button"
-                                            @click="navigator.clipboard.writeText(row.value); copied = true; setTimeout(() => copied = false, 1500)"
+                                            @click="copyText(row.value).then((ok) => { if (ok) { copied = true; setTimeout(() => copied = false, 1500); } })"
                                             class="border py-1.5 text-[10px] font-semibold uppercase tracking-wider transition-colors"
-                                            :class="copied ? 'border-emerald-400/50 text-emerald-400' : 'border-white/[0.16] text-ink-400 hover:text-white hover:bg-ink-800'"
+                                            :class="copied ? 'border-emerald-400/50 text-emerald-400' : 'border-fg/[0.16] text-ink-400 hover:border-accent hover:text-accent hover:bg-accent/10'"
                                             title="Copy to clipboard"
                                             x-text="copied ? 'Copied' : 'Copy'"
                                         ></button>
@@ -641,7 +635,7 @@
                                     type="text"
                                     x-model="commandDetailForm.title"
                                     placeholder="Untitled"
-                                    class="w-full bg-transparent text-2xl font-bold text-white tracking-tight placeholder-ink-600 outline-none border-b border-white/10 focus:border-amber-600/60 pb-2 transition-colors"
+                                    class="w-full bg-transparent text-2xl font-bold text-fg tracking-tight placeholder-ink-600 outline-none border-b border-fg/10 focus:border-amber-600/60 pb-2 transition-colors"
                                 >
                                 <p class="text-xs text-red-400 mt-1.5" x-show="errors.title" x-text="errors.title?.[0]"></p>
                             </div>
@@ -674,7 +668,7 @@
                                 <button
                                     type="submit"
                                     class="btn-primary"
-                                    :class="'from-[#A23E4C] to-[#8A2F3C] hover:from-[#B5505E] hover:to-[#9C3F4D]'"
+                                    :class="'from-accent to-accent-deep hover:from-accent-hover hover:to-accent-deep-hover'"
                                 >Save</button>
                                 <button type="button" @click="cancelEditCommandDetail()" class="btn-ghost">Cancel</button>
                             </div>
@@ -692,9 +686,9 @@
         @keydown.window="if (activeApp === 'task' && $event.key.toLowerCase() === 'n' && !$event.ctrlKey && !$event.metaKey && !$event.altKey && !['INPUT', 'TEXTAREA', 'SELECT'].includes($event.target.tagName) && !$event.target.isContentEditable) { $event.preventDefault(); $refs.taskInput.focus(); }"
         class="flex-1 flex flex-col overflow-hidden bg-ink-950"
     >
-        <header class="border-b border-white/[0.06] px-8 py-5 flex items-center gap-4">
+        <header class="border-b border-fg/[0.06] px-8 py-5 flex items-center gap-4">
             <div class="flex items-center gap-1.5 text-sm text-ink-500 min-w-0 flex-1">
-                <span class="text-white font-medium">Tasks</span>
+                <span class="text-fg font-medium">Tasks</span>
                 <span class="text-ink-600">/</span>
                 <span x-text="taskStatusFilter ? taskStatusFilter.charAt(0).toUpperCase() + taskStatusFilter.slice(1) : 'All'"></span>
             </div>
@@ -711,82 +705,72 @@
             </button>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-8">
-            <div class="max-w-5xl flex flex-col gap-5">
-                <form @submit.prevent="addTask()" class="flex border border-white/[0.16] bg-ink-900 transition-colors focus-within:border-amber-600/60">
-                    <input
-                        type="text"
-                        x-ref="taskInput"
-                        x-model="taskForm.title"
-                        placeholder="Add a task and press Enter…"
-                        class="flex-1 min-w-0 bg-transparent px-4 py-3 text-sm text-ink-100 placeholder-ink-500 outline-none"
-                    >
-                    <span class="flex items-center pr-3" title="Press N to add a task">
-                        <kbd class="ledger-kbd">N</kbd>
-                    </span>
-                    <button
-                        type="submit"
-                        class="px-6 text-sm font-semibold text-white bg-[#A23E4C] hover:bg-[#B5505E] transition-colors"
-                    >Add</button>
-                </form>
-
-                <div class="grid grid-cols-4 border border-white/[0.07]">
-                    <template x-for="status in taskStatuses" :key="status.key">
+        <div class="flex-1 overflow-y-auto px-8 py-6">
+            <div class="max-w-3xl">
+                <div class="inline-flex flex-wrap gap-0.5 p-[3px] rounded-[10px] tabs-track border border-fg/[0.06]" role="group" aria-label="Filter tasks">
+                    <template x-for="filter in [{ key: null, label: 'All' }, ...taskStatuses]" :key="filter.label">
                         <button
                             type="button"
-                            @click="filterTasks(taskStatusFilter === status.key ? null : status.key)"
-                            class="ledger-stat"
-                            :class="taskStatusFilter === status.key ? 'ledger-stat-active' : ''"
-                            :style="`--c: ${status.color}`"
+                            @click="filterTasks(filter.key)"
+                            class="px-3 py-1.5 rounded-lg text-[12.5px] transition-colors"
+                            :class="taskStatusFilter === filter.key ? 'bg-surface text-fg shadow-card' : 'text-ink-500 hover:text-ink-100'"
                         >
-                            <span class="text-[26px] font-bold leading-tight tabular-nums" :style="`color: ${status.color}`" x-text="taskCount(status.key)"></span>
-                            <span class="text-[11px] font-semibold uppercase tracking-widest text-ink-400" x-text="status.label"></span>
+                            <span x-text="filter.label"></span>
+                            <b class="ml-1 font-semibold tabular-nums" x-text="filter.key ? taskCount(filter.key) : tasks.length"></b>
                         </button>
                     </template>
                 </div>
 
-                <p x-show="taskLoading" class="text-sm text-ink-500">Loading…</p>
+                <form @submit.prevent="addTask()" class="mt-4 flex items-center gap-3.5 px-1 py-3.5 border-b border-fg/[0.08]">
+                    <span class="w-5 h-5 shrink-0 rounded-full border-[1.75px] border-dashed border-ink-500 flex items-center justify-center text-ink-500 text-sm leading-none">+</span>
+                    <input
+                        type="text"
+                        x-ref="taskInput"
+                        x-model="taskForm.title"
+                        placeholder="Add a task"
+                        class="flex-1 min-w-0 bg-transparent text-[15px] text-ink-100 placeholder-ink-500 outline-none"
+                    >
+                    <button
+                        type="submit"
+                        x-show="taskForm.title.trim() !== ''"
+                        class="text-xs font-semibold text-accent hover:text-accent-hover transition-colors"
+                    >Add</button>
+                    <span x-show="taskForm.title.trim() === ''" title="Press N to add a task"><kbd class="ledger-kbd">N</kbd></span>
+                </form>
 
-                <div x-show="!taskLoading && visibleTasks().length > 0" class="border border-white/[0.07]">
-                    <div class="ledger-row ledger-head">
-                        <span></span>
-                        <span>#</span>
-                        <span>Task</span>
-                        <span>Status</span>
-                        <span>Age</span>
-                        <span></span>
-                    </div>
+                <p x-show="taskLoading" class="mt-4 text-sm text-ink-500">Loading…</p>
 
-                    <template x-for="(task, index) in visibleTasks()" :key="task.id">
-                        <div class="ledger-row group" :style="`--c: ${taskStatusMeta(task.status).color}`">
+                <div x-show="!taskLoading && visibleTasks().length > 0">
+                    <template x-for="task in visibleTasks()" :key="task.id">
+                        <div class="group flex items-center gap-3.5 px-1 py-3.5 border-b border-fg/[0.08] text-[15px]">
                             <button
+                                type="button"
                                 @click="toggleTaskCompleted(task)"
                                 :title="task.status === 'completed' ? 'Mark not done' : 'Mark done'"
-                                class="w-[18px] h-[18px] border-[1.5px] flex items-center justify-center transition-colors"
-                                :class="task.status === 'completed' ? 'bg-emerald-400 border-emerald-400' : 'border-white/25 hover:border-white/50'"
+                                class="w-5 h-5 shrink-0 rounded-full border-[1.75px] flex items-center justify-center transition-colors text-ink-950"
+                                :class="task.status === 'completed' ? 'bg-emerald-400 border-emerald-400' : 'border-ink-500 hover:border-accent'"
                             >
-                                <svg x-show="task.status === 'completed'" width="10" height="10" viewBox="0 0 20 20" fill="none" stroke="#06281c" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10l4 4 8-8"/></svg>
+                                <svg x-show="task.status === 'completed'" width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg>
                             </button>
 
-                            <span class="font-mono text-[11px] text-ink-500" x-text="String(index + 1).padStart(2, '0')"></span>
-
                             <span
-                                class="truncate text-sm"
-                                :class="task.status === 'completed' ? 'line-through text-ink-500' : 'text-white'"
+                                class="flex-1 min-w-0 truncate"
+                                :class="task.status === 'completed' ? 'line-through text-ink-500' : 'text-fg'"
                                 :title="task.title"
                                 x-text="task.title"
                             ></span>
 
-                            <div x-data="{ open: false }" @click.outside="open = false" class="relative">
+                            <div x-data="{ open: false }" @click.outside="open = false" class="relative shrink-0">
                                 <button
                                     type="button"
                                     @click="open = !open"
-                                    class="inline-flex items-center gap-1.5 border px-2 py-1 text-[10px] font-semibold uppercase tracking-wider transition-colors hover:bg-white/[0.04]"
-                                    :style="`color: ${taskStatusMeta(task.status).color}; border-color: ${taskStatusMeta(task.status).color}59`"
+                                    title="Change status"
+                                    class="inline-flex items-center gap-1.5 px-2 py-1 -mx-2 rounded-md text-xs font-medium transition-colors hover:bg-fg/[0.06]"
+                                    :style="`color: ${taskStatusMeta(task.status).color}`"
                                 >
-                                    <span class="w-1.5 h-1.5 shrink-0" :style="`background: ${taskStatusMeta(task.status).color}`"></span>
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0" :style="`background: ${taskStatusMeta(task.status).color}`"></span>
                                     <span x-text="taskStatusMeta(task.status).label"></span>
-                                    <svg width="9" height="9" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-150" :class="open ? '-rotate-180' : ''"><path d="M5 8l5 5 5-5"/></svg>
+                                    <svg width="9" height="9" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="opacity-60 transition-transform duration-150" :class="open ? '-rotate-180' : ''"><path d="M5 8l5 5 5-5"/></svg>
                                 </button>
 
                                 <div
@@ -798,17 +782,17 @@
                                     x-transition:leave="transition ease-in duration-75"
                                     x-transition:leave-start="opacity-100"
                                     x-transition:leave-end="opacity-0"
-                                    class="absolute left-0 top-full mt-1 w-36 bg-ink-800 border border-white/[0.08] shadow-popover py-1 z-20"
+                                    class="absolute right-0 top-full mt-1 w-40 rounded-lg bg-surface border border-fg/[0.1] shadow-popover py-1 z-20"
                                 >
                                     <template x-for="option in taskStatuses" :key="option.key">
                                         <button
                                             type="button"
                                             @click="updateTaskStatus(task, option.key); open = false"
-                                            class="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-left transition-colors hover:bg-white/[0.06]"
-                                            :class="task.status === option.key ? '' : 'text-ink-400'"
+                                            class="w-full flex items-center gap-2 px-3 py-2 text-xs text-left transition-colors hover:bg-fg/[0.06]"
+                                            :class="task.status === option.key ? 'font-semibold' : 'text-ink-400'"
                                             :style="task.status === option.key ? `color: ${option.color}` : ''"
                                         >
-                                            <span class="w-1.5 h-1.5 shrink-0" :style="`background: ${option.color}`"></span>
+                                            <span class="w-1.5 h-1.5 rounded-full shrink-0" :style="`background: ${option.color}`"></span>
                                             <span x-text="option.label"></span>
                                             <svg x-show="task.status === option.key" width="10" height="10" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="ml-auto"><path d="M4 10l4 4 8-8"/></svg>
                                         </button>
@@ -817,15 +801,16 @@
                             </div>
 
                             <span
-                                class="font-mono text-[11px] text-ink-500"
+                                class="w-9 text-right font-mono text-[11px] text-ink-500 shrink-0"
                                 :title="task.created_at ? 'Added ' + new Date(task.created_at).toLocaleString() : ''"
                                 x-text="taskAge(task.created_at)"
                             ></span>
 
                             <button
+                                type="button"
                                 @click="deleteTask(task)"
                                 title="Delete task"
-                                class="w-7 h-7 flex items-center justify-center text-ink-500 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 hover:text-red-400 hover:bg-red-500/10 transition-all"
+                                class="w-7 h-7 shrink-0 flex items-center justify-center rounded-md text-ink-500 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 hover:text-red-400 hover:bg-red-500/10 transition-all"
                             >
                                 <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12M8 6V4a1 1 0 011-1h2a1 1 0 011 1v2m3 0-.7 9.1a2 2 0 01-2 1.9H7.7a2 2 0 01-2-1.9L5 6h10z"/></svg>
                             </button>
@@ -833,7 +818,7 @@
                     </template>
                 </div>
 
-                <div x-show="!taskLoading && visibleTasks().length === 0" class="flex flex-col items-center justify-center py-20 text-center border border-dashed border-white/[0.1]">
+                <div x-show="!taskLoading && visibleTasks().length === 0" class="py-16 text-center">
                     <p
                         class="text-sm text-ink-500"
                         x-text="taskStatusFilter ? 'No ' + taskStatusMeta(taskStatusFilter).label.toLowerCase() + ' tasks.' : 'No tasks here yet. Add one above to get started.'"
@@ -860,10 +845,10 @@
             class="card w-full max-w-md p-7 shadow-popover"
         >
             <div class="flex items-center justify-between mb-5">
-                <h2 class="text-base font-semibold text-white tracking-tight" x-text="renamingFolderId ? 'Rename Folder' : 'New Folder'"></h2>
+                <h2 class="text-base font-semibold text-fg tracking-tight" x-text="renamingFolderId ? 'Rename Folder' : 'New Folder'"></h2>
                 <span
                     class="text-[11px] font-semibold px-2.5 py-1 rounded-full"
-                    :class="'bg-[#A23E4C]/10 text-[#D98A96]'"
+                    :class="'bg-accent/10 text-accent-soft'"
                     x-text="activeCategory === 'office' ? '💼 Work' : '🏠 Personal'"
                 ></span>
             </div>
@@ -911,17 +896,17 @@
     function notesApp() {
         return {
             showSplash: true,
-            activeApp: 'notes',
+            activeApp: 'task',
             activeCategory: localStorage.getItem('activeCategory') || 'office',
             tasks: [],
             taskStatusFilter: null,
             taskForm: { title: '' },
             taskLoading: false,
             taskStatuses: [
-                { key: 'critical', label: 'Critical', color: '#ef4444' },
-                { key: 'active', label: 'Active', color: '#60a5fa' },
-                { key: 'upcoming', label: 'Upcoming', color: '#fbbf24' },
-                { key: 'completed', label: 'Completed', color: '#34d399' },
+                { key: 'critical', label: 'Critical', color: 'rgb(var(--st-critical))', border: 'rgb(var(--st-critical) / 0.35)' },
+                { key: 'active', label: 'Active', color: 'rgb(var(--st-active))', border: 'rgb(var(--st-active) / 0.35)' },
+                { key: 'upcoming', label: 'Upcoming', color: 'rgb(var(--st-upcoming))', border: 'rgb(var(--st-upcoming) / 0.35)' },
+                { key: 'completed', label: 'Completed', color: 'rgb(var(--st-completed))', border: 'rgb(var(--st-completed) / 0.35)' },
             ],
             folderTree: [],
             nodesById: {},
@@ -946,7 +931,8 @@
             errors: {},
 
             init() {
-                this.loadContent(null);
+                // Tasks is the first tab, so the app opens on it; Notes and Comms load when you switch to them.
+                this.loadTasks();
             },
 
             escapeHtml(str) {
@@ -956,6 +942,26 @@
                     .replace(/>/g, '&gt;')
                     .replace(/"/g, '&quot;')
                     .replace(/'/g, '&#39;');
+            },
+
+            // Copies text to the clipboard; resolves true only if it worked. Falls back to the old
+            // execCommand route where the clipboard API is missing or refused.
+            async copyText(text) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    return true;
+                } catch (e) {
+                    const field = document.createElement('textarea');
+                    field.value = text;
+                    field.setAttribute('readonly', '');
+                    field.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+                    document.body.appendChild(field);
+                    field.select();
+                    let ok = false;
+                    try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+                    document.body.removeChild(field);
+                    return ok;
+                }
             },
 
             toggleCategory() {

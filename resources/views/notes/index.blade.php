@@ -387,7 +387,7 @@
                     <template x-if="!isEditingDetail">
                         <div>
                             <h1 class="text-2xl font-bold text-fg tracking-tight mb-5" x-text="selectedNote.title"></h1>
-                            <p class="text-sm text-ink-300 whitespace-pre-line leading-relaxed" x-text="selectedNote.content"></p>
+                            <p class="text-sm text-ink-300 whitespace-pre-line leading-relaxed"><template x-for="(seg, i) in noteSegments(selectedNote.content)" :key="i"><span x-data="{ copied: false }"><template x-if="seg.type === 'text'"><span x-text="seg.value"></span></template><template x-if="seg.type === 'code'"><button type="button" title="Click to copy" @click="copyText(seg.value).then((ok) => { if (ok) { copied = true; setTimeout(() => copied = false, 1500); } })" class="inline px-1.5 py-0.5 rounded-md border font-mono text-[0.85em] cursor-pointer transition-colors" :class="copied ? 'border-emerald-400/50 text-emerald-400 bg-emerald-400/10' : 'border-fg/[0.16] bg-fg/[0.06] text-fg hover:border-accent hover:text-accent'" x-text="copied ? 'Copied' : seg.value"></button></template><template x-if="seg.type === 'link'"><a :href="seg.href" target="_blank" rel="noopener noreferrer" class="text-accent underline underline-offset-2 hover:opacity-80" x-text="seg.value"></a></template></span></template></p>
 
                             <div class="mt-10 flex items-center gap-2">
                                 <button @click="startEditNote()" class="btn-secondary">
@@ -420,6 +420,9 @@
                             <div>
                                 <textarea
                                     x-model="detailForm.content"
+                                    @input="noteAutoFormat($event)"
+                                    @keydown.enter="noteListEnter($event)"
+                                    @keydown.backspace="noteListBackspace($event)"
                                     placeholder="Write something…"
                                     class="w-full min-h-[50vh] bg-transparent text-sm text-ink-200 placeholder-ink-600 outline-none leading-relaxed resize-none [field-sizing:content]"
                                 ></textarea>
@@ -1290,6 +1293,150 @@
                 this.detailForm = { title: this.selectedNote.title, content: this.selectedNote.content };
                 this.errors = {};
                 this.isEditingDetail = true;
+            },
+
+            // Splits note text into plain / code / link pieces for the view mode:
+            // `like this` is copyable code, <https://example.com> is a clickable link.
+            // Only http(s) links (or bare domains, which get https://) count; anything
+            // else inside <> stays as typed.
+            noteSegments(content) {
+                const text = String(content ?? '');
+                const segments = [];
+                const pattern = /`([^`\n]+)`|<([^<>\s]+)>/g;
+                let last = 0;
+                let m;
+
+                const pushText = (value) => {
+                    if (!value) return;
+                    const prev = segments[segments.length - 1];
+                    if (prev && prev.type === 'text') prev.value += value;
+                    else segments.push({ type: 'text', value });
+                };
+
+                while ((m = pattern.exec(text)) !== null) {
+                    pushText(text.slice(last, m.index));
+                    last = m.index + m[0].length;
+
+                    if (m[1] !== undefined) {
+                        segments.push({ type: 'code', value: m[1] });
+                        continue;
+                    }
+
+                    let href = null;
+                    if (/^https?:\/\/[^\s/]+/i.test(m[2])) href = m[2];
+                    else if (/^(www\.)?[a-z0-9-]+(\.[a-z0-9-]+)+(:\d+)?([/?#]\S*)?$/i.test(m[2])) href = 'https://' + m[2];
+
+                    if (href) segments.push({ type: 'link', value: m[2], href });
+                    else pushText(m[0]);
+                }
+
+                pushText(text.slice(last));
+                return segments;
+            },
+
+            // ---- List support for the note editor (content stays plain text) ----
+            // Typing ". " (or "- " / "* ") at the start of a line makes a bullet,
+            // "1 " makes a numbered item. Enter continues a list, Enter on an empty
+            // item or Backspace right after a marker ends it.
+
+            // Replace [start, end) with text, keeping the browser's undo stack where possible.
+            noteReplace(el, start, end, text) {
+                el.focus();
+                el.setSelectionRange(start, end);
+                if (!document.execCommand('insertText', false, text)) {
+                    el.setRangeText(text, start, end, 'end');
+                    el.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            },
+
+            noteAutoFormat(e) {
+                if (e.inputType !== 'insertText' || e.data !== ' ') return;
+
+                const el = e.target;
+                const caret = el.selectionStart;
+                const lineStart = el.value.lastIndexOf('\n', caret - 1) + 1;
+                const typed = el.value.slice(lineStart, caret);
+
+                let match = typed.match(/^([ \t]*)[.\-*] $/);
+                if (match) {
+                    this.noteReplace(el, lineStart, caret, match[1] + '• ');
+                    return;
+                }
+
+                match = typed.match(/^([ \t]*)(\d+) $/);
+                if (match) {
+                    this.noteReplace(el, lineStart, caret, match[1] + match[2] + '. ');
+                }
+            },
+
+            noteListEnter(e) {
+                if (e.isComposing || e.shiftKey || e.ctrlKey || e.metaKey || e.altKey) return;
+
+                const el = e.target;
+                if (el.selectionStart !== el.selectionEnd) return;
+
+                const value = el.value;
+                const caret = el.selectionStart;
+                const lineStart = value.lastIndexOf('\n', caret - 1) + 1;
+                const match = value.slice(lineStart, caret).match(/^([ \t]*)(•|(\d+)\.) (.*)$/);
+                if (!match) return;
+
+                e.preventDefault();
+
+                const [, indent, marker, num, text] = match;
+                const lineEndIdx = value.indexOf('\n', caret);
+                const lineEnd = lineEndIdx === -1 ? value.length : lineEndIdx;
+
+                // Empty item (nothing typed after the marker, nothing after the caret): end the list.
+                if (text === '' && lineEnd === caret) {
+                    this.noteReplace(el, lineStart, caret, '');
+                    return;
+                }
+
+                const rest = value.slice(caret, lineEnd);
+
+                if (num === undefined) {
+                    this.noteReplace(el, caret, lineEnd, '\n' + indent + '• ' + rest);
+                    el.setSelectionRange(caret + 1 + indent.length + 2, caret + 1 + indent.length + 2);
+                    return;
+                }
+
+                // Numbered: insert the next number, then renumber the items that follow it.
+                let next = parseInt(num, 10) + 1;
+                let out = '\n' + indent + next + '. ' + rest;
+                let end = lineEnd;
+                const numbered = new RegExp('^' + indent + '(\\d+)\\. ');
+
+                while (end < value.length) {
+                    const nextStart = end + 1;
+                    const nextEndIdx = value.indexOf('\n', nextStart);
+                    const nextEnd = nextEndIdx === -1 ? value.length : nextEndIdx;
+                    const line = value.slice(nextStart, nextEnd);
+                    if (!numbered.test(line)) break;
+
+                    next += 1;
+                    out += '\n' + line.replace(numbered, indent + next + '. ');
+                    end = nextEnd;
+                }
+
+                const caretAfter = caret + 1 + indent.length + String(parseInt(num, 10) + 1).length + 2;
+                this.noteReplace(el, caret, end, out);
+                el.setSelectionRange(caretAfter, caretAfter);
+            },
+
+            noteListBackspace(e) {
+                if (e.isComposing) return;
+
+                const el = e.target;
+                if (el.selectionStart !== el.selectionEnd) return;
+
+                const caret = el.selectionStart;
+                const lineStart = el.value.lastIndexOf('\n', caret - 1) + 1;
+
+                if (/^[ \t]*(•|\d+\.) $/.test(el.value.slice(lineStart, caret))) {
+                    e.preventDefault();
+                    this.noteReplace(el, lineStart, caret, '');
+                }
             },
 
             cancelEditDetail() {

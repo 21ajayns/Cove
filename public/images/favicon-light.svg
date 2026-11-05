@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+    <defs>
+        <linearGradient id="coveGradFaviconLight" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#55B8A5"/>
+            <stop offset="100%" stop-color="#1F7A6B"/>
+        </linearGradient>
+    </defs>
+    <rect width="64" height="64" rx="14" fill="#F7FBFA"/>
+    <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="13.25" fill="none" stroke="#1F7A6B" stroke-opacity="0.22" stroke-width="1.5"/>
+    <path d="M44 12 A23 23 0 1 0 44 52" fill="none" stroke="url(#coveGradFaviconLight)" stroke-width="5" stroke-linecap="round"/>
+    <path d="M24 27 q4.5 -5 9 0 t9 0" fill="none" stroke="#55B8A5" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M24 37 q4.5 -5 9 0 t9 0" fill="none" stroke="#1F7A6B" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

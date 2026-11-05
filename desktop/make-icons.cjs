@@ -1,4 +1,4 @@
-// Builds build/icon.ico and build/icon.png from public/images/favicon.svg.
+// Builds build/icon.ico and build/icon.png from public/images/favicon-light.svg.
 // Uses headless Chrome as the rasteriser, so there are no extra dependencies.
 // Run with: node desktop/make-icons.cjs
 const fs = require('fs');
@@ -17,7 +17,8 @@ const CHROME = [
 if (!CHROME) throw new Error('Chrome or Edge is needed to render the icons (or set CHROME_PATH).');
 
 const ICO_SIZES = [16, 24, 32, 48, 64, 128, 256];
-const svg = fs.readFileSync(path.join(root, 'public', 'images', 'favicon.svg'), 'utf8');
+// The app icon uses the light (Eucalyptus) version of the logo; the browser favicon stays dark.
+const svg = fs.readFileSync(path.join(root, 'public', 'images', 'favicon-light.svg'), 'utf8');
 const svgUri = 'data:image/svg+xml;base64,' + Buffer.from(svg).toString('base64');
 
 const html = `<!doctype html><body><pre id="out"></pre><script>

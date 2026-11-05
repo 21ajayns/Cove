@@ -253,7 +253,7 @@
     }
 
     .note-editor {
-        @apply outline-none min-h-[50vh] text-ink-200;
+        @apply outline-none min-h-[50vh] text-ink-300;
     }
 
     .note-editor.is-empty::before {

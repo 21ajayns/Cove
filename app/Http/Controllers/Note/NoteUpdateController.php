@@ -7,6 +7,7 @@ use App\DataTransferObjects\Note\NoteUpdateDto;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Note\NoteUpdateRequest;
 use App\Repositories\Interfaces\Note\NoteRepositoryInterface;
+use App\Support\NoteHtml;
 use Illuminate\Http\JsonResponse;
 
 class NoteUpdateController extends Controller
@@ -20,7 +21,7 @@ class NoteUpdateController extends Controller
     {
         $dto = new NoteUpdateDto(
             $request->validated('title'),
-            $request->validated('content')
+            NoteHtml::clean($request->validated('content'))
         );
 
         $updated = $this->noteRepository->update($this->organizationId(), $note, $dto);

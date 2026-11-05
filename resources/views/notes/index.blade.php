@@ -362,7 +362,7 @@
                                     </svg>
                                 </button>
                                 <h3 class="font-semibold text-sm leading-snug text-fg tracking-tight pr-6" x-text="note.title"></h3>
-                                <p class="text-sm text-ink-400 line-clamp-4 whitespace-pre-line leading-relaxed" x-text="note.content"></p>
+                                <p class="text-sm text-ink-400 line-clamp-4 whitespace-pre-line leading-relaxed" x-text="notePlain(note.content)"></p>
                             </div>
                         </template>
                     </div>
@@ -387,7 +387,7 @@
                     <template x-if="!isEditingDetail">
                         <div>
                             <h1 class="text-2xl font-bold text-fg tracking-tight mb-5" x-text="selectedNote.title"></h1>
-                            <p class="text-sm text-ink-300 whitespace-pre-line leading-relaxed"><template x-for="(seg, i) in noteSegments(selectedNote.content)" :key="i"><span x-data="{ copied: false }"><template x-if="seg.type === 'text'"><span x-text="seg.value"></span></template><template x-if="seg.type === 'code'"><button type="button" title="Click to copy" @click="copyText(seg.value).then((ok) => { if (ok) { copied = true; setTimeout(() => copied = false, 1500); } })" class="inline px-1.5 py-0.5 rounded-md border font-mono text-[0.85em] cursor-pointer transition-colors" :class="copied ? 'border-emerald-400/50 text-emerald-400 bg-emerald-400/10' : 'border-fg/[0.16] bg-fg/[0.06] text-fg hover:border-accent hover:text-accent'" x-text="copied ? 'Copied' : seg.value"></button></template><template x-if="seg.type === 'link'"><a :href="seg.href" target="_blank" rel="noopener noreferrer" class="text-accent underline underline-offset-2 hover:opacity-80" x-text="seg.value"></a></template></span></template></p>
+                            <div class="note-rich note-view text-ink-300" x-html="noteBodyHtml(selectedNote.content)" @click="noteViewClick($event)"></div>
 
                             <div class="mt-10 flex items-center gap-2">
                                 <button @click="startEditNote()" class="btn-secondary">
@@ -418,14 +418,57 @@
                             </div>
 
                             <div>
-                                <textarea
-                                    x-model="detailForm.content"
-                                    @input="noteAutoFormat($event)"
-                                    @keydown.enter="noteListEnter($event)"
-                                    @keydown.backspace="noteListBackspace($event)"
-                                    placeholder="Write something…"
-                                    class="w-full min-h-[50vh] bg-transparent text-sm text-ink-200 placeholder-ink-600 outline-none leading-relaxed resize-none [field-sizing:content]"
-                                ></textarea>
+                                <div
+                                    x-ref="noteEditor"
+                                    contenteditable="true"
+                                    role="textbox"
+                                    aria-multiline="true"
+                                    data-placeholder="Write something…"
+                                    x-init="noteInitEditor($el)"
+                                    @input="noteEditorInput($event)"
+                                    @keydown="noteEditorKeydown($event)"
+                                    @paste="noteEditorPaste($event)"
+                                    class="note-rich note-editor"
+                                ></div>
+
+                                <!-- Floating toolbar: appears above selected text -->
+                                <div
+                                    x-show="noteTool.show"
+                                    x-cloak
+                                    class="note-toolbar"
+                                    :style="`left:${noteTool.x}px; top:${noteTool.y}px`"
+                                    @mousedown="if ($event.target.tagName !== 'INPUT') $event.preventDefault()"
+                                    @selectionchange.document="noteUpdateToolbar()"
+                                    @scroll.capture.window="noteUpdateToolbar()"
+                                    @resize.window="noteUpdateToolbar()"
+                                >
+                                    <template x-if="!noteTool.linkMode">
+                                        <div class="flex items-center gap-0.5">
+                                            <button type="button" class="note-tool font-mono" :class="noteTool.code && 'is-on'" @click="noteToggleCode()" title="Code: click to copy once saved">&lt;/&gt;</button>
+                                            <button type="button" class="note-tool" :class="noteTool.link && 'is-on'" @click="noteOpenLink()" title="Link">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.07 0l3-3a5 5 0 00-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 00-7.07 0l-3 3a5 5 0 007.07 7.07l1.5-1.5"/></svg>
+                                            </button>
+                                            <button type="button" class="note-tool" :class="noteTool.red && 'is-on'" @click="noteToggleRed()" title="Red text">
+                                                <span class="w-3.5 h-3.5 rounded-full" style="background:#ef4444"></span>
+                                            </button>
+                                        </div>
+                                    </template>
+                                    <template x-if="noteTool.linkMode">
+                                        <div class="flex items-center gap-1">
+                                            <input
+                                                x-ref="noteLinkInput"
+                                                x-model="noteTool.url"
+                                                @keydown.enter.prevent="noteApplyLink()"
+                                                @keydown.escape.prevent="noteCloseLink()"
+                                                type="text"
+                                                placeholder="Paste a link…"
+                                                class="h-7 w-52 bg-transparent text-xs text-fg outline-none px-2 placeholder-ink-600"
+                                            >
+                                            <button type="button" class="note-tool" @click="noteApplyLink()">Apply</button>
+                                            <button type="button" class="note-tool" x-show="noteTool.link" @click="noteRemoveLink()">Remove</button>
+                                        </div>
+                                    </template>
+                                </div>
                                 <p class="text-xs text-red-400 mt-1.5" x-show="errors.content" x-text="errors.content?.[0]"></p>
                             </div>
 
@@ -918,6 +961,8 @@
             subfolders: [],
             notes: [],
             selectedNote: null,
+            noteTool: { show: false, x: 0, y: 0, linkMode: false, url: '', code: false, link: false, red: false },
+            noteRange: null,
             isEditingDetail: false,
             isNewNote: false,
             detailForm: { title: '', content: '' },
@@ -1281,6 +1326,315 @@
                 }).join('');
             },
 
+            // ---- Rich notes ----
+            // Formatted notes are saved as HTML wrapped in <div class="nr"> (the server re-cleans it).
+            // Older notes are plain text; they are shown escaped and converted when edited.
+
+            noteIsRich(content) {
+                return typeof content === 'string' && content.startsWith('<div class="nr">');
+            },
+
+            // Inner HTML for the editor and the read view.
+            noteBodyHtml(content) {
+                content = content ?? '';
+                if (this.noteIsRich(content)) {
+                    return content.slice('<div class="nr">'.length, -'</div>'.length);
+                }
+                return this.escapeHtml(content).replace(/\r?\n/g, '<br>');
+            },
+
+            // Plain-text version for the note cards.
+            notePlain(content) {
+                content = content ?? '';
+                if (!this.noteIsRich(content)) return content;
+
+                const doc = new DOMParser().parseFromString(content, 'text/html');
+                doc.querySelectorAll('br').forEach((b) => b.replaceWith('\n'));
+                doc.querySelectorAll('li').forEach((li) => li.prepend('• '));
+                doc.querySelectorAll('div, p, li').forEach((el) => el.append('\n'));
+                return doc.body.textContent.replace(/\n{2,}/g, '\n').trim();
+            },
+
+            noteViewClick(e) {
+                const code = e.target.closest ? e.target.closest('code') : null;
+                if (!code) return;
+
+                this.copyText(code.textContent).then((ok) => {
+                    if (!ok) return;
+                    code.classList.add('is-copied');
+                    setTimeout(() => code.classList.remove('is-copied'), 1500);
+                });
+            },
+
+            noteInitEditor(ed) {
+                ed.innerHTML = this.noteBodyHtml(this.detailForm.content);
+                this.noteTool.show = false;
+                this.noteTool.linkMode = false;
+                this.noteRange = null;
+                this.noteMarkEmpty(ed);
+                if (this.isNewNote) ed.focus();
+            },
+
+            noteMarkEmpty(ed) {
+                const empty = ed.textContent.trim() === '' && !ed.querySelector('li');
+                ed.classList.toggle('is-empty', empty);
+                return empty;
+            },
+
+            // Copies the editor's HTML into the form (an empty editor saves as '' so "required" still applies).
+            noteSync() {
+                const ed = this.$refs.noteEditor;
+                if (!ed) return;
+                this.detailForm.content = this.noteMarkEmpty(ed)
+                    ? ''
+                    : '<div class="nr">' + ed.innerHTML.replace(/​/g, '') + '</div>';
+            },
+
+            noteClosest(node, selector) {
+                const ed = this.$refs.noteEditor;
+                const el = node && node.nodeType === 3 ? node.parentElement : node;
+                const found = el && el.closest ? el.closest(selector) : null;
+                return found && ed && ed.contains(found) ? found : null;
+            },
+
+            noteEditorInput(e) {
+                const ed = this.$refs.noteEditor;
+                if (e.inputType === 'insertText' && e.data === ' ') this.noteAutoList(ed);
+                this.noteSync();
+            },
+
+            // ". " / "- " / "* " at the start of a line makes a bullet list, "1 " a numbered list.
+            noteAutoList(ed) {
+                const sel = window.getSelection();
+                if (!sel.rangeCount || !sel.isCollapsed) return;
+
+                const node = sel.anchorNode;
+                if (!node || node.nodeType !== 3 || !ed.contains(node) || this.noteClosest(node, 'li')) return;
+
+                const prev = node.previousSibling;
+                if (prev && prev.nodeName !== 'BR') return;
+
+                const before = node.textContent.slice(0, sel.anchorOffset);
+                let command = null;
+                let start = 1;
+
+                if (/^[.\-*][  ]$/.test(before)) {
+                    command = 'insertUnorderedList';
+                } else if (/^\d{1,4}[  ]$/.test(before)) {
+                    command = 'insertOrderedList';
+                    start = parseInt(before, 10);
+                }
+                if (!command) return;
+
+                const range = document.createRange();
+                range.setStart(node, 0);
+                range.setEnd(node, before.length);
+                sel.removeAllRanges();
+                sel.addRange(range);
+                document.execCommand('delete');
+                document.execCommand(command);
+
+                if (command === 'insertOrderedList' && start !== 1) {
+                    const list = this.noteClosest(window.getSelection().anchorNode, 'ol');
+                    if (list) list.setAttribute('start', String(start));
+                }
+            },
+
+            noteEditorKeydown(e) {
+                // Tab nests a list item under the one above it; Shift+Tab moves it back out.
+                if (e.key !== 'Tab' || e.ctrlKey || e.metaKey || e.altKey || e.isComposing) return;
+
+                const sel = window.getSelection();
+                if (!sel.rangeCount || !this.noteClosest(sel.anchorNode, 'li')) return;
+
+                e.preventDefault();
+                document.execCommand(e.shiftKey ? 'outdent' : 'indent');
+                this.noteSync();
+            },
+
+            // Pasting always inserts plain text, so no foreign styles sneak in.
+            noteEditorPaste(e) {
+                e.preventDefault();
+                const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+                if (text) document.execCommand('insertText', false, text);
+            },
+
+            // ---- Floating toolbar (code / link / red) ----
+
+            noteSelectionOk() {
+                const ed = this.$refs.noteEditor;
+                const sel = window.getSelection();
+                return !!ed && sel.rangeCount > 0 && !sel.isCollapsed && ed.contains(sel.anchorNode) && ed.contains(sel.focusNode);
+            },
+
+            noteIsRed() {
+                try {
+                    return /239,\s*68,\s*68/.test(document.queryCommandValue('foreColor'));
+                } catch (err) {
+                    return false;
+                }
+            },
+
+            noteUpdateToolbar() {
+                const t = this.noteTool;
+                if (t.linkMode) return; // stay open while the link is typed
+
+                if (!this.noteSelectionOk()) {
+                    t.show = false;
+                    return;
+                }
+
+                const sel = window.getSelection();
+                const rect = sel.getRangeAt(0).getBoundingClientRect();
+                if (!rect.width && !rect.height) {
+                    t.show = false;
+                    return;
+                }
+
+                t.code = !!this.noteClosest(sel.anchorNode, 'code') && !!this.noteClosest(sel.focusNode, 'code');
+                t.link = !!this.noteClosest(sel.anchorNode, 'a');
+                t.red = this.noteIsRed();
+
+                const width = 300;
+                t.x = Math.max(8, Math.min(rect.left + rect.width / 2 - 60, window.innerWidth - width - 8));
+                t.y = rect.top - 46 < 8 ? rect.bottom + 8 : rect.top - 46;
+                t.show = true;
+            },
+
+            noteToggleCode() {
+                if (!this.noteSelectionOk()) return;
+                const sel = window.getSelection();
+                const existing = this.noteClosest(sel.anchorNode, 'code');
+
+                if (existing) {
+                    // Turn the whole code span back into plain text (done on the DOM so no
+                    // leftover monospace styling is carried over by the browser).
+                    const text = document.createTextNode(existing.textContent);
+                    existing.replaceWith(text);
+                    const range = document.createRange();
+                    range.selectNodeContents(text);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                } else {
+                    document.execCommand('insertHTML', false, '<code>' + this.escapeHtml(sel.toString()) + '</code>');
+
+                    // Put the caret after the new code span so typing carries on as normal text.
+                    // The browser snaps a caret at the edge back into <code>, so park it behind an
+                    // invisible spacer character (stripped again in noteSync).
+                    const code = this.noteClosest(window.getSelection().anchorNode, 'code')
+                        || this.noteClosest(window.getSelection().anchorNode?.previousSibling, 'code');
+                    if (code) {
+                        let next = code.nextSibling;
+                        if (next && next.nodeType === 3) {
+                            next.insertData(0, '​');
+                        } else {
+                            next = document.createTextNode('​');
+                            code.after(next);
+                        }
+                        const after = document.createRange();
+                        after.setStart(next, 1);
+                        after.collapse(true);
+                        window.getSelection().removeAllRanges();
+                        window.getSelection().addRange(after);
+                    }
+                }
+
+                this.noteSync();
+                this.noteUpdateToolbar();
+            },
+
+            noteToggleRed() {
+                if (!this.noteSelectionOk()) return;
+                const ed = this.$refs.noteEditor;
+                const wasRed = this.noteTool.red;
+
+                document.execCommand('styleWithCSS', false, true);
+
+                if (!wasRed) {
+                    document.execCommand('foreColor', false, '#ef4444');
+                } else {
+                    // Clearing: colour the selection with a marker value, then unwrap those spans.
+                    document.execCommand('foreColor', false, '#000001');
+
+                    const sel = window.getSelection();
+                    const saved = sel.rangeCount
+                        ? { sc: sel.anchorNode, so: sel.anchorOffset, ec: sel.focusNode, eo: sel.focusOffset }
+                        : null;
+
+                    ed.querySelectorAll('span').forEach((span) => {
+                        if (!/^rgb\(0,\s*0,\s*1\)$/.test(span.style.color)) return;
+                        while (span.firstChild) span.parentNode.insertBefore(span.firstChild, span);
+                        span.remove();
+                    });
+
+                    if (saved) {
+                        try {
+                            const range = document.createRange();
+                            range.setStart(saved.sc, saved.so);
+                            range.setEnd(saved.ec, saved.eo);
+                            sel.removeAllRanges();
+                            sel.addRange(range);
+                        } catch (err) { /* selection collapsed; fine */ }
+                    }
+                }
+
+                this.noteSync();
+                this.noteUpdateToolbar();
+            },
+
+            noteOpenLink() {
+                if (!this.noteSelectionOk()) return;
+                const sel = window.getSelection();
+                const link = this.noteClosest(sel.anchorNode, 'a');
+
+                this.noteRange = sel.getRangeAt(0).cloneRange();
+                this.noteTool.url = link ? link.getAttribute('href') : '';
+                this.noteTool.linkMode = true;
+                setTimeout(() => this.$refs.noteLinkInput && this.$refs.noteLinkInput.focus(), 0);
+            },
+
+            noteRestoreRange() {
+                const ed = this.$refs.noteEditor;
+                if (!ed || !this.noteRange) return false;
+                ed.focus();
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(this.noteRange);
+                return true;
+            },
+
+            noteCloseLink() {
+                this.noteTool.linkMode = false;
+                this.noteRestoreRange();
+                this.noteUpdateToolbar();
+            },
+
+            noteApplyLink() {
+                let url = (this.noteTool.url || '').trim();
+                if (!url) {
+                    this.noteCloseLink();
+                    return;
+                }
+                if (!/^https?:\/\//i.test(url)) url = 'https://' + url.replace(/^\/+/, '');
+
+                this.noteTool.linkMode = false;
+                if (this.noteRestoreRange()) {
+                    const existing = this.noteClosest(this.noteRange.commonAncestorContainer, 'a');
+                    if (existing) existing.setAttribute('href', url);
+                    else document.execCommand('createLink', false, url);
+                }
+
+                this.noteSync();
+                this.noteUpdateToolbar();
+            },
+
+            noteRemoveLink() {
+                this.noteTool.linkMode = false;
+                if (this.noteRestoreRange()) document.execCommand('unlink');
+                this.noteSync();
+                this.noteUpdateToolbar();
+            },
+
             startNewNote() {
                 this.selectedNote = { id: null, title: '', content: '' };
                 this.detailForm = { title: '', content: '' };
@@ -1293,150 +1647,6 @@
                 this.detailForm = { title: this.selectedNote.title, content: this.selectedNote.content };
                 this.errors = {};
                 this.isEditingDetail = true;
-            },
-
-            // Splits note text into plain / code / link pieces for the view mode:
-            // `like this` is copyable code, <https://example.com> is a clickable link.
-            // Only http(s) links (or bare domains, which get https://) count; anything
-            // else inside <> stays as typed.
-            noteSegments(content) {
-                const text = String(content ?? '');
-                const segments = [];
-                const pattern = /`([^`\n]+)`|<([^<>\s]+)>/g;
-                let last = 0;
-                let m;
-
-                const pushText = (value) => {
-                    if (!value) return;
-                    const prev = segments[segments.length - 1];
-                    if (prev && prev.type === 'text') prev.value += value;
-                    else segments.push({ type: 'text', value });
-                };
-
-                while ((m = pattern.exec(text)) !== null) {
-                    pushText(text.slice(last, m.index));
-                    last = m.index + m[0].length;
-
-                    if (m[1] !== undefined) {
-                        segments.push({ type: 'code', value: m[1] });
-                        continue;
-                    }
-
-                    let href = null;
-                    if (/^https?:\/\/[^\s/]+/i.test(m[2])) href = m[2];
-                    else if (/^(www\.)?[a-z0-9-]+(\.[a-z0-9-]+)+(:\d+)?([/?#]\S*)?$/i.test(m[2])) href = 'https://' + m[2];
-
-                    if (href) segments.push({ type: 'link', value: m[2], href });
-                    else pushText(m[0]);
-                }
-
-                pushText(text.slice(last));
-                return segments;
-            },
-
-            // ---- List support for the note editor (content stays plain text) ----
-            // Typing ". " (or "- " / "* ") at the start of a line makes a bullet,
-            // "1 " makes a numbered item. Enter continues a list, Enter on an empty
-            // item or Backspace right after a marker ends it.
-
-            // Replace [start, end) with text, keeping the browser's undo stack where possible.
-            noteReplace(el, start, end, text) {
-                el.focus();
-                el.setSelectionRange(start, end);
-                if (!document.execCommand('insertText', false, text)) {
-                    el.setRangeText(text, start, end, 'end');
-                    el.dispatchEvent(new Event('input', { bubbles: true }));
-                }
-            },
-
-            noteAutoFormat(e) {
-                if (e.inputType !== 'insertText' || e.data !== ' ') return;
-
-                const el = e.target;
-                const caret = el.selectionStart;
-                const lineStart = el.value.lastIndexOf('\n', caret - 1) + 1;
-                const typed = el.value.slice(lineStart, caret);
-
-                let match = typed.match(/^([ \t]*)[.\-*] $/);
-                if (match) {
-                    this.noteReplace(el, lineStart, caret, match[1] + '• ');
-                    return;
-                }
-
-                match = typed.match(/^([ \t]*)(\d+) $/);
-                if (match) {
-                    this.noteReplace(el, lineStart, caret, match[1] + match[2] + '. ');
-                }
-            },
-
-            noteListEnter(e) {
-                if (e.isComposing || e.shiftKey || e.ctrlKey || e.metaKey || e.altKey) return;
-
-                const el = e.target;
-                if (el.selectionStart !== el.selectionEnd) return;
-
-                const value = el.value;
-                const caret = el.selectionStart;
-                const lineStart = value.lastIndexOf('\n', caret - 1) + 1;
-                const match = value.slice(lineStart, caret).match(/^([ \t]*)(•|(\d+)\.) (.*)$/);
-                if (!match) return;
-
-                e.preventDefault();
-
-                const [, indent, marker, num, text] = match;
-                const lineEndIdx = value.indexOf('\n', caret);
-                const lineEnd = lineEndIdx === -1 ? value.length : lineEndIdx;
-
-                // Empty item (nothing typed after the marker, nothing after the caret): end the list.
-                if (text === '' && lineEnd === caret) {
-                    this.noteReplace(el, lineStart, caret, '');
-                    return;
-                }
-
-                const rest = value.slice(caret, lineEnd);
-
-                if (num === undefined) {
-                    this.noteReplace(el, caret, lineEnd, '\n' + indent + '• ' + rest);
-                    el.setSelectionRange(caret + 1 + indent.length + 2, caret + 1 + indent.length + 2);
-                    return;
-                }
-
-                // Numbered: insert the next number, then renumber the items that follow it.
-                let next = parseInt(num, 10) + 1;
-                let out = '\n' + indent + next + '. ' + rest;
-                let end = lineEnd;
-                const numbered = new RegExp('^' + indent + '(\\d+)\\. ');
-
-                while (end < value.length) {
-                    const nextStart = end + 1;
-                    const nextEndIdx = value.indexOf('\n', nextStart);
-                    const nextEnd = nextEndIdx === -1 ? value.length : nextEndIdx;
-                    const line = value.slice(nextStart, nextEnd);
-                    if (!numbered.test(line)) break;
-
-                    next += 1;
-                    out += '\n' + line.replace(numbered, indent + next + '. ');
-                    end = nextEnd;
-                }
-
-                const caretAfter = caret + 1 + indent.length + String(parseInt(num, 10) + 1).length + 2;
-                this.noteReplace(el, caret, end, out);
-                el.setSelectionRange(caretAfter, caretAfter);
-            },
-
-            noteListBackspace(e) {
-                if (e.isComposing) return;
-
-                const el = e.target;
-                if (el.selectionStart !== el.selectionEnd) return;
-
-                const caret = el.selectionStart;
-                const lineStart = el.value.lastIndexOf('\n', caret - 1) + 1;
-
-                if (/^[ \t]*(•|\d+\.) $/.test(el.value.slice(lineStart, caret))) {
-                    e.preventDefault();
-                    this.noteReplace(el, lineStart, caret, '');
-                }
             },
 
             cancelEditDetail() {

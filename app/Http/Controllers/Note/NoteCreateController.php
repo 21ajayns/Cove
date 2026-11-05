@@ -8,6 +8,7 @@ use App\DataTransferObjects\Note\NoteCreateDto;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Note\NoteCreateRequest;
 use App\Repositories\Interfaces\Note\NoteRepositoryInterface;
+use App\Support\NoteHtml;
 use Illuminate\Http\JsonResponse;
 
 class NoteCreateController extends Controller
@@ -22,7 +23,7 @@ class NoteCreateController extends Controller
         $dto = new NoteCreateDto(
             $this->organizationId(),
             $request->validated('title'),
-            $request->validated('content'),
+            NoteHtml::clean($request->validated('content')),
             new CategoryEnum($request->validated('category')),
             $request->validated('folder_id')
         );

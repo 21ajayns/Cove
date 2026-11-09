@@ -1,5 +1,5 @@
 <script>
-    // Light is the default. Dark is used only after the person switches to it with the sun/moon button.
+    // Dark is the default. Light is used only after the person switches to it with the sun/moon button.
     (function () {
         var root = document.documentElement;
 
@@ -8,10 +8,10 @@
         }
 
         function apply() {
-            var theme = stored() === 'dark' ? 'dark' : 'light';
+            var theme = stored() === 'light' ? 'light' : 'dark';
             root.setAttribute('data-theme', theme);
             var meta = document.querySelector('meta[name="theme-color"]');
-            if (meta) meta.setAttribute('content', theme === 'light' ? '#f7fbfa' : '#120e0a');
+            if (meta) meta.setAttribute('content', theme === 'light' ? '#f0f3f1' : '#0f1214');
         }
 
         window.toggleTheme = function () {

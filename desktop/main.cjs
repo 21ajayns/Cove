@@ -283,7 +283,7 @@ function trackWindowState(win) {
 function loadingPage(message, detail) {
     const html = `<!doctype html><meta charset="utf-8"><title>Cove</title>
 <style>
-  :root { color-scheme: light; --bg:#f7fbfa; --fg:#13292a; --muted:#4c6b69; }
+  :root { color-scheme: dark; --bg:#0f1214; --fg:#e8eef0; --muted:#8b979c; }
   html,body { height:100%; margin:0; background:var(--bg); color:var(--fg); font-family:'Segoe UI',system-ui,sans-serif; }
   body { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; text-align:center; padding:24px; box-sizing:border-box; }
   svg { width:72px; height:72px; animation:breathe 1.8s ease-in-out infinite; }
@@ -291,10 +291,10 @@ function loadingPage(message, detail) {
   p { margin:0; color:var(--muted); font-size:13px; max-width:520px; white-space:pre-wrap; }
   b { font-size:15px; letter-spacing:.2em; font-weight:600; }
 </style>
-<svg viewBox="0 0 64 64"><defs><linearGradient id="g" gradientUnits="userSpaceOnUse" x1="8" y1="8" x2="56" y2="56"><stop offset="0" stop-color="#55b8a5"/><stop offset="1" stop-color="#1f7a6b"/></linearGradient></defs>
+<svg viewBox="0 0 64 64"><defs><linearGradient id="g" gradientUnits="userSpaceOnUse" x1="8" y1="8" x2="56" y2="56"><stop offset="0" stop-color="#62be96"/><stop offset="1" stop-color="#277f5e"/></linearGradient></defs>
 <path d="M44 12 A23 23 0 1 0 44 52" fill="none" stroke="url(#g)" stroke-width="4.5" stroke-linecap="round"/>
-<path d="M24 27 q4.5 -5 9 0 t9 0" fill="none" stroke="#55b8a5" stroke-width="3.2" stroke-linecap="round"/>
-<path d="M24 37 q4.5 -5 9 0 t9 0" fill="none" stroke="#1f7a6b" stroke-width="3.2" stroke-linecap="round"/></svg>
+<path d="M24 27 q4.5 -5 9 0 t9 0" fill="none" stroke="#62be96" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M24 37 q4.5 -5 9 0 t9 0" fill="none" stroke="#277f5e" stroke-width="3.2" stroke-linecap="round"/></svg>
 <b>COVE</b><p>${message}</p>${detail ? `<p>${detail.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</p>` : ''}`;
     return 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
 }
@@ -349,7 +349,7 @@ async function createWindow() {
         autoHideMenuBar: true,
         title: 'Cove',
         icon: iconPath,
-        backgroundColor: '#f7fbfa', // light is the default theme
+        backgroundColor: '#0f1214', // dark is the default theme
         webPreferences: { contextIsolation: true, sandbox: true, spellcheck: false },
     });
     mainWindow = win;

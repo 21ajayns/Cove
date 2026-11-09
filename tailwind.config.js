@@ -39,6 +39,7 @@ export default {
                     'deep-hover': rgb('accent-deep-hover'),
                     soft: rgb('accent-soft'),
                 },
+                'on-accent': rgb('on-accent'),
                 'tab-on': rgb('tab-on'),
                 'tab-icon': rgb('tab-icon'),
                 cmd: rgb('cmd'),

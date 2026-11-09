@@ -45,7 +45,7 @@
             Keep me logged in
         </label>
 
-        <button type="submit" class="w-full py-3 text-sm font-semibold text-white bg-accent hover:bg-accent-hover transition-colors">
+        <button type="submit" class="w-full py-3 text-sm font-semibold text-on-accent bg-accent hover:bg-accent-hover transition-colors">
             Log in
         </button>
     </form>

@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png?v=3">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-180.png?v=3">
     <link rel="manifest" href="/manifest.json?v=3">
-    <meta name="theme-color" content="#f7fbfa">
+    <meta name="theme-color" content="#0f1214">
     @include('partials.theme-init')
     @vite(['resources/css/app.css'])
 </head>

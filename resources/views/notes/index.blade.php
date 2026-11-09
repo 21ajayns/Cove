@@ -10,7 +10,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png?v=3">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-180.png?v=3">
     <link rel="manifest" href="/manifest.json?v=3">
-    <meta name="theme-color" content="#f7fbfa">
+    <meta name="theme-color" content="#0f1214">
     @include('partials.theme-init')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -98,7 +98,7 @@
                 class="w-full h-12 flex items-center gap-3 pl-[9px] pr-3 rounded-xl bg-fg/[0.04] border border-fg/[0.06] hover:bg-fg/[0.07] text-left transition-colors"
             >
                 <span
-                    class="w-[30px] h-[30px] shrink-0 flex items-center justify-center rounded-lg bg-gradient-to-br from-accent to-accent-deep text-white text-sm"
+                    class="w-[30px] h-[30px] shrink-0 flex items-center justify-center rounded-lg bg-gradient-to-br from-accent to-accent-deep text-on-accent text-sm"
                     style="font-family: 'Silkscreen', cursive;"
                     x-text="activeCategory === 'office' ? 'W' : 'P'"
                 ></span>
@@ -267,7 +267,7 @@
                 <button
                     @click="startNewNote()"
                     title="New note"
-                    class="w-11 h-11 rounded-xl flex items-center justify-center text-white shadow-[0_1px_0_0_rgba(255,255,255,0.16)_inset,0_1px_3px_rgba(0,0,0,0.5)] transition-all duration-150 active:scale-[0.95]"
+                    class="w-11 h-11 rounded-xl flex items-center justify-center text-on-accent shadow-[0_1px_0_0_rgba(255,255,255,0.16)_inset,0_1px_3px_rgba(0,0,0,0.5)] transition-all duration-150 active:scale-[0.95]"
                     :class="'bg-gradient-to-b from-accent to-accent-deep hover:from-accent-hover hover:to-accent-deep-hover'"
                 >
                     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -314,55 +314,96 @@
                 <div>
                     <p x-show="loading" class="text-sm text-ink-500">Loading…</p>
 
-                    <div
-                        x-show="!loading"
-                        class="grid gap-4"
-                        style="grid-template-columns: repeat(3, 1fr);"
-                    >
+                    <div x-show="!loading" class="max-w-xl flex flex-col gap-3">
                         <template x-for="folder in subfolders" :key="folder.id">
                             <div
                                 @click="selectFolder(folder.id)"
-                                class="tile-folder group"
+                                class="folder-block group"
                             >
-                                <div class="absolute top-3 right-3 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-150">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" class="shrink-0"><path d="M2 6a2 2 0 012-2h4.5l1.5 2H16a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/></svg>
+                                <span class="truncate" x-text="folder.name"></span>
+
+                                <div class="absolute top-1/2 -translate-y-1/2 right-3 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-150">
                                     <button
                                         @click.stop="openRenameFolderModal(folder)"
                                         title="Rename folder"
-                                        class="tile-action hover:text-amber-400 hover:bg-amber-500/10"
+                                        class="folder-block-action"
                                     >
-                                        <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M13.5 2.5a1.5 1.5 0 012.121 2.121l-8.5 8.5-2.828.707.707-2.828 8.5-8.5z"/></svg>
+                                        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M13.5 2.5a1.5 1.5 0 012.121 2.121l-8.5 8.5-2.828.707.707-2.828 8.5-8.5z"/></svg>
                                     </button>
                                     <button
                                         @click.stop="deleteFolder(folder)"
                                         title="Delete folder"
-                                        class="tile-action hover:text-red-400 hover:bg-red-500/10"
+                                        class="folder-block-action"
                                     >
-                                        <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M4 6h12M8 6V4a1 1 0 011-1h2a1 1 0 011 1v2m3 0-.7 9.1a2 2 0 01-2 1.9H7.7a2 2 0 01-2-1.9L5 6h10z"/>
                                         </svg>
                                     </button>
                                 </div>
-                                <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" class="text-amber-400/80"><path d="M2 6a2 2 0 012-2h4.5l1.5 2H16a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/></svg>
-                                <h3 class="font-semibold text-sm leading-snug text-fg tracking-tight pr-12" x-text="folder.name"></h3>
                             </div>
                         </template>
 
-                        <template x-for="note in notes" :key="note.id">
-                            <div
-                                @click="viewNote(note)"
-                                class="tile-note group"
-                            >
-                                <button
-                                    @click.stop="deleteNote(note)"
-                                    title="Delete note"
-                                    class="absolute top-3 right-3 tile-action opacity-0 group-hover:opacity-100 hover:text-red-400 hover:bg-red-500/10 transition-all duration-150"
-                                >
-                                    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M4 6h12M8 6V4a1 1 0 011-1h2a1 1 0 011 1v2m3 0-.7 9.1a2 2 0 01-2 1.9H7.7a2 2 0 01-2-1.9L5 6h10z"/>
-                                    </svg>
-                                </button>
-                                <h3 class="font-semibold text-sm leading-snug text-fg tracking-tight pr-6" x-text="note.title"></h3>
-                                <p class="text-sm text-ink-400 line-clamp-4 whitespace-pre-line leading-relaxed" x-text="notePlain(note.content)"></p>
+                        <template x-for="(note, noteIndex) in notes" :key="note.id">
+                            <div class="note-card" :class="subfolders.length > 0 && noteIndex === 0 ? 'mt-3' : ''">
+                                <div class="flex items-start gap-3">
+                                    <span class="note-card-icon">
+                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M6 3a1 1 0 00-1 1v16a1 1 0 001 1h12a1 1 0 001-1V8l-5-5H6z"/>
+                                            <path d="M13 3v5h5"/>
+                                            <path d="M9 13h6M9 17h4"/>
+                                        </svg>
+                                    </span>
+
+                                    <div x-data="{ open: false }" @click.outside="open = false" @keydown.escape.window="open = false" class="relative ml-auto">
+                                        <button
+                                            type="button"
+                                            @click="open = !open"
+                                            title="More"
+                                            aria-label="More actions"
+                                            class="w-8 h-8 flex items-center justify-center rounded-lg text-ink-400 hover:bg-fg/[0.08] hover:text-fg transition-colors"
+                                        >
+                                            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><circle cx="4" cy="10" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="16" cy="10" r="1.5"/></svg>
+                                        </button>
+
+                                        <div
+                                            x-show="open"
+                                            x-cloak
+                                            x-transition:enter="transition ease-out duration-100"
+                                            x-transition:enter-start="opacity-0 -translate-y-1"
+                                            x-transition:enter-end="opacity-100 translate-y-0"
+                                            x-transition:leave="transition ease-in duration-75"
+                                            x-transition:leave-start="opacity-100"
+                                            x-transition:leave-end="opacity-0"
+                                            class="absolute right-0 top-full mt-1 w-36 rounded-lg bg-surface border border-fg/[0.1] shadow-popover py-1 z-20"
+                                        >
+                                            <button
+                                                type="button"
+                                                @click="open = false; editNoteFromList(note)"
+                                                class="w-full flex items-center gap-2 px-3 py-2 text-xs text-left text-ink-300 hover:bg-fg/[0.06] transition-colors"
+                                            >
+                                                <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M13.5 2.5a1.5 1.5 0 012.121 2.121l-8.5 8.5-2.828.707.707-2.828 8.5-8.5z"/></svg>
+                                                Edit
+                                            </button>
+                                            <button
+                                                type="button"
+                                                @click="open = false; deleteNote(note)"
+                                                class="w-full flex items-center gap-2 px-3 py-2 text-xs text-left text-red-400 hover:bg-red-500/10 transition-colors"
+                                            >
+                                                <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12M8 6V4a1 1 0 011-1h2a1 1 0 011 1v2m3 0-.7 9.1a2 2 0 01-2 1.9H7.7a2 2 0 01-2-1.9L5 6h10z"/></svg>
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h3 class="mt-3 font-semibold text-[15px] leading-snug text-fg tracking-tight truncate" :title="note.title" x-text="note.title || 'Untitled'"></h3>
+                                <p class="mt-0.5 text-[13px] text-ink-400" x-text="'Created ' + noteAgo(note.created_at)"></p>
+
+                                <div class="mt-4 flex items-center gap-2">
+                                    <button type="button" @click="viewNote(note)" class="note-card-btn">Open</button>
+                                    <button type="button" @click="editNoteFromList(note)" class="note-card-btn">Edit</button>
+                                </div>
                             </div>
                         </template>
                     </div>
@@ -387,7 +428,7 @@
                     <template x-if="!isEditingDetail">
                         <div>
                             <h1 class="text-2xl font-bold text-fg tracking-tight mb-5" x-text="selectedNote.title"></h1>
-                            <div class="note-rich note-view text-ink-300" x-html="noteBodyHtml(selectedNote.content)" @click="noteViewClick($event)"></div>
+                            <div class="note-rich note-view text-ink-300" x-html="noteViewHtml(selectedNote.content)" @click="noteViewClick($event)"></div>
 
                             <div class="mt-10 flex items-center gap-2">
                                 <button @click="startEditNote()" class="btn-secondary">
@@ -494,7 +535,7 @@
                 <button
                     @click="startNewCommand()"
                     title="New command set"
-                    class="w-11 h-11 rounded-xl flex items-center justify-center text-white shadow-[0_1px_0_0_rgba(255,255,255,0.16)_inset,0_1px_3px_rgba(0,0,0,0.5)] transition-all duration-150 active:scale-[0.95]"
+                    class="w-11 h-11 rounded-xl flex items-center justify-center text-on-accent shadow-[0_1px_0_0_rgba(255,255,255,0.16)_inset,0_1px_3px_rgba(0,0,0,0.5)] transition-all duration-150 active:scale-[0.95]"
                     :class="'bg-gradient-to-b from-accent to-accent-deep hover:from-accent-hover hover:to-accent-deep-hover'"
                 >
                     <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 6L3.5 10 7 14M13 6l3.5 4-3.5 4M11.5 4l-3 12"/></svg>
@@ -767,7 +808,7 @@
                     </template>
                 </div>
 
-                <form @submit.prevent="addTask()" class="mt-4 flex items-center gap-3.5 px-1 py-3.5 border-b border-fg/[0.08]">
+                <form @submit.prevent="addTask()" class="mt-4 flex items-center gap-3 px-3.5 py-3 border border-dashed border-fg/[0.16] rounded-[10px]">
                     <span class="w-5 h-5 shrink-0 rounded-full border-[1.75px] border-dashed border-ink-500 flex items-center justify-center text-ink-500 text-sm leading-none">+</span>
                     <input
                         type="text"
@@ -786,15 +827,52 @@
 
                 <p x-show="taskLoading" class="mt-4 text-sm text-ink-500">Loading…</p>
 
-                <div x-show="!taskLoading && visibleTasks().length > 0">
-                    <template x-for="task in visibleTasks()" :key="task.id">
-                        <div class="group flex items-center gap-3.5 px-1 py-3.5 border-b border-fg/[0.08] text-[15px]">
+                <div x-show="!taskLoading && visibleTasks().length > 0" class="mt-6 flex flex-col gap-[18px]">
+                    <template x-for="statusGroup in taskGroups()" :key="statusGroup.key">
+                    <section
+                        x-show="draggingTaskId !== null || taskCount(statusGroup.key) > 0"
+                        class="flex flex-col gap-2 -mx-2 px-2 -my-1.5 py-1.5 rounded-xl transition-colors"
+                        :class="dragOverKey === statusGroup.key ? 'bg-fg/[0.04]' : ''"
+                        :style="dragOverKey === statusGroup.key ? `box-shadow: inset 0 0 0 1.5px ${statusGroup.border}` : ''"
+                        @dragover="if (draggingTaskId !== null) { $event.preventDefault(); $event.dataTransfer.dropEffect = 'move'; dragOverKey = statusGroup.key; }"
+                        @dragleave="if (!$el.contains($event.relatedTarget) && dragOverKey === statusGroup.key) dragOverKey = null"
+                        @drop.prevent="dropTask(statusGroup.key)"
+                    >
+                        <div class="flex items-center gap-2.5 h-[22px]">
+                            <span class="w-[9px] h-[9px] rounded-[2px] shrink-0" :style="`background: ${statusGroup.color}`"></span>
+                            <h3 class="text-[11px] font-bold uppercase tracking-[0.1em]" :style="`color: ${statusGroup.color}`" x-text="statusGroup.label"></h3>
+                            <span class="font-mono text-[11px] text-ink-500 tabular-nums" x-text="taskCount(statusGroup.key)"></span>
+                            <span class="flex-1 h-px bg-fg/[0.07]"></span>
+                            <button
+                                type="button"
+                                x-show="statusGroup.key === 'completed' && taskStatusFilter !== 'completed'"
+                                @click="toggleShowCompleted()"
+                                :aria-expanded="showCompleted.toString()"
+                                class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-xs text-ink-400 hover:text-ink-100 hover:bg-fg/[0.06] transition-colors"
+                            >
+                                <span x-text="showCompleted ? 'Hide' : 'Show'"></span>
+                                <svg width="9" height="9" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-150" :class="showCompleted ? '-rotate-180' : ''"><path d="M5 8l5 5 5-5"/></svg>
+                            </button>
+                        </div>
+
+                        <div x-show="statusGroup.key !== 'completed' || showCompleted || taskStatusFilter === 'completed'" class="flex flex-col gap-1.5">
+                    <template x-for="task in statusGroup.tasks" :key="task.id">
+                        <div
+                            draggable="true"
+                            @dragstart="startTaskDrag($event, task)"
+                            @dragend="endTaskDrag()"
+                            title="Drag to another status"
+                            class="group relative flex items-center gap-3.5 pl-3.5 pr-2.5 py-2.5 bg-surface border border-fg/[0.07] rounded-[9px] text-[15px] cursor-grab active:cursor-grabbing transition-opacity"
+                            :class="draggingTaskId === task.id ? 'opacity-40' : ''"
+                        >
+                            <svg aria-hidden="true" width="8" height="12" viewBox="0 0 8 12" fill="currentColor" class="absolute left-[3px] top-1/2 -translate-y-1/2 text-ink-500 opacity-0 group-hover:opacity-70 transition-opacity"><circle cx="2" cy="2" r="1"/><circle cx="6" cy="2" r="1"/><circle cx="2" cy="6" r="1"/><circle cx="6" cy="6" r="1"/><circle cx="2" cy="10" r="1"/><circle cx="6" cy="10" r="1"/></svg>
                             <button
                                 type="button"
                                 @click="toggleTaskCompleted(task)"
                                 :title="task.status === 'completed' ? 'Mark not done' : 'Mark done'"
                                 class="w-5 h-5 shrink-0 rounded-full border-[1.75px] flex items-center justify-center transition-colors text-ink-950"
-                                :class="task.status === 'completed' ? 'bg-emerald-400 border-emerald-400' : 'border-ink-500 hover:border-accent'"
+                                :class="task.status === 'completed' ? 'bg-emerald-400 border-emerald-400' : 'hover:bg-fg/[0.06]'"
+                                :style="task.status === 'completed' ? '' : `border-color: ${statusGroup.ring}`"
                             >
                                 <svg x-show="task.status === 'completed'" width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg>
                             </button>
@@ -862,6 +940,14 @@
                             </button>
                         </div>
                     </template>
+                        </div>
+
+                        <div
+                            x-show="taskCount(statusGroup.key) === 0"
+                            class="h-11 rounded-[9px] border border-dashed border-fg/[0.16] flex items-center justify-center text-xs text-ink-500"
+                        >Drop here</div>
+                    </section>
+                    </template>
                 </div>
 
                 <div x-show="!taskLoading && visibleTasks().length === 0" class="py-16 text-center">
@@ -913,6 +999,31 @@
             </form>
         </div>
     </div>
+
+    <!-- Confirm dialog. Used instead of the browser's confirm(), which in the desktop app leaves the
+         page unable to take keyboard input after it closes. -->
+    <div
+        x-show="confirmDialog.show"
+        x-cloak
+        x-transition.opacity
+        x-effect="if (confirmDialog.show) $nextTick(() => $refs.confirmOk.focus())"
+        @keydown.escape.window="if (confirmDialog.show) answerConfirm(false)"
+        class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+        style="display: none;"
+    >
+        <div
+            @click.outside="answerConfirm(false)"
+            role="alertdialog"
+            aria-modal="true"
+            class="card w-full max-w-sm p-6 shadow-popover"
+        >
+            <p class="text-sm text-fg leading-relaxed" x-text="confirmDialog.message"></p>
+            <div class="flex justify-end gap-2 pt-5">
+                <button type="button" @click="answerConfirm(false)" class="btn-ghost">Cancel</button>
+                <button type="button" x-ref="confirmOk" @click="answerConfirm(true)" class="btn-secondary text-red-400" x-text="confirmDialog.okLabel"></button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -940,8 +1051,14 @@
     })();
 
     function notesApp() {
+        // Resolves the open confirm dialog's promise; kept outside Alpine's reactive state.
+        let pendingConfirm = null;
+        // Where keyboard focus was before the confirm dialog opened, so it can go back there.
+        let focusBeforeConfirm = null;
+
         return {
             showSplash: true,
+            confirmDialog: { show: false, message: '', okLabel: 'Delete' },
             activeApp: 'task',
             activeCategory: localStorage.getItem('activeCategory') || 'office',
             tasks: [],
@@ -949,11 +1066,15 @@
             taskForm: { title: '' },
             taskLoading: false,
             taskStatuses: [
-                { key: 'critical', label: 'Critical', color: 'rgb(var(--st-critical))', border: 'rgb(var(--st-critical) / 0.35)' },
-                { key: 'active', label: 'Active', color: 'rgb(var(--st-active))', border: 'rgb(var(--st-active) / 0.35)' },
-                { key: 'upcoming', label: 'Upcoming', color: 'rgb(var(--st-upcoming))', border: 'rgb(var(--st-upcoming) / 0.35)' },
-                { key: 'completed', label: 'Completed', color: 'rgb(var(--st-completed))', border: 'rgb(var(--st-completed) / 0.35)' },
+                { key: 'critical', label: 'Critical', color: 'rgb(var(--st-critical))', border: 'rgb(var(--st-critical) / 0.35)', ring: 'rgb(var(--st-critical) / 0.7)' },
+                { key: 'active', label: 'Active', color: 'rgb(var(--st-active))', border: 'rgb(var(--st-active) / 0.35)', ring: 'rgb(var(--st-active) / 0.7)' },
+                { key: 'upcoming', label: 'Upcoming', color: 'rgb(var(--st-upcoming))', border: 'rgb(var(--st-upcoming) / 0.35)', ring: 'rgb(var(--st-upcoming) / 0.7)' },
+                { key: 'completed', label: 'Completed', color: 'rgb(var(--st-completed))', border: 'rgb(var(--st-completed) / 0.35)', ring: 'rgb(var(--st-completed) / 0.7)' },
             ],
+            draggingTaskId: null,
+            dragOverKey: null,
+            // Completed tasks are folded away under their heading until shown; remembered per browser.
+            showCompleted: (() => { try { return localStorage.getItem('showCompleted') === '1'; } catch (e) { return false; } })(),
             folderTree: [],
             nodesById: {},
             selectedFolderId: null,
@@ -981,6 +1102,38 @@
             init() {
                 // Tasks is the first tab, so the app opens on it; Notes and Comms load when you switch to them.
                 this.loadTasks();
+            },
+
+            // In-page replacement for confirm(): resolves true if the person confirms.
+            askConfirm(message, okLabel = 'Delete') {
+                if (pendingConfirm) {
+                    pendingConfirm(false);
+                }
+
+                focusBeforeConfirm = document.activeElement;
+                this.confirmDialog = { show: true, message, okLabel };
+
+                return new Promise((resolve) => { pendingConfirm = resolve; });
+            },
+
+            answerConfirm(ok) {
+                if (!this.confirmDialog.show) {
+                    return;
+                }
+
+                this.confirmDialog.show = false;
+                const resolve = pendingConfirm;
+                pendingConfirm = null;
+
+                const previous = focusBeforeConfirm;
+                focusBeforeConfirm = null;
+                if (previous && previous.isConnected && typeof previous.focus === 'function') {
+                    previous.focus();
+                }
+
+                if (resolve) {
+                    resolve(ok);
+                }
             },
 
             escapeHtml(str) {
@@ -1082,6 +1235,44 @@
                     .sort((a, b) => order[a.status] - order[b.status]);
             },
 
+            // The visible tasks split into one group per status (Critical, Active, Upcoming, Completed).
+            // Every group is always returned; the page hides empty ones unless a task is being dragged,
+            // so the groups never get added or removed mid-drag (which would cancel it). The page reads
+            // counts with taskCount(key), not group.tasks.length: Alpine can evaluate x-show before it
+            // refreshes a reused group's data, which left a group hidden after a drop.
+            taskGroups() {
+                return this.taskStatuses
+                    .filter((s) => !this.taskStatusFilter || s.key === this.taskStatusFilter)
+                    .map((s) => ({ ...s, tasks: this.tasks.filter((t) => t.status === s.key) }));
+            },
+
+            startTaskDrag(event, task) {
+                event.dataTransfer.effectAllowed = 'move';
+                // A private type, so dropping onto a text field doesn't paste anything.
+                event.dataTransfer.setData('application/x-cove-task', String(task.id));
+                // Changing the page during dragstart can cancel the drag, so the empty groups appear a tick later.
+                setTimeout(() => { this.draggingTaskId = task.id; }, 0);
+            },
+
+            endTaskDrag() {
+                this.draggingTaskId = null;
+                this.dragOverKey = null;
+            },
+
+            dropTask(status) {
+                const task = this.tasks.find((t) => t.id === this.draggingTaskId);
+                this.endTaskDrag();
+
+                if (task) {
+                    this.updateTaskStatus(task, status);
+                }
+            },
+
+            toggleShowCompleted() {
+                this.showCompleted = !this.showCompleted;
+                try { localStorage.setItem('showCompleted', this.showCompleted ? '1' : '0'); } catch (e) {}
+            },
+
             taskCount(status) {
                 return this.tasks.filter((t) => t.status === status).length;
             },
@@ -1125,19 +1316,32 @@
                 this.tasks.push(task);
             },
 
+            // Moves the task straight away and puts it back if the server refuses.
             async updateTaskStatus(task, status) {
-                const response = await fetch(`/api/tasks/${task.id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({ status }),
-                });
-
-                if (!response.ok) {
+                if (task.status === status) {
                     return;
                 }
 
-                const updated = await response.json();
-                task.status = updated.status;
+                const previous = task.status;
+                task.status = status;
+
+                try {
+                    const response = await fetch(`/api/tasks/${task.id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify({ status }),
+                    });
+
+                    if (!response.ok) {
+                        task.status = previous;
+                        return;
+                    }
+
+                    const updated = await response.json();
+                    task.status = updated.status;
+                } catch (e) {
+                    task.status = previous;
+                }
             },
 
             toggleTaskCompleted(task) {
@@ -1145,7 +1349,7 @@
             },
 
             async deleteTask(task) {
-                if (!confirm(`Delete "${task.title}"?`)) {
+                if (!(await this.askConfirm(`Delete "${task.title}"?`))) {
                     return;
                 }
 
@@ -1155,7 +1359,7 @@
             },
 
             async clearTasks() {
-                if (!confirm(`Delete all ${this.activeCategory} tasks? This cannot be undone.`)) {
+                if (!(await this.askConfirm(`Delete all ${this.activeCategory === 'office' ? 'Work' : 'Personal'} tasks? This cannot be undone.`, 'Delete all'))) {
                     return;
                 }
 
@@ -1257,8 +1461,32 @@
                 this.isNewNote = false;
             },
 
+            // Opens a note straight into edit mode from the list.
+            async editNoteFromList(note) {
+                await this.viewNote(note);
+                this.startEditNote();
+            },
+
+            // "just now", "3 days ago", "2 months ago" for the note cards.
+            noteAgo(date) {
+                if (!date) {
+                    return '';
+                }
+
+                const minutes = (Date.now() - new Date(date).getTime()) / 60000;
+                const plural = (n, unit) => `${n} ${unit}${n === 1 ? '' : 's'} ago`;
+
+                if (minutes < 1) return 'just now';
+                if (minutes < 60) return plural(Math.round(minutes), 'minute');
+                if (minutes < 1440) return plural(Math.round(minutes / 60), 'hour');
+                if (minutes < 43200) return plural(Math.round(minutes / 1440), 'day');
+                if (minutes < 525600) return plural(Math.round(minutes / 43200), 'month');
+
+                return plural(Math.round(minutes / 525600), 'year');
+            },
+
             async deleteNote(note) {
-                if (!confirm(`Delete "${note.title || 'this note'}"? This cannot be undone.`)) {
+                if (!(await this.askConfirm(`Delete "${note.title || 'this note'}"? This cannot be undone.`))) {
                     return;
                 }
 
@@ -1355,14 +1583,33 @@
                 return doc.body.textContent.replace(/\n{2,}/g, '\n').trim();
             },
 
+            // Read-view HTML: every <code> gets a Copy button on its right, inside one rectangle.
+            // (Saved code has no attributes - the server strips them - so this match is exact.)
+            noteViewHtml(content) {
+                return this.noteBodyHtml(content).replace(
+                    /<code>([\s\S]*?)<\/code>/g,
+                    '<span class="code-block"><code>$1</code><button type="button" class="code-copy" title="Copy" aria-label="Copy">' + this.noteCopyIcon + '</button></span>'
+                );
+            },
+
+            noteCopyIcon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15V6a2 2 0 012-2h9"/></svg>',
+            noteCheckIcon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+
             noteViewClick(e) {
-                const code = e.target.closest ? e.target.closest('code') : null;
+                const button = e.target.closest ? e.target.closest('.code-copy') : null;
+                if (!button) return;
+
+                const code = button.parentElement.querySelector('code');
                 if (!code) return;
 
                 this.copyText(code.textContent).then((ok) => {
                     if (!ok) return;
-                    code.classList.add('is-copied');
-                    setTimeout(() => code.classList.remove('is-copied'), 1500);
+                    button.classList.add('is-copied');
+                    button.innerHTML = this.noteCheckIcon;
+                    setTimeout(() => {
+                        button.classList.remove('is-copied');
+                        button.innerHTML = this.noteCopyIcon;
+                    }, 1500);
                 });
             },
 
@@ -1403,7 +1650,7 @@
                 this.noteSync();
             },
 
-            // ". " / "- " / "* " at the start of a line makes a bullet list, "1 " a numbered list.
+            // ". " / "- " / "* " at the start of a line makes a bullet list, "1. " a numbered list.
             noteAutoList(ed) {
                 const sel = window.getSelection();
                 if (!sel.rangeCount || !sel.isCollapsed) return;
@@ -1420,7 +1667,7 @@
 
                 if (/^[.\-*][  ]$/.test(before)) {
                     command = 'insertUnorderedList';
-                } else if (/^\d{1,4}[  ]$/.test(before)) {
+                } else if (/^\d{1,4}\.[  ]$/.test(before)) {
                     command = 'insertOrderedList';
                     start = parseInt(before, 10);
                 }
@@ -1799,7 +2046,7 @@
             },
 
             async deleteCommand(cmd) {
-                if (!confirm(`Delete "${cmd.title || 'this command set'}"? This cannot be undone.`)) {
+                if (!(await this.askConfirm(`Delete "${cmd.title || 'this command set'}"? This cannot be undone.`))) {
                     return;
                 }
 
@@ -1882,7 +2129,7 @@
             },
 
             async deleteFolder(folder) {
-                if (!confirm(`Delete "${folder.name}" and everything inside it? This cannot be undone.`)) {
+                if (!(await this.askConfirm(`Delete "${folder.name}" and everything inside it? This cannot be undone.`))) {
                     return;
                 }
 

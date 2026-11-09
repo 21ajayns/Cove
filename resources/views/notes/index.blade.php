@@ -314,14 +314,15 @@
                 <div>
                     <p x-show="loading" class="text-sm text-ink-500">Loading…</p>
 
-                    <div x-show="!loading" class="max-w-xl flex flex-col gap-3">
+                    <div x-show="!loading" class="flex flex-col gap-6">
+                        <div x-show="subfolders.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         <template x-for="folder in subfolders" :key="folder.id">
                             <div
                                 @click="selectFolder(folder.id)"
-                                class="folder-block group"
+                                class="folder-block group min-w-0"
                             >
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" class="shrink-0"><path d="M2 6a2 2 0 012-2h4.5l1.5 2H16a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/></svg>
-                                <span class="truncate" x-text="folder.name"></span>
+                                <span class="truncate" :title="folder.name" x-text="folder.name"></span>
 
                                 <div class="absolute top-1/2 -translate-y-1/2 right-3 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-150">
                                     <button
@@ -343,9 +344,11 @@
                                 </div>
                             </div>
                         </template>
+                        </div>
 
-                        <template x-for="(note, noteIndex) in notes" :key="note.id">
-                            <div class="note-card" :class="subfolders.length > 0 && noteIndex === 0 ? 'mt-3' : ''">
+                        <div x-show="notes.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <template x-for="note in notes" :key="note.id">
+                            <div class="note-card min-w-0">
                                 <div class="flex items-start gap-3">
                                     <span class="note-card-icon">
                                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
@@ -406,6 +409,7 @@
                                 </div>
                             </div>
                         </template>
+                        </div>
                     </div>
 
                     <div x-show="!loading && notes.length === 0 && subfolders.length === 0" class="flex flex-col items-center justify-center py-24 text-center">

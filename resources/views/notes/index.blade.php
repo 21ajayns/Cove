@@ -422,35 +422,59 @@
             </template>
 
             <template x-if="selectedNote">
-                <div class="max-w-2xl">
-                    <button @click="selectedNote = null; isEditingDetail = false; isNewNote = false;" class="flex items-center gap-1.5 text-sm text-ink-500 hover:text-fg transition-colors mb-6">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
-                        Back
-                    </button>
-
-                    <!-- View mode -->
+                <div>
+                    <!-- View mode: a tinted header band (back, actions, title, chips) above the note. The negative margin cancels the page padding so the band runs edge to edge. -->
                     <template x-if="!isEditingDetail">
-                        <div>
-                            <h1 class="text-2xl font-bold text-fg tracking-tight mb-5" x-text="selectedNote.title"></h1>
-                            <div class="note-rich note-view text-ink-300" x-html="noteViewHtml(selectedNote.content)" @click="noteViewClick($event)"></div>
+                        <div class="-m-8">
+                            <section class="px-10 pt-5 pb-7 bg-accent/[0.08] border-b border-accent/[0.18]">
+                                <div class="flex items-center gap-2">
+                                    <button @click="selectedNote = null; isEditingDetail = false; isNewNote = false;" class="flex items-center gap-1.5 py-1 text-sm text-ink-400 hover:text-fg transition-colors">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+                                        Back
+                                    </button>
+                                    <span class="flex-1"></span>
+                                    <button @click="startEditNote()" class="btn-primary !py-2 !px-4">
+                                        <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M13.5 2.5a1.5 1.5 0 012.121 2.121l-8.5 8.5-2.828.707.707-2.828 8.5-8.5z"/></svg>
+                                        Edit note
+                                    </button>
+                                    <button
+                                        @click="deleteNote(selectedNote)"
+                                        title="Delete note"
+                                        aria-label="Delete note"
+                                        class="w-[38px] h-[38px] shrink-0 flex items-center justify-center rounded-xl border border-red-400/30 text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
+                                    >
+                                        <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 6h12M8 6V4a1 1 0 011-1h2a1 1 0 011 1v2m3 0-.7 9.1a2 2 0 01-2 1.9H7.7a2 2 0 01-2-1.9L5 6h10z"/>
+                                        </svg>
+                                    </button>
+                                </div>
 
-                            <div class="mt-10 flex items-center gap-2">
-                                <button @click="startEditNote()" class="btn-secondary">
-                                    <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M13.5 2.5a1.5 1.5 0 012.121 2.121l-8.5 8.5-2.828.707.707-2.828 8.5-8.5z"/></svg>
-                                    Edit
-                                </button>
-                                <button @click="deleteNote(selectedNote)" class="btn-ghost text-red-400 hover:bg-red-500/10 hover:text-red-300">
-                                    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M4 6h12M8 6V4a1 1 0 011-1h2a1 1 0 011 1v2m3 0-.7 9.1a2 2 0 01-2 1.9H7.7a2 2 0 01-2-1.9L5 6h10z"/>
-                                    </svg>
-                                    Delete
-                                </button>
+                                <p class="mt-5 text-[11px] font-bold uppercase tracking-[0.12em] text-accent">Note</p>
+                                <h1 class="mt-1.5 text-[34px] font-bold leading-tight tracking-tight text-fg break-words" x-text="selectedNote.title || 'Untitled'"></h1>
+
+                                <div class="mt-4 flex flex-wrap gap-2">
+                                    <span class="inline-flex items-center gap-1.5 h-[26px] px-2.5 rounded-full bg-accent/[0.14] text-accent-soft text-xs font-medium max-w-full">
+                                        <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor" class="shrink-0"><path d="M2 6a2 2 0 012-2h4.5l1.5 2H16a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/></svg>
+                                        <span class="truncate" x-text="noteFolderName(selectedNote)"></span>
+                                    </span>
+                                    <span class="inline-flex items-center h-[26px] px-2.5 rounded-full bg-fg/[0.06] text-ink-400 text-xs" x-text="'Created ' + noteAgo(selectedNote.created_at)"></span>
+                                    <span x-show="noteWasEdited(selectedNote)" class="inline-flex items-center h-[26px] px-2.5 rounded-full bg-fg/[0.06] text-ink-400 text-xs" x-text="'Edited ' + noteAgo(selectedNote.updated_at)"></span>
+                                </div>
+                            </section>
+
+                            <div class="max-w-[760px] px-10 pt-8 pb-12">
+                                <div class="note-rich note-view text-ink-300" x-html="noteViewHtml(selectedNote.content)" @click="noteViewClick($event)"></div>
                             </div>
                         </div>
                     </template>
 
                     <!-- Edit / create mode -->
                     <template x-if="isEditingDetail">
+                      <div class="max-w-2xl">
+                        <button @click="selectedNote = null; isEditingDetail = false; isNewNote = false;" class="flex items-center gap-1.5 text-sm text-ink-500 hover:text-fg transition-colors mb-6">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+                            Back
+                        </button>
                         <form @submit.prevent="saveDetail()" class="space-y-5">
                             <div>
                                 <input
@@ -526,6 +550,7 @@
                                 <button type="button" @click="cancelEditDetail()" class="btn-ghost">Cancel</button>
                             </div>
                         </form>
+                      </div>
                     </template>
                 </div>
             </template>
@@ -1487,6 +1512,22 @@
                 if (minutes < 525600) return plural(Math.round(minutes / 43200), 'month');
 
                 return plural(Math.round(minutes / 525600), 'year');
+            },
+
+            // Name of the folder a note lives in, for the chip in the note header.
+            noteFolderName(note) {
+                const id = note.folder_id || null;
+
+                return id && this.nodesById[id] ? this.nodesById[id].name : 'All Notes';
+            },
+
+            // True once a note has been changed after it was created (a minute of slack, since both stamps are set on creation).
+            noteWasEdited(note) {
+                if (!note.created_at || !note.updated_at) {
+                    return false;
+                }
+
+                return new Date(note.updated_at).getTime() - new Date(note.created_at).getTime() > 60000;
             },
 
             async deleteNote(note) {

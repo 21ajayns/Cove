@@ -1,8 +1,139 @@
+@import './fonts.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Theme variables are RGB triplets so Tailwind can add opacity. Dark is "Graphite and mint"; light is "Fog green". */
 @layer base {
+    :root {
+        color-scheme: dark;
+
+        --ink-950: 15 18 20;
+        --ink-900: 20 24 27;
+        --ink-850: 26 31 35;
+        --ink-800: 32 38 43;
+        --ink-700: 38 44 49;
+        --ink-600: 50 58 65;
+        --ink-500: 139 151 156;
+        --ink-400: 167 177 182;
+        --ink-300: 201 209 213;
+        --ink-100: 232 238 240;
+
+        --fg: 255 255 255;
+        --fg-boost: 1;
+        --surface: 20 24 27;
+        --surface-2: 26 31 35;
+
+        --accent: 61 220 151;
+        --accent-deep: 40 178 120;
+        --accent-hover: 94 232 172;
+        --accent-deep-hover: 54 200 138;
+        --accent-soft: 138 238 195;
+        --on-accent: 15 18 20;
+
+        --tab-on: 50 58 65;
+        --tab-icon: 61 220 151;
+        --tabs-track: rgba(0, 0, 0, 0.28);
+        --cmd: 138 238 195;
+        --folder-accent: 201 160 90;
+
+        --amber-400: 138 238 195;
+        --amber-500: 61 220 151;
+        --amber-600: 40 178 120;
+        --amber-700: 30 140 96;
+        --red-300: 252 165 165;
+        --red-400: 248 113 113;
+        --red-500: 239 68 68;
+        --emerald-400: 52 211 153;
+        --emerald-500: 16 185 129;
+        --blue-400: 96 165 250;
+        --blue-500: 59 130 246;
+
+        --btn-from: 61 220 151;
+        --btn-to: 40 178 120;
+        --btn-hover-from: 94 232 172;
+        --btn-hover-to: 61 220 151;
+
+        --st-critical: 239 68 68;
+        --st-active: 96 165 250;
+        --st-upcoming: 251 191 36;
+        --st-completed: 52 211 153;
+
+        --logo-a: 138 238 195;
+        --logo-b: 61 220 151;
+        --logo-wave2: 61 220 151;
+        --splash-1: #16201d;
+        --splash-2: #0f1214;
+
+        --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
+        --shadow-popover: 0 12px 32px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    :root[data-theme='light'] {
+        color-scheme: light;
+
+        --ink-950: 240 243 241;
+        --ink-900: 228 234 231;
+        --ink-850: 248 250 249;
+        --ink-800: 234 239 236;
+        --ink-700: 221 228 224;
+        --ink-600: 195 206 201;
+        --ink-500: 100 114 109;
+        --ink-400: 74 87 82;
+        --ink-300: 53 64 59;
+        --ink-100: 31 39 36;
+
+        --fg: 31 39 36;
+        --fg-boost: 2.2;
+        --surface: 248 250 249;
+        --surface-2: 234 239 236;
+
+        --accent: 39 127 94;
+        --accent-deep: 28 100 74;
+        --accent-hover: 46 148 109;
+        --accent-deep-hover: 33 118 88;
+        --accent-soft: 28 100 74;
+        --on-accent: 255 255 255;
+
+        --tab-on: 248 250 249;
+        --tab-icon: 39 127 94;
+        --tabs-track: #d5ddd9;
+        --cmd: 28 100 74;
+        --folder-accent: 138 100 16;
+
+        --amber-400: 138 100 16;
+        --amber-500: 138 100 16;
+        --amber-600: 39 127 94;
+        --amber-700: 28 100 74;
+        --red-300: 154 52 38;
+        --red-400: 179 64 47;
+        --red-500: 179 64 47;
+        --emerald-400: 22 120 80;
+        --emerald-500: 22 120 80;
+        --blue-400: 37 87 184;
+        --blue-500: 37 87 184;
+
+        --btn-from: 39 127 94;
+        --btn-to: 28 100 74;
+        --btn-hover-from: 46 148 109;
+        --btn-hover-to: 39 127 94;
+
+        --st-critical: 185 28 28;
+        --st-active: 37 99 235;
+        --st-upcoming: 161 98 7;
+        --st-completed: 21 128 61;
+
+        --logo-a: 98 190 150;
+        --logo-b: 39 127 94;
+        --logo-wave2: 39 127 94;
+        --splash-1: #e1ebe6;
+        --splash-2: #f0f3f1;
+
+        --shadow-card: 0 1px 2px rgba(31, 39, 36, 0.08);
+        --shadow-popover: 0 12px 32px rgba(31, 39, 36, 0.16), 0 2px 8px rgba(31, 39, 36, 0.08);
+    }
+
     html,
     body {
         height: 100%;
@@ -23,11 +154,11 @@
     }
 
     ::-webkit-scrollbar-thumb {
-        @apply bg-white/10 rounded-full;
+        @apply bg-fg/10 rounded-full;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-        @apply bg-white/20;
+        @apply bg-fg/20;
     }
 }
 
@@ -37,77 +168,155 @@
     }
 
     .btn-primary {
-        @apply btn bg-gradient-to-b from-amber-600 to-amber-700 text-white px-5 py-2.5 shadow-[0_1px_0_0_rgba(255,255,255,0.16)_inset,0_1px_3px_rgba(0,0,0,0.5)] hover:from-amber-500 hover:to-amber-600;
+        @apply btn text-on-accent px-5 py-2.5 shadow-[0_1px_0_0_rgba(255,255,255,0.16)_inset,0_1px_3px_rgba(0,0,0,0.5)];
+        background-image: linear-gradient(to bottom, rgb(var(--btn-from)), rgb(var(--btn-to)));
+    }
+
+    .btn-primary:hover {
+        background-image: linear-gradient(to bottom, rgb(var(--btn-hover-from)), rgb(var(--btn-hover-to)));
     }
 
     .btn-secondary {
-        @apply btn bg-white/[0.06] text-ink-100 border border-white/10 px-5 py-2.5 hover:bg-white/[0.1];
+        @apply btn bg-fg/[0.06] text-ink-100 border border-fg/10 px-5 py-2.5 hover:bg-fg/[0.1];
     }
 
     .btn-ghost {
-        @apply btn text-ink-400 hover:bg-white/[0.06] hover:text-ink-100 px-3.5 py-2;
+        @apply btn text-ink-400 hover:bg-fg/[0.06] hover:text-ink-100 px-3.5 py-2;
     }
 
     .input-field {
-        @apply w-full rounded-xl bg-white/[0.04] border border-white/10 px-3.5 py-2.5 text-sm text-ink-100 placeholder-ink-500 outline-none transition duration-150 focus:border-amber-600/60 focus:ring-4 focus:ring-amber-600/10;
+        @apply w-full rounded-xl bg-fg/[0.04] border border-fg/10 px-3.5 py-2.5 text-sm text-ink-100 placeholder-ink-500 outline-none transition duration-150 focus:border-amber-600/60 focus:ring-4 focus:ring-amber-600/10;
     }
 
     .card {
-        @apply rounded-2xl bg-ink-850 border border-white/[0.06] shadow-card transition-all duration-150;
+        @apply rounded-2xl bg-ink-850 border border-fg/[0.06] shadow-card transition-all duration-150;
     }
 
-    .tile {
-        @apply relative cursor-pointer p-5 flex flex-col gap-2.5 bg-ink-850 border border-white/[0.07] transition-colors duration-150 hover:bg-ink-800 hover:border-white/[0.16];
+    /* Folders: wide, solid accent blocks (like a "create a link" call-to-action). */
+    .folder-block {
+        @apply relative w-full h-14 flex items-center justify-center gap-3 px-14 rounded-xl cursor-pointer select-none text-on-accent font-semibold text-[15px] transition-all duration-150 active:scale-[0.99];
+        background-image: linear-gradient(to bottom, rgb(var(--btn-from)), rgb(var(--btn-to)));
     }
 
-    .tile-folder {
-        @apply tile shadow-[inset_0_2px_0_0_rgba(245,158,11,0.7)];
+    .folder-block:hover {
+        background-image: linear-gradient(to bottom, rgb(var(--btn-hover-from)), rgb(var(--btn-hover-to)));
     }
 
-    .tile-note {
-        @apply tile shadow-[inset_3px_0_0_0_rgba(162,62,76,0.8)];
+    .folder-block-action {
+        @apply w-8 h-8 flex items-center justify-center rounded-lg text-on-accent/80 hover:bg-black/15 hover:text-on-accent transition-colors;
+    }
+
+    /* Notes: stacked cards with an icon, title, age and two action buttons. */
+    .note-card {
+        @apply relative w-full p-4 rounded-xl bg-ink-850 border border-fg/[0.12] shadow-card transition-colors duration-150 hover:border-fg/[0.22];
+    }
+
+    .note-card-icon {
+        @apply w-[50px] h-[50px] shrink-0 flex items-center justify-center rounded-full bg-accent/[0.14] text-accent;
+    }
+
+    .note-card-btn {
+        @apply flex-1 h-10 rounded-lg inline-flex items-center justify-center text-sm font-semibold text-fg bg-fg/[0.08] transition-colors hover:bg-fg/[0.14] active:scale-[0.98];
     }
 
     .tile-action {
         @apply w-7 h-7 flex items-center justify-center text-ink-500;
     }
 
-    .ledger-stat {
-        @apply flex flex-col items-start gap-1 px-4 py-3.5 text-left bg-ink-900 border-r border-white/[0.07] last:border-r-0 transition-colors duration-150 hover:bg-ink-850;
-        box-shadow: inset 0 2px 0 0 transparent;
+    /* Rich notes: the editor and the read view share these styles. */
+    .note-rich {
+        @apply text-sm leading-relaxed break-words whitespace-pre-wrap;
+        overflow-wrap: anywhere;
     }
 
-    .ledger-stat-active {
-        @apply bg-ink-850;
-        box-shadow: inset 0 2px 0 0 var(--c);
+    .note-rich ul,
+    .note-rich ol {
+        @apply my-2 pl-6;
     }
 
-    .ledger-row {
-        @apply relative grid items-center gap-3 pl-5 pr-3 min-h-[48px] bg-ink-900 border-b border-white/[0.07] last:border-b-0 transition-colors duration-150 hover:bg-ink-850;
-        grid-template-columns: 18px 24px minmax(0, 1fr) 130px 44px 28px;
+    /* A list gets a small gap from the text around it, but not at the very top/bottom of the note. */
+    .note-rich > ul:first-child,
+    .note-rich > ol:first-child {
+        @apply mt-0;
     }
 
-    .ledger-row::before {
-        content: '';
-        @apply absolute left-0 top-0 bottom-0 w-[3px];
-        background: var(--c);
+    .note-rich > ul:last-child,
+    .note-rich > ol:last-child {
+        @apply mb-0;
     }
 
-    .ledger-head {
-        @apply min-h-[34px] bg-ink-850 text-[10px] font-semibold uppercase tracking-widest text-ink-500 hover:bg-ink-850;
+    .note-rich li {
+        @apply my-0.5;
     }
 
-    .ledger-head::before {
-        display: none;
+    /* Sub-lists (the editor nests them inside a list or inside an item) sit tight under their parent. */
+    .note-rich ul ul,
+    .note-rich ul ol,
+    .note-rich ol ul,
+    .note-rich ol ol {
+        @apply my-0.5;
+    }
+
+    .note-rich ul { list-style: disc; }
+    .note-rich ul ul { list-style: circle; }
+    .note-rich ul ul ul { list-style: square; }
+    .note-rich ol { list-style: decimal; }
+    .note-rich ol ol { list-style: decimal; }
+
+    .note-rich a {
+        @apply text-accent underline underline-offset-2;
+    }
+
+    .note-rich code {
+        @apply font-mono text-[0.85em] px-1.5 py-0.5 rounded-md border border-fg/[0.16] bg-fg/[0.06] text-fg;
+        overflow-wrap: anywhere;
+    }
+
+    /* In a saved note each code piece is a soft tinted pill with a small copy icon after it. */
+    .note-view .code-block {
+        @apply inline-flex items-center gap-1.5 max-w-full rounded-[7px] bg-accent/[0.14] py-px pl-2 pr-1;
+    }
+
+    .note-view .code-block code {
+        @apply min-w-0 rounded-none border-0 bg-transparent p-0 text-fg;
+    }
+
+    .note-view .code-copy {
+        @apply shrink-0 inline-flex h-[22px] w-[22px] items-center justify-center rounded-md text-accent opacity-75 cursor-pointer select-none transition-colors hover:bg-accent/[0.18] hover:opacity-100;
+    }
+
+    .note-view .code-copy.is-copied {
+        @apply text-emerald-400 opacity-100;
+    }
+
+    .note-editor {
+        @apply outline-none min-h-[50vh] text-ink-300;
+    }
+
+    .note-editor.is-empty::before {
+        content: attr(data-placeholder);
+        @apply text-ink-600 pointer-events-none float-left h-0;
+    }
+
+    .note-toolbar {
+        @apply fixed z-50 flex items-center gap-0.5 p-1 rounded-xl border border-fg/[0.14] bg-ink-850 shadow-card select-none;
+    }
+
+    .note-tool {
+        @apply h-7 min-w-[28px] px-2 rounded-lg inline-flex items-center justify-center text-xs font-medium text-ink-300 transition-colors hover:bg-fg/[0.1] hover:text-fg;
+    }
+
+    .note-tool.is-on {
+        @apply bg-accent/20 text-accent;
     }
 
     .cmd-row {
-        @apply grid items-center gap-3 px-4 min-h-[46px] bg-ink-900 border-b border-white/[0.07] last:border-b-0 transition-colors duration-150 hover:bg-ink-850;
+        @apply grid items-center gap-3 px-4 min-h-[46px] bg-surface border-b border-fg/[0.07] last:border-b-0 transition-colors duration-150 hover:bg-surface-2;
         grid-template-columns: 28px minmax(130px, 1fr) minmax(0, 1.8fr) 72px;
     }
 
     .cmd-list-row {
-        @apply relative grid items-center gap-3 pl-5 pr-3 min-h-[50px] bg-ink-900 border-b border-white/[0.07] last:border-b-0 transition-colors duration-150 hover:bg-ink-850;
+        @apply relative grid items-center gap-3 pl-5 pr-3 min-h-[50px] bg-surface border-b border-fg/[0.07] last:border-b-0 transition-colors duration-150 hover:bg-surface-2;
         grid-template-columns: 18px minmax(160px, 1fr) minmax(0, 1.6fr) 44px 64px;
     }
 
@@ -118,45 +327,25 @@
     }
 
     .cmd-head {
-        @apply min-h-[34px] bg-ink-850 text-[10px] font-semibold uppercase tracking-widest text-ink-500 hover:bg-ink-850;
+        @apply min-h-[34px] bg-surface-2 text-[10px] font-semibold uppercase tracking-widest text-ink-500 hover:bg-surface-2;
     }
 
     .ledger-kbd {
-        @apply font-mono text-[11px] leading-none px-1.5 py-1 border border-white/[0.16] text-ink-400;
+        @apply font-mono text-[11px] leading-none px-1.5 py-1 border border-fg/[0.16] text-ink-400;
     }
 
-    .flip-card {
-        perspective: 800px;
+    .tabs-track {
+        background: var(--tabs-track);
     }
 
-    .flip-card-inner {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
-        transform-style: preserve-3d;
+    .theme-sun,
+    .theme-moon {
+        display: none;
     }
 
-    .flip-card-flipped {
-        transform: rotateY(180deg);
-    }
-
-    .flip-face {
-        position: absolute;
-        inset: 0;
-        backface-visibility: hidden;
-        border-radius: 0.75rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        font-weight: 600;
-        color: white;
-        font-size: 0.875rem;
-    }
-
-    .flip-face-back {
-        transform: rotateY(180deg);
+    :root[data-theme='dark'] .theme-sun,
+    :root[data-theme='light'] .theme-moon {
+        display: block;
     }
 
     .pill {
@@ -172,14 +361,20 @@
     }
 
     .sidebar-item {
-        @apply flex items-center gap-2 rounded-lg text-[13px] font-medium text-ink-400 transition-colors duration-100 hover:bg-white/[0.05] hover:text-ink-100;
+        @apply flex items-center gap-2 rounded-lg text-[13px] font-medium text-ink-400 transition-colors duration-100 hover:bg-fg/[0.05] hover:text-ink-100;
     }
 
     .sidebar-item-active {
-        @apply bg-white/[0.08] text-white;
+        @apply bg-fg/[0.08] text-fg;
     }
 
     .icon-chip {
-        @apply w-5 h-5 flex items-center justify-center rounded-md bg-white/[0.05] text-ink-400 shrink-0;
+        @apply w-5 h-5 flex items-center justify-center rounded-md bg-fg/[0.05] text-ink-400 shrink-0;
     }
+}
+
+/* In light mode the active sidebar row is a raised white chip, like the active tab */
+:root[data-theme='light'] .sidebar-item-active {
+    background-color: rgb(var(--surface));
+    box-shadow: var(--shadow-card);
 }

@@ -41,11 +41,11 @@
         </div>
 
         <label for="remember" class="flex items-center gap-2.5 text-sm text-ink-400 cursor-pointer select-none">
-            <input id="remember" type="checkbox" name="remember" value="1" class="w-4 h-4 accent-[#A23E4C]">
+            <input id="remember" type="checkbox" name="remember" value="1" class="w-4 h-4 accent-accent">
             Keep me logged in
         </label>
 
-        <button type="submit" class="w-full py-3 text-sm font-semibold text-white bg-[#A23E4C] hover:bg-[#B5505E] transition-colors">
+        <button type="submit" class="w-full py-3 text-sm font-semibold text-on-accent bg-accent hover:bg-accent-hover transition-colors">
             Log in
         </button>
     </form>

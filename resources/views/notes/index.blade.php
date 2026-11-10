@@ -5,15 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Cove</title>
-    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg?v=2">
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png?v=2">
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png?v=2">
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-180.png?v=2">
-    <link rel="manifest" href="/manifest.json?v=2">
-    <meta name="theme-color" content="#120e0a">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Silkscreen:wght@400;700&family=Orbitron:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg?v=3">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png?v=3">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png?v=3">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-180.png?v=3">
+    <link rel="manifest" href="/manifest.json?v=3">
+    <meta name="theme-color" content="#0f1214">
+    @include('partials.theme-init')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-ink-950 text-ink-100 antialiased font-sans text-sm">
@@ -31,15 +29,15 @@
         @click="showSplash = false"
         @keydown.window="showSplash = false"
         class="fixed inset-0 z-[100] flex flex-col items-center justify-center cursor-pointer select-none"
-        style="background: radial-gradient(circle at 50% 42%, #2a1a12 0%, #120e0a 65%);"
+        style="background: radial-gradient(circle at 50% 42%, var(--splash-1) 0%, var(--splash-2) 65%);"
     >
         <div class="relative w-28 h-28 sm:w-36 sm:h-36 flex items-center justify-center">
-            <div class="absolute inset-0 rounded-full animate-[spin_9s_linear_infinite]" style="border:1px solid rgba(232,164,85,0.18); border-top-color:#E8A455; border-right-color:#A23E4C;"></div>
+            <div class="absolute inset-0 rounded-full animate-[spin_9s_linear_infinite]" style="border:1px solid rgb(var(--logo-a) / 0.18); border-top-color:rgb(var(--logo-a)); border-right-color:rgb(var(--logo-b));"></div>
             <svg viewBox="0 0 64 64" class="w-14 h-14 sm:w-16 sm:h-16" role="img" aria-label="Cove">
                 <defs>
                     <linearGradient id="coveGradSplash" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#E8A455"/>
-                        <stop offset="100%" stop-color="#A23E4C"/>
+                        <stop offset="0%" style="stop-color: rgb(var(--logo-a))"/>
+                        <stop offset="100%" style="stop-color: rgb(var(--logo-b))"/>
                     </linearGradient>
                     <filter id="coveGlowSplash" x="-60%" y="-60%" width="220%" height="220%">
                         <feGaussianBlur stdDeviation="2.6" result="blur"/>
@@ -49,15 +47,14 @@
                         </feMerge>
                     </filter>
                 </defs>
-                <line x1="32" y1="10" x2="32" y2="3" stroke="url(#coveGradSplash)" stroke-width="2" stroke-linecap="round" filter="url(#coveGlowSplash)"/>
-                <path d="M43 13 A22 22 0 1 0 43 51" fill="none" stroke="url(#coveGradSplash)" stroke-width="4" stroke-linecap="round" filter="url(#coveGlowSplash)"/>
-                <circle cx="43" cy="13" r="3" fill="#E8A455" filter="url(#coveGlowSplash)"/>
-                <circle cx="43" cy="51" r="3" fill="#A23E4C" filter="url(#coveGlowSplash)"/>
+                <path d="M44 12 A23 23 0 1 0 44 52" fill="none" stroke="url(#coveGradSplash)" stroke-width="4" stroke-linecap="round" filter="url(#coveGlowSplash)"/>
+                <path d="M24 27 q4.5 -5 9 0 t9 0" fill="none" style="stroke: rgb(var(--logo-a))" stroke-width="3" stroke-linecap="round" filter="url(#coveGlowSplash)"/>
+                <path d="M24 37 q4.5 -5 9 0 t9 0" fill="none" style="stroke: rgb(var(--logo-wave2))" stroke-width="3" stroke-linecap="round" filter="url(#coveGlowSplash)"/>
             </svg>
         </div>
         <span
             class="mt-6 text-3xl sm:text-4xl font-bold tracking-[0.3em]"
-            style="font-family: 'Orbitron', sans-serif; background: linear-gradient(135deg, #E8A455, #A23E4C); -webkit-background-clip: text; background-clip: text; color: transparent;"
+            style="font-family: 'Orbitron', sans-serif; background: linear-gradient(135deg, rgb(var(--logo-a)), rgb(var(--logo-b))); -webkit-background-clip: text; background-clip: text; color: transparent;"
         >COVE</span>
         <div class="mt-10 flex flex-col items-center gap-2 text-ink-500">
             <span class="text-xs font-semibold uppercase tracking-[0.2em]">Press anywhere to continue</span>
@@ -67,16 +64,16 @@
         </div>
     </div>
 
-    <!-- Icon rail -->
-    <div class="w-16 shrink-0 bg-ink-950 border-r border-white/[0.06] flex flex-col items-center py-4 gap-3">
-        <div class="w-9 h-9 flex items-center justify-center">
-            <svg viewBox="0 0 64 64" class="w-full h-full" role="img" aria-label="Cove">
+    <!-- Sidebar -->
+    <aside class="w-72 shrink-0 bg-ink-900 border-r border-fg/[0.06] flex flex-col">
+        <div class="px-4 pt-4 flex items-center gap-2.5">
+            <svg viewBox="0 0 64 64" class="w-8 h-8 shrink-0" role="img" aria-label="Cove">
                 <defs>
-                    <linearGradient id="coveGradRail" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#E8A455"/>
-                        <stop offset="100%" stop-color="#A23E4C"/>
+                    <linearGradient id="coveGradSide" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" style="stop-color: rgb(var(--logo-a))"/>
+                        <stop offset="100%" style="stop-color: rgb(var(--logo-b))"/>
                     </linearGradient>
-                    <filter id="coveGlowRail" x="-60%" y="-60%" width="220%" height="220%">
+                    <filter id="coveGlowSide" x="-60%" y="-60%" width="220%" height="220%">
                         <feGaussianBlur stdDeviation="1.6" result="blur"/>
                         <feMerge>
                             <feMergeNode in="blur"/>
@@ -84,79 +81,63 @@
                         </feMerge>
                     </filter>
                 </defs>
-                <line x1="32" y1="10" x2="32" y2="3" stroke="url(#coveGradRail)" stroke-width="2" stroke-linecap="round" filter="url(#coveGlowRail)"/>
-                <path d="M43 13 A22 22 0 1 0 43 51" fill="none" stroke="url(#coveGradRail)" stroke-width="4" stroke-linecap="round" filter="url(#coveGlowRail)"/>
-                <circle cx="43" cy="13" r="3" fill="#E8A455" filter="url(#coveGlowRail)"/>
-                <circle cx="43" cy="51" r="3" fill="#A23E4C" filter="url(#coveGlowRail)"/>
+                <path d="M44 12 A23 23 0 1 0 44 52" fill="none" stroke="url(#coveGradSide)" stroke-width="4" stroke-linecap="round" filter="url(#coveGlowSide)"/>
+                <path d="M24 27 q4.5 -5 9 0 t9 0" fill="none" style="stroke: rgb(var(--logo-a))" stroke-width="3" stroke-linecap="round" filter="url(#coveGlowSide)"/>
+                <path d="M24 37 q4.5 -5 9 0 t9 0" fill="none" style="stroke: rgb(var(--logo-wave2))" stroke-width="3" stroke-linecap="round" filter="url(#coveGlowSide)"/>
             </svg>
+            <span
+                class="text-sm font-bold tracking-[0.14em]"
+                style="font-family: 'Orbitron', sans-serif; background: linear-gradient(135deg, rgb(var(--logo-a)), rgb(var(--logo-b))); -webkit-background-clip: text; background-clip: text; color: transparent;"
+            >COVE</span>
         </div>
 
-        <div class="w-8 border-t border-white/[0.06]"></div>
-
-        <button
-            @click="switchApp('notes')"
-            class="w-10 h-10 rounded-xl flex items-center justify-center transition-all"
-            :class="activeApp === 'notes' ? 'bg-white/[0.08] text-white' : 'text-ink-500 hover:bg-white/[0.05] hover:text-ink-200'"
-            title="Notes"
-        >
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 3a1 1 0 011-1h6l4 4v11a1 1 0 01-1 1H5a1 1 0 01-1-1V3z"/><path d="M11 2v4h4"/></svg>
-        </button>
-
-        <button
-            @click="switchApp('task')"
-            class="w-10 h-10 rounded-xl flex items-center justify-center transition-all"
-            :class="activeApp === 'task' ? 'bg-white/[0.08] text-white' : 'text-ink-500 hover:bg-white/[0.05] hover:text-ink-200'"
-            title="Tasks"
-        >
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="14" height="14" rx="3"/><path d="M7 10l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-
-        <button
-            @click="switchApp('command')"
-            class="w-10 h-10 rounded-xl flex items-center justify-center transition-all"
-            :class="activeApp === 'command' ? 'bg-white/[0.08] text-white' : 'text-ink-500 hover:bg-white/[0.05] hover:text-ink-200'"
-            title="Commands"
-        >
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 6L3.5 10 7 14M13 6l3.5 4-3.5 4M11.5 4l-3 12"/></svg>
-        </button>
-
-        <div class="mt-auto flex flex-col items-center gap-3">
-            <div
-                class="w-9 h-9 flex items-center justify-center bg-white/[0.06] border border-white/[0.08] text-xs font-semibold text-ink-100 select-none"
-                title="{{ auth()->user()->name }} · {{ auth()->user()->email }}"
-            >{{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}</div>
-
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button
-                    type="submit"
-                    title="Log out"
-                    class="w-10 h-10 flex items-center justify-center text-ink-500 hover:bg-red-500/10 hover:text-red-400 transition-colors"
-                >
-                    <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4H4v12h4M13 6l4 4-4 4M17 10H8"/></svg>
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Sidebar -->
-    <aside class="w-72 shrink-0 bg-ink-900 border-r border-white/[0.06] flex flex-col">
-        <div class="px-4 pt-4">
+        <div class="px-4 pt-3">
             <button
                 type="button"
                 @click="toggleCategory()"
-                class="flip-card w-full h-12 block"
+                class="w-full h-12 flex items-center gap-3 pl-[9px] pr-3 rounded-xl bg-fg/[0.04] border border-fg/[0.06] hover:bg-fg/[0.07] text-left transition-colors"
             >
-                <div class="flip-card-inner" :class="activeCategory === 'personal' ? 'flip-card-flipped' : ''">
-                    <div class="flip-face flip-face-front bg-gradient-to-br from-[#A23E4C] to-[#8A2F3C] shadow-card" style="font-family: 'Silkscreen', cursive; font-weight: 400; letter-spacing: 0.02em;">
-                        Work
-                    </div>
-                    <div class="flip-face flip-face-back bg-gradient-to-br from-[#A23E4C] to-[#8A2F3C] shadow-card" style="font-family: 'Silkscreen', cursive; font-weight: 400; letter-spacing: 0.02em;">
-                        Personal
-                    </div>
-                </div>
+                <span
+                    class="w-[30px] h-[30px] shrink-0 flex items-center justify-center rounded-lg bg-gradient-to-br from-accent to-accent-deep text-on-accent text-sm"
+                    style="font-family: 'Silkscreen', cursive;"
+                    x-text="activeCategory === 'office' ? 'W' : 'P'"
+                ></span>
+                <span class="flex-1 min-w-0 flex flex-col leading-tight">
+                    <span class="text-[13px] font-semibold text-ink-100" x-text="activeCategory === 'office' ? 'Work' : 'Personal'"></span>
+                    <span class="text-[10.5px] text-ink-500" x-text="'Switch to ' + (activeCategory === 'office' ? 'Personal' : 'Work')"></span>
+                </span>
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-ink-500 shrink-0"><path d="M4 7h11l-3-3M16 13H5l3 3"/></svg>
             </button>
         </div>
+
+        <nav class="mx-4 mt-3 p-1 grid grid-cols-3 gap-1 rounded-xl tabs-track border border-fg/[0.06]">
+            <button
+                @click="switchApp('task')"
+                class="h-[64px] rounded-[9px] flex flex-col items-center justify-center gap-1.5 text-xs font-medium transition-colors"
+                :class="activeApp === 'task' ? 'bg-tab-on text-fg shadow-card [&>svg]:text-tab-icon' : 'text-ink-400 hover:text-ink-100'"
+            >
+                <svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" class="shrink-0"><rect x="3" y="3" width="14" height="14" rx="3"/><path d="M7 10l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Tasks
+            </button>
+
+            <button
+                @click="switchApp('command')"
+                class="h-[64px] rounded-[9px] flex flex-col items-center justify-center gap-1.5 text-xs font-medium transition-colors"
+                :class="activeApp === 'command' ? 'bg-tab-on text-fg shadow-card [&>svg]:text-tab-icon' : 'text-ink-400 hover:text-ink-100'"
+            >
+                <svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M7 6L3.5 10 7 14M13 6l3.5 4-3.5 4M11.5 4l-3 12"/></svg>
+                Comms
+            </button>
+
+            <button
+                @click="switchApp('notes')"
+                class="h-[64px] rounded-[9px] flex flex-col items-center justify-center gap-1.5 text-xs font-medium transition-colors"
+                :class="activeApp === 'notes' ? 'bg-tab-on text-fg shadow-card [&>svg]:text-tab-icon' : 'text-ink-400 hover:text-ink-100'"
+            >
+                <svg width="21" height="21" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" class="shrink-0"><path d="M4 3a1 1 0 011-1h6l4 4v11a1 1 0 01-1 1H5a1 1 0 01-1-1V3z"/><path d="M11 2v4h4"/></svg>
+                Notes
+            </button>
+        </nav>
 
         <template x-if="activeApp === 'notes'">
             <div class="flex flex-col flex-1 overflow-hidden">
@@ -174,7 +155,7 @@
                     </div>
                 </div>
 
-                <div class="mx-4 mt-3 border-t border-white/[0.06]"></div>
+                <div class="mx-4 mt-3 border-t border-fg/[0.06]"></div>
 
                 <nav class="flex-1 overflow-y-auto py-3">
                     <button
@@ -216,7 +197,7 @@
                     </div>
                 </div>
 
-                <div class="mx-4 mt-3 border-t border-white/[0.06]"></div>
+                <div class="mx-4 mt-3 border-t border-fg/[0.06]"></div>
 
                 <nav class="flex-1 overflow-y-auto py-3">
                     <button
@@ -226,7 +207,7 @@
                         :class="selectedFolderId === null ? 'sidebar-item-active' : ''"
                     >
                         <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor" class="text-ink-500 shrink-0"><path d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0013.414 6L10 2.586A2 2 0 008.586 2H4z"/></svg>
-                        All Commands
+                        All Comms
                     </button>
 
                     <div class="pt-4 pb-1.5 px-5 text-[10px] font-semibold uppercase tracking-widest text-ink-500">
@@ -242,39 +223,52 @@
             </div>
         </template>
 
-        <template x-if="activeApp === 'task'">
-            <div class="flex flex-col flex-1 overflow-hidden">
-                <div class="mx-4 mt-4 border-t border-white/[0.06]"></div>
+        {{-- Tasks filter lives at the top of the Tasks page, so the sidebar only keeps the space --}}
+        <div x-show="activeApp === 'task'" class="flex-1"></div>
 
-                <nav class="flex-1 overflow-y-auto py-3">
-                    <div class="pb-1.5 px-5 text-[10px] font-semibold uppercase tracking-widest text-ink-500">
-                        Filter
-                    </div>
+        <div class="mx-4 border-t border-fg/[0.06] py-3 flex items-center gap-2.5">
+            <div
+                class="w-8 h-8 shrink-0 flex items-center justify-center bg-fg/[0.06] border border-fg/[0.08] text-xs font-semibold text-ink-100 select-none"
+                title="{{ auth()->user()->email }}"
+            >{{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}</div>
 
-                    <template x-for="filter in [{key: null, label: 'All'}, {key: 'active', label: 'Active'}, {key: 'upcoming', label: 'Upcoming'}, {key: 'critical', label: 'Critical'}, {key: 'completed', label: 'Completed'}]" :key="filter.label">
-                        <button
-                            @click="filterTasks(filter.key)"
-                            class="sidebar-item mx-3 px-2.5 py-2"
-                            style="width: calc(100% - 24px)"
-                            :class="taskStatusFilter === filter.key ? 'sidebar-item-active' : ''"
-                        >
-                            <span x-text="filter.label"></span>
-                        </button>
-                    </template>
-                </nav>
-            </div>
-        </template>
+            <span class="flex-1 min-w-0 truncate text-[13px] text-ink-400">{{ auth()->user()->name }}</span>
+
+            <button
+                type="button"
+                onclick="toggleTheme()"
+                title="Switch light / dark"
+                aria-label="Switch light or dark theme"
+                class="w-9 h-9 flex items-center justify-center text-ink-500 hover:bg-fg/[0.06] hover:text-ink-100 transition-colors"
+            >
+                <svg class="theme-sun" width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="10" cy="10" r="3.5"/><path d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.7 4.7l1.4 1.4M13.9 13.9l1.4 1.4M4.7 15.3l1.4-1.4M13.9 6.1l1.4-1.4"/></svg>
+                <svg class="theme-moon" width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 11.5A6.5 6.5 0 018.5 3.5a6.5 6.5 0 108 8z"/></svg>
+            </button>
+
+            @unless (config('cove.local'))
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button
+                        type="submit"
+                        title="Log out"
+                        class="w-9 h-9 flex items-center justify-center text-ink-500 hover:bg-red-500/10 hover:text-red-400 transition-colors"
+                    >
+                        <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4H4v12h4M13 6l4 4-4 4M17 10H8"/></svg>
+                    </button>
+                </form>
+            @endunless
+        </div>
     </aside>
 
     <!-- Main: Notes -->
     <main x-show="activeApp === 'notes'" x-cloak class="flex-1 flex flex-col overflow-hidden bg-ink-950">
-        <header class="border-b border-white/[0.06] px-8 py-5 flex items-center gap-4">
+        <header class="border-b border-fg/[0.06] px-8 py-5 flex items-center gap-4">
             <div class="flex items-center gap-2.5 shrink-0" x-show="!selectedNote" x-cloak>
                 <button
                     @click="startNewNote()"
                     title="New note"
-                    class="w-11 h-11 rounded-xl flex items-center justify-center text-white shadow-[0_1px_0_0_rgba(255,255,255,0.16)_inset,0_1px_3px_rgba(0,0,0,0.5)] transition-all duration-150 active:scale-[0.95]"
-                    :class="'bg-gradient-to-b from-[#A23E4C] to-[#8A2F3C] hover:from-[#B5505E] hover:to-[#9C3F4D]'"
+                    class="w-11 h-11 rounded-xl flex items-center justify-center text-on-accent shadow-[0_1px_0_0_rgba(255,255,255,0.16)_inset,0_1px_3px_rgba(0,0,0,0.5)] transition-all duration-150 active:scale-[0.95]"
+                    :class="'bg-gradient-to-b from-accent to-accent-deep hover:from-accent-hover hover:to-accent-deep-hover'"
                 >
                     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 3a1 1 0 00-1 1v16a1 1 0 001 1h12a1 1 0 001-1V8l-5-5H6z"/>
@@ -285,7 +279,7 @@
                 <button
                     @click="openFolderModal()"
                     title="New folder"
-                    class="w-11 h-11 rounded-xl flex items-center justify-center bg-white/[0.04] border border-amber-500/25 text-amber-400 hover:bg-amber-500/10 hover:border-amber-500/40 transition-all duration-150 active:scale-[0.95]"
+                    class="w-11 h-11 rounded-xl flex items-center justify-center bg-fg/[0.04] border border-amber-500/25 text-amber-400 hover:bg-amber-500/10 hover:border-amber-500/40 transition-all duration-150 active:scale-[0.95]"
                 >
                     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 7a2 2 0 012-2h4l2 2h6a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
@@ -295,13 +289,13 @@
             </div>
 
             <div class="flex items-center gap-1.5 text-sm text-ink-500 min-w-0">
-                <button @click="selectFolder(null)" class="hover:text-white transition-colors font-medium shrink-0">All Notes</button>
+                <button @click="selectFolder(null)" class="hover:text-fg transition-colors font-medium shrink-0">All Notes</button>
                 <template x-for="(crumb, index) in breadcrumbs" :key="crumb.id">
                     <div class="flex items-center gap-1.5 min-w-0">
                         <span class="shrink-0 text-ink-600">/</span>
                         <button
                             @click="selectFolder(crumb.id)"
-                            class="hover:text-white transition-colors truncate"
+                            class="hover:text-fg transition-colors truncate"
                             x-text="crumb.name"
                         ></button>
                     </div>
@@ -309,7 +303,7 @@
                 <template x-if="selectedNote">
                     <div class="flex items-center gap-1.5 min-w-0">
                         <span class="shrink-0 text-ink-600">/</span>
-                        <span class="text-white truncate font-medium" x-text="selectedNote.title || 'New Note'"></span>
+                        <span class="text-fg truncate font-medium" x-text="selectedNote.title || 'New Note'"></span>
                     </div>
                 </template>
             </div>
@@ -320,61 +314,106 @@
                 <div>
                     <p x-show="loading" class="text-sm text-ink-500">Loading…</p>
 
-                    <div
-                        x-show="!loading"
-                        class="grid gap-4"
-                        style="grid-template-columns: repeat(3, 1fr);"
-                    >
+                    <div x-show="!loading" class="flex flex-col gap-6">
+                        <div x-show="subfolders.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         <template x-for="folder in subfolders" :key="folder.id">
                             <div
                                 @click="selectFolder(folder.id)"
-                                class="tile-folder group"
+                                class="folder-block group min-w-0"
                             >
-                                <div class="absolute top-3 right-3 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-150">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" class="shrink-0"><path d="M2 6a2 2 0 012-2h4.5l1.5 2H16a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/></svg>
+                                <span class="truncate" :title="folder.name" x-text="folder.name"></span>
+
+                                <div class="absolute top-1/2 -translate-y-1/2 right-3 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-150">
                                     <button
                                         @click.stop="openRenameFolderModal(folder)"
                                         title="Rename folder"
-                                        class="tile-action hover:text-amber-400 hover:bg-amber-500/10"
+                                        class="folder-block-action"
                                     >
-                                        <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M13.5 2.5a1.5 1.5 0 012.121 2.121l-8.5 8.5-2.828.707.707-2.828 8.5-8.5z"/></svg>
+                                        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M13.5 2.5a1.5 1.5 0 012.121 2.121l-8.5 8.5-2.828.707.707-2.828 8.5-8.5z"/></svg>
                                     </button>
                                     <button
                                         @click.stop="deleteFolder(folder)"
                                         title="Delete folder"
-                                        class="tile-action hover:text-red-400 hover:bg-red-500/10"
+                                        class="folder-block-action"
                                     >
-                                        <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M4 6h12M8 6V4a1 1 0 011-1h2a1 1 0 011 1v2m3 0-.7 9.1a2 2 0 01-2 1.9H7.7a2 2 0 01-2-1.9L5 6h10z"/>
                                         </svg>
                                     </button>
                                 </div>
-                                <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" class="text-amber-400/80"><path d="M2 6a2 2 0 012-2h4.5l1.5 2H16a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/></svg>
-                                <h3 class="font-semibold text-sm leading-snug text-white tracking-tight pr-12" x-text="folder.name"></h3>
                             </div>
                         </template>
+                        </div>
 
+                        <div x-show="notes.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         <template x-for="note in notes" :key="note.id">
-                            <div
-                                @click="viewNote(note)"
-                                class="tile-note group"
-                            >
-                                <button
-                                    @click.stop="deleteNote(note)"
-                                    title="Delete note"
-                                    class="absolute top-3 right-3 tile-action opacity-0 group-hover:opacity-100 hover:text-red-400 hover:bg-red-500/10 transition-all duration-150"
-                                >
-                                    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M4 6h12M8 6V4a1 1 0 011-1h2a1 1 0 011 1v2m3 0-.7 9.1a2 2 0 01-2 1.9H7.7a2 2 0 01-2-1.9L5 6h10z"/>
-                                    </svg>
-                                </button>
-                                <h3 class="font-semibold text-sm leading-snug text-white tracking-tight pr-6" x-text="note.title"></h3>
-                                <p class="text-sm text-ink-400 line-clamp-4 whitespace-pre-line leading-relaxed" x-text="note.content"></p>
+                            <div class="note-card min-w-0">
+                                <div class="flex items-start gap-3">
+                                    <span class="note-card-icon">
+                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M6 3a1 1 0 00-1 1v16a1 1 0 001 1h12a1 1 0 001-1V8l-5-5H6z"/>
+                                            <path d="M13 3v5h5"/>
+                                            <path d="M9 13h6M9 17h4"/>
+                                        </svg>
+                                    </span>
+
+                                    <div x-data="{ open: false }" @click.outside="open = false" @keydown.escape.window="open = false" class="relative ml-auto">
+                                        <button
+                                            type="button"
+                                            @click="open = !open"
+                                            title="More"
+                                            aria-label="More actions"
+                                            class="w-8 h-8 flex items-center justify-center rounded-lg text-ink-400 hover:bg-fg/[0.08] hover:text-fg transition-colors"
+                                        >
+                                            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><circle cx="4" cy="10" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="16" cy="10" r="1.5"/></svg>
+                                        </button>
+
+                                        <div
+                                            x-show="open"
+                                            x-cloak
+                                            x-transition:enter="transition ease-out duration-100"
+                                            x-transition:enter-start="opacity-0 -translate-y-1"
+                                            x-transition:enter-end="opacity-100 translate-y-0"
+                                            x-transition:leave="transition ease-in duration-75"
+                                            x-transition:leave-start="opacity-100"
+                                            x-transition:leave-end="opacity-0"
+                                            class="absolute right-0 top-full mt-1 w-36 rounded-lg bg-surface border border-fg/[0.1] shadow-popover py-1 z-20"
+                                        >
+                                            <button
+                                                type="button"
+                                                @click="open = false; editNoteFromList(note)"
+                                                class="w-full flex items-center gap-2 px-3 py-2 text-xs text-left text-ink-300 hover:bg-fg/[0.06] transition-colors"
+                                            >
+                                                <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M13.5 2.5a1.5 1.5 0 012.121 2.121l-8.5 8.5-2.828.707.707-2.828 8.5-8.5z"/></svg>
+                                                Edit
+                                            </button>
+                                            <button
+                                                type="button"
+                                                @click="open = false; deleteNote(note)"
+                                                class="w-full flex items-center gap-2 px-3 py-2 text-xs text-left text-red-400 hover:bg-red-500/10 transition-colors"
+                                            >
+                                                <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12M8 6V4a1 1 0 011-1h2a1 1 0 011 1v2m3 0-.7 9.1a2 2 0 01-2 1.9H7.7a2 2 0 01-2-1.9L5 6h10z"/></svg>
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h3 class="mt-3 font-semibold text-[15px] leading-snug text-fg tracking-tight truncate" :title="note.title" x-text="note.title || 'Untitled'"></h3>
+                                <p class="mt-0.5 text-[13px] text-ink-400" x-text="'Created ' + noteAgo(note.created_at)"></p>
+
+                                <div class="mt-4 flex items-center gap-2">
+                                    <button type="button" @click="viewNote(note)" class="note-card-btn">Open</button>
+                                    <button type="button" @click="editNoteFromList(note)" class="note-card-btn">Edit</button>
+                                </div>
                             </div>
                         </template>
+                        </div>
                     </div>
 
                     <div x-show="!loading && notes.length === 0 && subfolders.length === 0" class="flex flex-col items-center justify-center py-24 text-center">
-                        <div class="w-14 h-14 rounded-2xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center mb-4">
+                        <div class="w-14 h-14 rounded-2xl bg-fg/[0.04] border border-fg/[0.06] flex items-center justify-center mb-4">
                             <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" class="text-ink-500"><path d="M4 3a1 1 0 011-1h6l4 4v11a1 1 0 01-1 1H5a1 1 0 01-1-1V3z"/><path d="M11 2v4h4"/></svg>
                         </div>
                         <p class="text-sm text-ink-500">Nothing here yet. Create a note or a folder to get started.</p>
@@ -383,52 +422,122 @@
             </template>
 
             <template x-if="selectedNote">
-                <div class="max-w-2xl">
-                    <button @click="selectedNote = null; isEditingDetail = false; isNewNote = false;" class="flex items-center gap-1.5 text-sm text-ink-500 hover:text-white transition-colors mb-6">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
-                        Back
-                    </button>
-
-                    <!-- View mode -->
+                <div>
+                    <!-- View mode: a tinted header band (back, actions, title, chips) above the note. The negative margin cancels the page padding so the band runs edge to edge. -->
                     <template x-if="!isEditingDetail">
-                        <div>
-                            <h1 class="text-2xl font-bold text-white tracking-tight mb-5" x-text="selectedNote.title"></h1>
-                            <p class="text-sm text-ink-300 whitespace-pre-line leading-relaxed" x-text="selectedNote.content"></p>
+                        <div class="-m-8">
+                            <section class="px-10 pt-5 pb-7 bg-accent/[0.08] border-b border-accent/[0.18]">
+                                <div class="flex items-center gap-2">
+                                    <button @click="selectedNote = null; isEditingDetail = false; isNewNote = false;" class="flex items-center gap-1.5 py-1 text-sm text-ink-400 hover:text-fg transition-colors">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+                                        Back
+                                    </button>
+                                    <span class="flex-1"></span>
+                                    <button @click="startEditNote()" class="btn-primary !py-2 !px-4">
+                                        <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path d="M13.5 2.5a1.5 1.5 0 012.121 2.121l-8.5 8.5-2.828.707.707-2.828 8.5-8.5z"/></svg>
+                                        Edit note
+                                    </button>
+                                    <button
+                                        @click="deleteNote(selectedNote)"
+                                        title="Delete note"
+                                        aria-label="Delete note"
+                                        class="w-[38px] h-[38px] shrink-0 flex items-center justify-center rounded-xl border border-red-400/30 text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
+                                    >
+                                        <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 6h12M8 6V4a1 1 0 011-1h2a1 1 0 011 1v2m3 0-.7 9.1a2 2 0 01-2 1.9H7.7a2 2 0 01-2-1.9L5 6h10z"/>
+                                        </svg>
+                                    </button>
+                                </div>
 
-                            <div class="mt-10 flex items-center gap-2">
-                                <button @click="startEditNote()" class="btn-secondary">
-                                    <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M13.5 2.5a1.5 1.5 0 012.121 2.121l-8.5 8.5-2.828.707.707-2.828 8.5-8.5z"/></svg>
-                                    Edit
-                                </button>
-                                <button @click="deleteNote(selectedNote)" class="btn-ghost text-red-400 hover:bg-red-500/10 hover:text-red-300">
-                                    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M4 6h12M8 6V4a1 1 0 011-1h2a1 1 0 011 1v2m3 0-.7 9.1a2 2 0 01-2 1.9H7.7a2 2 0 01-2-1.9L5 6h10z"/>
-                                    </svg>
-                                    Delete
-                                </button>
+                                <p class="mt-5 text-[11px] font-bold uppercase tracking-[0.12em] text-accent">Note</p>
+                                <h1 class="mt-1.5 text-[34px] font-bold leading-tight tracking-tight text-fg break-words" x-text="selectedNote.title || 'Untitled'"></h1>
+
+                                <div class="mt-4 flex flex-wrap gap-2">
+                                    <span class="inline-flex items-center gap-1.5 h-[26px] px-2.5 rounded-full bg-accent/[0.14] text-accent-soft text-xs font-medium max-w-full">
+                                        <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor" class="shrink-0"><path d="M2 6a2 2 0 012-2h4.5l1.5 2H16a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/></svg>
+                                        <span class="truncate" x-text="noteFolderName(selectedNote)"></span>
+                                    </span>
+                                    <span class="inline-flex items-center h-[26px] px-2.5 rounded-full bg-fg/[0.06] text-ink-400 text-xs" x-text="'Created ' + noteAgo(selectedNote.created_at)"></span>
+                                    <span x-show="noteWasEdited(selectedNote)" class="inline-flex items-center h-[26px] px-2.5 rounded-full bg-fg/[0.06] text-ink-400 text-xs" x-text="'Edited ' + noteAgo(selectedNote.updated_at)"></span>
+                                </div>
+                            </section>
+
+                            <div class="max-w-[760px] px-10 pt-8 pb-12">
+                                <div class="note-rich note-view text-ink-300" x-html="noteViewHtml(selectedNote.content)" @click="noteViewClick($event)"></div>
                             </div>
                         </div>
                     </template>
 
                     <!-- Edit / create mode -->
                     <template x-if="isEditingDetail">
+                      <div class="max-w-2xl">
+                        <button @click="selectedNote = null; isEditingDetail = false; isNewNote = false;" class="flex items-center gap-1.5 text-sm text-ink-500 hover:text-fg transition-colors mb-6">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+                            Back
+                        </button>
                         <form @submit.prevent="saveDetail()" class="space-y-5">
                             <div>
                                 <input
                                     type="text"
                                     x-model="detailForm.title"
                                     placeholder="Untitled"
-                                    class="w-full bg-transparent text-2xl font-bold text-white tracking-tight placeholder-ink-600 outline-none border-b border-white/10 focus:border-amber-600/60 pb-2 transition-colors"
+                                    class="w-full bg-transparent text-2xl font-bold text-fg tracking-tight placeholder-ink-600 outline-none border-b border-fg/10 focus:border-amber-600/60 pb-2 transition-colors"
                                 >
                                 <p class="text-xs text-red-400 mt-1.5" x-show="errors.title" x-text="errors.title?.[0]"></p>
                             </div>
 
                             <div>
-                                <textarea
-                                    x-model="detailForm.content"
-                                    placeholder="Write something…"
-                                    class="w-full min-h-[50vh] bg-transparent text-sm text-ink-200 placeholder-ink-600 outline-none leading-relaxed resize-none [field-sizing:content]"
-                                ></textarea>
+                                <div
+                                    x-ref="noteEditor"
+                                    contenteditable="true"
+                                    role="textbox"
+                                    aria-multiline="true"
+                                    data-placeholder="Write something…"
+                                    x-init="noteInitEditor($el)"
+                                    @input="noteEditorInput($event)"
+                                    @keydown="noteEditorKeydown($event)"
+                                    @paste="noteEditorPaste($event)"
+                                    class="note-rich note-editor"
+                                ></div>
+
+                                <!-- Floating toolbar: appears above selected text -->
+                                <div
+                                    x-show="noteTool.show"
+                                    x-cloak
+                                    class="note-toolbar"
+                                    :style="`left:${noteTool.x}px; top:${noteTool.y}px`"
+                                    @mousedown="if ($event.target.tagName !== 'INPUT') $event.preventDefault()"
+                                    @selectionchange.document="noteUpdateToolbar()"
+                                    @scroll.capture.window="noteUpdateToolbar()"
+                                    @resize.window="noteUpdateToolbar()"
+                                >
+                                    <template x-if="!noteTool.linkMode">
+                                        <div class="flex items-center gap-0.5">
+                                            <button type="button" class="note-tool font-mono" :class="noteTool.code && 'is-on'" @click="noteToggleCode()" title="Code: click to copy once saved">&lt;/&gt;</button>
+                                            <button type="button" class="note-tool" :class="noteTool.link && 'is-on'" @click="noteOpenLink()" title="Link">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.07 0l3-3a5 5 0 00-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 00-7.07 0l-3 3a5 5 0 007.07 7.07l1.5-1.5"/></svg>
+                                            </button>
+                                            <button type="button" class="note-tool" :class="noteTool.red && 'is-on'" @click="noteToggleRed()" title="Red text">
+                                                <span class="w-3.5 h-3.5 rounded-full" style="background:#ef4444"></span>
+                                            </button>
+                                        </div>
+                                    </template>
+                                    <template x-if="noteTool.linkMode">
+                                        <div class="flex items-center gap-1">
+                                            <input
+                                                x-ref="noteLinkInput"
+                                                x-model="noteTool.url"
+                                                @keydown.enter.prevent="noteApplyLink()"
+                                                @keydown.escape.prevent="noteCloseLink()"
+                                                type="text"
+                                                placeholder="Paste a link…"
+                                                class="h-7 w-52 bg-transparent text-xs text-fg outline-none px-2 placeholder-ink-600"
+                                            >
+                                            <button type="button" class="note-tool" @click="noteApplyLink()">Apply</button>
+                                            <button type="button" class="note-tool" x-show="noteTool.link" @click="noteRemoveLink()">Remove</button>
+                                        </div>
+                                    </template>
+                                </div>
                                 <p class="text-xs text-red-400 mt-1.5" x-show="errors.content" x-text="errors.content?.[0]"></p>
                             </div>
 
@@ -436,11 +545,12 @@
                                 <button
                                     type="submit"
                                     class="btn-primary"
-                                    :class="'from-[#A23E4C] to-[#8A2F3C] hover:from-[#B5505E] hover:to-[#9C3F4D]'"
+                                    :class="'from-accent to-accent-deep hover:from-accent-hover hover:to-accent-deep-hover'"
                                 >Save</button>
                                 <button type="button" @click="cancelEditDetail()" class="btn-ghost">Cancel</button>
                             </div>
                         </form>
+                      </div>
                     </template>
                 </div>
             </template>
@@ -449,20 +559,20 @@
 
     <!-- Main: Commands -->
     <main x-show="activeApp === 'command'" x-cloak class="flex-1 flex flex-col overflow-hidden bg-ink-950">
-        <header class="border-b border-white/[0.06] px-8 py-5 flex items-center gap-4">
+        <header class="border-b border-fg/[0.06] px-8 py-5 flex items-center gap-4">
             <div class="flex items-center gap-2.5 shrink-0" x-show="!selectedCommand" x-cloak>
                 <button
                     @click="startNewCommand()"
                     title="New command set"
-                    class="w-11 h-11 rounded-xl flex items-center justify-center text-white shadow-[0_1px_0_0_rgba(255,255,255,0.16)_inset,0_1px_3px_rgba(0,0,0,0.5)] transition-all duration-150 active:scale-[0.95]"
-                    :class="'bg-gradient-to-b from-[#A23E4C] to-[#8A2F3C] hover:from-[#B5505E] hover:to-[#9C3F4D]'"
+                    class="w-11 h-11 rounded-xl flex items-center justify-center text-on-accent shadow-[0_1px_0_0_rgba(255,255,255,0.16)_inset,0_1px_3px_rgba(0,0,0,0.5)] transition-all duration-150 active:scale-[0.95]"
+                    :class="'bg-gradient-to-b from-accent to-accent-deep hover:from-accent-hover hover:to-accent-deep-hover'"
                 >
                     <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 6L3.5 10 7 14M13 6l3.5 4-3.5 4M11.5 4l-3 12"/></svg>
                 </button>
                 <button
                     @click="openFolderModal()"
                     title="New folder"
-                    class="w-11 h-11 rounded-xl flex items-center justify-center bg-white/[0.04] border border-amber-500/25 text-amber-400 hover:bg-amber-500/10 hover:border-amber-500/40 transition-all duration-150 active:scale-[0.95]"
+                    class="w-11 h-11 rounded-xl flex items-center justify-center bg-fg/[0.04] border border-amber-500/25 text-amber-400 hover:bg-amber-500/10 hover:border-amber-500/40 transition-all duration-150 active:scale-[0.95]"
                 >
                     <svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 7a2 2 0 012-2h4l2 2h6a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
@@ -472,13 +582,13 @@
             </div>
 
             <div class="flex items-center gap-1.5 text-sm text-ink-500 min-w-0">
-                <button @click="selectFolder(null)" class="hover:text-white transition-colors font-medium shrink-0">All Commands</button>
+                <button @click="selectFolder(null)" class="hover:text-fg transition-colors font-medium shrink-0">All Comms</button>
                 <template x-for="(crumb, index) in breadcrumbs" :key="crumb.id">
                     <div class="flex items-center gap-1.5 min-w-0">
                         <span class="shrink-0 text-ink-600">/</span>
                         <button
                             @click="selectFolder(crumb.id)"
-                            class="hover:text-white transition-colors truncate"
+                            class="hover:text-fg transition-colors truncate"
                             x-text="crumb.name"
                         ></button>
                     </div>
@@ -486,7 +596,7 @@
                 <template x-if="selectedCommand">
                     <div class="flex items-center gap-1.5 min-w-0">
                         <span class="shrink-0 text-ink-600">/</span>
-                        <span class="text-white truncate font-medium" x-text="selectedCommand.title || 'New Command Set'"></span>
+                        <span class="text-fg truncate font-medium" x-text="selectedCommand.title || 'New Command Set'"></span>
                     </div>
                 </template>
             </div>
@@ -499,7 +609,7 @@
 
                     <div
                         x-show="!loading && (subfolders.length > 0 || commands.length > 0)"
-                        class="max-w-5xl border border-white/[0.07]"
+                        class="max-w-5xl border border-fg/[0.07]"
                     >
                         <div class="cmd-list-row cmd-head">
                             <span></span>
@@ -513,10 +623,10 @@
                             <div
                                 @click="selectFolder(folder.id)"
                                 class="cmd-list-row group cursor-pointer"
-                                style="--c: rgba(245, 158, 11, 0.7)"
+                                style="--c: rgb(var(--folder-accent) / 0.7)"
                             >
                                 <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" class="text-amber-400/80"><path d="M2 6a2 2 0 012-2h4.5l1.5 2H16a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/></svg>
-                                <span class="text-sm font-semibold text-white truncate" :title="folder.name" x-text="folder.name"></span>
+                                <span class="text-sm font-semibold text-fg truncate" :title="folder.name" x-text="folder.name"></span>
                                 <span class="text-xs text-ink-500">Folder</span>
                                 <span></span>
                                 <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
@@ -544,13 +654,13 @@
                             <div
                                 @click="viewCommand(cmd)"
                                 class="cmd-list-row group cursor-pointer"
-                                style="--c: rgba(162, 62, 76, 0.8)"
+                                style="--c: rgb(var(--accent) / 0.8)"
                             >
                                 <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="text-ink-500"><path d="M4 6l4 4-4 4M10 15h6"/></svg>
-                                <span class="text-sm font-semibold text-white truncate" :title="cmd.title" x-text="cmd.title"></span>
+                                <span class="text-sm font-semibold text-fg truncate" :title="cmd.title" x-text="cmd.title"></span>
                                 <code
                                     class="font-mono text-[12px] truncate"
-                                    :class="cmd.rows.length ? 'text-[#f3c98b]/80' : 'text-ink-500'"
+                                    :class="cmd.rows.length ? 'text-cmd/80' : 'text-ink-500'"
                                     :title="cmd.rows[0]?.value || ''"
                                     x-text="cmd.rows[0]?.value || 'Empty'"
                                 ></code>
@@ -571,7 +681,7 @@
                     </div>
 
                     <div x-show="!loading && commands.length === 0 && subfolders.length === 0" class="flex flex-col items-center justify-center py-24 text-center">
-                        <div class="w-14 h-14 bg-white/[0.04] border border-white/[0.06] flex items-center justify-center mb-4">
+                        <div class="w-14 h-14 bg-fg/[0.04] border border-fg/[0.06] flex items-center justify-center mb-4">
                             <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" class="text-ink-500"><path d="M7 6L3.5 10 7 14M13 6l3.5 4-3.5 4M11.5 4l-3 12"/></svg>
                         </div>
                         <p class="text-sm text-ink-500">Nothing here yet. Create a command set or a folder to get started.</p>
@@ -581,7 +691,7 @@
 
             <template x-if="selectedCommand">
                 <div class="max-w-5xl">
-                    <button @click="selectedCommand = null; isEditingCommandDetail = false; isNewCommand = false;" class="flex items-center gap-1.5 text-sm text-ink-500 hover:text-white transition-colors mb-6">
+                    <button @click="selectedCommand = null; isEditingCommandDetail = false; isNewCommand = false;" class="flex items-center gap-1.5 text-sm text-ink-500 hover:text-fg transition-colors mb-6">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
                         Back
                     </button>
@@ -589,9 +699,9 @@
                     <!-- View mode -->
                     <template x-if="!isEditingCommandDetail">
                         <div>
-                            <h1 class="text-2xl font-bold text-white tracking-tight mb-5" x-text="selectedCommand.title"></h1>
+                            <h1 class="text-2xl font-bold text-fg tracking-tight mb-5" x-text="selectedCommand.title"></h1>
 
-                            <div class="border border-white/[0.07]">
+                            <div class="border border-fg/[0.07]">
                                 <div x-show="selectedCommand.rows.length > 0" class="cmd-row cmd-head">
                                     <span>#</span>
                                     <span>What</span>
@@ -602,13 +712,13 @@
                                 <template x-for="(row, idx) in selectedCommand.rows" :key="idx">
                                     <div x-data="{ copied: false }" class="cmd-row">
                                         <span class="font-mono text-[11px] text-ink-500" x-text="String(idx + 1).padStart(2, '0')"></span>
-                                        <span class="text-sm text-white truncate" :title="row.label" x-text="row.label"></span>
-                                        <code class="font-mono text-[12.5px] text-[#f3c98b] truncate" :title="row.value" x-text="row.value"></code>
+                                        <span class="text-sm text-fg truncate" :title="row.label" x-text="row.label"></span>
+                                        <code class="font-mono text-[12.5px] text-cmd truncate" :title="row.value" x-text="row.value"></code>
                                         <button
                                             type="button"
-                                            @click="navigator.clipboard.writeText(row.value); copied = true; setTimeout(() => copied = false, 1500)"
+                                            @click="copyText(row.value).then((ok) => { if (ok) { copied = true; setTimeout(() => copied = false, 1500); } })"
                                             class="border py-1.5 text-[10px] font-semibold uppercase tracking-wider transition-colors"
-                                            :class="copied ? 'border-emerald-400/50 text-emerald-400' : 'border-white/[0.16] text-ink-400 hover:text-white hover:bg-ink-800'"
+                                            :class="copied ? 'border-emerald-400/50 text-emerald-400' : 'border-fg/[0.16] text-ink-400 hover:border-accent hover:text-accent hover:bg-accent/10'"
                                             title="Copy to clipboard"
                                             x-text="copied ? 'Copied' : 'Copy'"
                                         ></button>
@@ -641,7 +751,7 @@
                                     type="text"
                                     x-model="commandDetailForm.title"
                                     placeholder="Untitled"
-                                    class="w-full bg-transparent text-2xl font-bold text-white tracking-tight placeholder-ink-600 outline-none border-b border-white/10 focus:border-amber-600/60 pb-2 transition-colors"
+                                    class="w-full bg-transparent text-2xl font-bold text-fg tracking-tight placeholder-ink-600 outline-none border-b border-fg/10 focus:border-amber-600/60 pb-2 transition-colors"
                                 >
                                 <p class="text-xs text-red-400 mt-1.5" x-show="errors.title" x-text="errors.title?.[0]"></p>
                             </div>
@@ -674,7 +784,7 @@
                                 <button
                                     type="submit"
                                     class="btn-primary"
-                                    :class="'from-[#A23E4C] to-[#8A2F3C] hover:from-[#B5505E] hover:to-[#9C3F4D]'"
+                                    :class="'from-accent to-accent-deep hover:from-accent-hover hover:to-accent-deep-hover'"
                                 >Save</button>
                                 <button type="button" @click="cancelEditCommandDetail()" class="btn-ghost">Cancel</button>
                             </div>
@@ -692,9 +802,9 @@
         @keydown.window="if (activeApp === 'task' && $event.key.toLowerCase() === 'n' && !$event.ctrlKey && !$event.metaKey && !$event.altKey && !['INPUT', 'TEXTAREA', 'SELECT'].includes($event.target.tagName) && !$event.target.isContentEditable) { $event.preventDefault(); $refs.taskInput.focus(); }"
         class="flex-1 flex flex-col overflow-hidden bg-ink-950"
     >
-        <header class="border-b border-white/[0.06] px-8 py-5 flex items-center gap-4">
+        <header class="border-b border-fg/[0.06] px-8 py-5 flex items-center gap-4">
             <div class="flex items-center gap-1.5 text-sm text-ink-500 min-w-0 flex-1">
-                <span class="text-white font-medium">Tasks</span>
+                <span class="text-fg font-medium">Tasks</span>
                 <span class="text-ink-600">/</span>
                 <span x-text="taskStatusFilter ? taskStatusFilter.charAt(0).toUpperCase() + taskStatusFilter.slice(1) : 'All'"></span>
             </div>
@@ -711,82 +821,109 @@
             </button>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-8">
-            <div class="max-w-5xl flex flex-col gap-5">
-                <form @submit.prevent="addTask()" class="flex border border-white/[0.16] bg-ink-900 transition-colors focus-within:border-amber-600/60">
-                    <input
-                        type="text"
-                        x-ref="taskInput"
-                        x-model="taskForm.title"
-                        placeholder="Add a task and press Enter…"
-                        class="flex-1 min-w-0 bg-transparent px-4 py-3 text-sm text-ink-100 placeholder-ink-500 outline-none"
-                    >
-                    <span class="flex items-center pr-3" title="Press N to add a task">
-                        <kbd class="ledger-kbd">N</kbd>
-                    </span>
-                    <button
-                        type="submit"
-                        class="px-6 text-sm font-semibold text-white bg-[#A23E4C] hover:bg-[#B5505E] transition-colors"
-                    >Add</button>
-                </form>
-
-                <div class="grid grid-cols-4 border border-white/[0.07]">
-                    <template x-for="status in taskStatuses" :key="status.key">
+        <div class="flex-1 overflow-y-auto px-8 py-6">
+            <div class="max-w-3xl">
+                <div class="inline-flex flex-wrap gap-0.5 p-[3px] rounded-[10px] tabs-track border border-fg/[0.06]" role="group" aria-label="Filter tasks">
+                    <template x-for="filter in [{ key: null, label: 'All' }, ...taskStatuses]" :key="filter.label">
                         <button
                             type="button"
-                            @click="filterTasks(taskStatusFilter === status.key ? null : status.key)"
-                            class="ledger-stat"
-                            :class="taskStatusFilter === status.key ? 'ledger-stat-active' : ''"
-                            :style="`--c: ${status.color}`"
+                            @click="filterTasks(filter.key)"
+                            class="px-3 py-1.5 rounded-lg text-[12.5px] transition-colors"
+                            :class="taskStatusFilter === filter.key ? 'bg-surface text-fg shadow-card' : 'text-ink-500 hover:text-ink-100'"
                         >
-                            <span class="text-[26px] font-bold leading-tight tabular-nums" :style="`color: ${status.color}`" x-text="taskCount(status.key)"></span>
-                            <span class="text-[11px] font-semibold uppercase tracking-widest text-ink-400" x-text="status.label"></span>
+                            <span x-text="filter.label"></span>
+                            <b class="ml-1 font-semibold tabular-nums" x-text="filter.key ? taskCount(filter.key) : tasks.length"></b>
                         </button>
                     </template>
                 </div>
 
-                <p x-show="taskLoading" class="text-sm text-ink-500">Loading…</p>
+                <form @submit.prevent="addTask()" class="mt-4 flex items-center gap-3 px-3.5 py-3 border border-dashed border-fg/[0.16] rounded-[10px]">
+                    <span class="w-5 h-5 shrink-0 rounded-full border-[1.75px] border-dashed border-ink-500 flex items-center justify-center text-ink-500 text-sm leading-none">+</span>
+                    <input
+                        type="text"
+                        x-ref="taskInput"
+                        x-model="taskForm.title"
+                        placeholder="Add a task"
+                        class="flex-1 min-w-0 bg-transparent text-[15px] text-ink-100 placeholder-ink-500 outline-none"
+                    >
+                    <button
+                        type="submit"
+                        x-show="taskForm.title.trim() !== ''"
+                        class="text-xs font-semibold text-accent hover:text-accent-hover transition-colors"
+                    >Add</button>
+                    <span x-show="taskForm.title.trim() === ''" title="Press N to add a task"><kbd class="ledger-kbd">N</kbd></span>
+                </form>
 
-                <div x-show="!taskLoading && visibleTasks().length > 0" class="border border-white/[0.07]">
-                    <div class="ledger-row ledger-head">
-                        <span></span>
-                        <span>#</span>
-                        <span>Task</span>
-                        <span>Status</span>
-                        <span>Age</span>
-                        <span></span>
-                    </div>
+                <p x-show="taskLoading" class="mt-4 text-sm text-ink-500">Loading…</p>
 
-                    <template x-for="(task, index) in visibleTasks()" :key="task.id">
-                        <div class="ledger-row group" :style="`--c: ${taskStatusMeta(task.status).color}`">
+                <div x-show="!taskLoading && visibleTasks().length > 0" class="mt-6 flex flex-col gap-[18px]">
+                    <template x-for="statusGroup in taskGroups()" :key="statusGroup.key">
+                    <section
+                        x-show="draggingTaskId !== null || taskCount(statusGroup.key) > 0"
+                        class="flex flex-col gap-2 -mx-2 px-2 -my-1.5 py-1.5 rounded-xl transition-colors"
+                        :class="dragOverKey === statusGroup.key ? 'bg-fg/[0.04]' : ''"
+                        :style="dragOverKey === statusGroup.key ? `box-shadow: inset 0 0 0 1.5px ${statusGroup.border}` : ''"
+                        @dragover="if (draggingTaskId !== null) { $event.preventDefault(); $event.dataTransfer.dropEffect = 'move'; dragOverKey = statusGroup.key; }"
+                        @dragleave="if (!$el.contains($event.relatedTarget) && dragOverKey === statusGroup.key) dragOverKey = null"
+                        @drop.prevent="dropTask(statusGroup.key)"
+                    >
+                        <div class="flex items-center gap-2.5 h-[22px]">
+                            <span class="w-[9px] h-[9px] rounded-[2px] shrink-0" :style="`background: ${statusGroup.color}`"></span>
+                            <h3 class="text-[11px] font-bold uppercase tracking-[0.1em]" :style="`color: ${statusGroup.color}`" x-text="statusGroup.label"></h3>
+                            <span class="font-mono text-[11px] text-ink-500 tabular-nums" x-text="taskCount(statusGroup.key)"></span>
+                            <span class="flex-1 h-px bg-fg/[0.07]"></span>
                             <button
+                                type="button"
+                                x-show="statusGroup.key === 'completed' && taskStatusFilter !== 'completed'"
+                                @click="toggleShowCompleted()"
+                                :aria-expanded="showCompleted.toString()"
+                                class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-xs text-ink-400 hover:text-ink-100 hover:bg-fg/[0.06] transition-colors"
+                            >
+                                <span x-text="showCompleted ? 'Hide' : 'Show'"></span>
+                                <svg width="9" height="9" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-150" :class="showCompleted ? '-rotate-180' : ''"><path d="M5 8l5 5 5-5"/></svg>
+                            </button>
+                        </div>
+
+                        <div x-show="statusGroup.key !== 'completed' || showCompleted || taskStatusFilter === 'completed'" class="flex flex-col gap-1.5">
+                    <template x-for="task in statusGroup.tasks" :key="task.id">
+                        <div
+                            draggable="true"
+                            @dragstart="startTaskDrag($event, task)"
+                            @dragend="endTaskDrag()"
+                            title="Drag to another status"
+                            class="group relative flex items-center gap-3.5 pl-3.5 pr-2.5 py-2.5 bg-surface border border-fg/[0.07] rounded-[9px] text-[15px] cursor-grab active:cursor-grabbing transition-opacity"
+                            :class="draggingTaskId === task.id ? 'opacity-40' : ''"
+                        >
+                            <svg aria-hidden="true" width="8" height="12" viewBox="0 0 8 12" fill="currentColor" class="absolute left-[3px] top-1/2 -translate-y-1/2 text-ink-500 opacity-0 group-hover:opacity-70 transition-opacity"><circle cx="2" cy="2" r="1"/><circle cx="6" cy="2" r="1"/><circle cx="2" cy="6" r="1"/><circle cx="6" cy="6" r="1"/><circle cx="2" cy="10" r="1"/><circle cx="6" cy="10" r="1"/></svg>
+                            <button
+                                type="button"
                                 @click="toggleTaskCompleted(task)"
                                 :title="task.status === 'completed' ? 'Mark not done' : 'Mark done'"
-                                class="w-[18px] h-[18px] border-[1.5px] flex items-center justify-center transition-colors"
-                                :class="task.status === 'completed' ? 'bg-emerald-400 border-emerald-400' : 'border-white/25 hover:border-white/50'"
+                                class="w-5 h-5 shrink-0 rounded-full border-[1.75px] flex items-center justify-center transition-colors text-ink-950"
+                                :class="task.status === 'completed' ? 'bg-emerald-400 border-emerald-400' : 'hover:bg-fg/[0.06]'"
+                                :style="task.status === 'completed' ? '' : `border-color: ${statusGroup.ring}`"
                             >
-                                <svg x-show="task.status === 'completed'" width="10" height="10" viewBox="0 0 20 20" fill="none" stroke="#06281c" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10l4 4 8-8"/></svg>
+                                <svg x-show="task.status === 'completed'" width="11" height="11" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg>
                             </button>
 
-                            <span class="font-mono text-[11px] text-ink-500" x-text="String(index + 1).padStart(2, '0')"></span>
-
                             <span
-                                class="truncate text-sm"
-                                :class="task.status === 'completed' ? 'line-through text-ink-500' : 'text-white'"
+                                class="flex-1 min-w-0 truncate"
+                                :class="task.status === 'completed' ? 'line-through text-ink-500' : 'text-fg'"
                                 :title="task.title"
                                 x-text="task.title"
                             ></span>
 
-                            <div x-data="{ open: false }" @click.outside="open = false" class="relative">
+                            <div x-data="{ open: false }" @click.outside="open = false" class="relative shrink-0">
                                 <button
                                     type="button"
                                     @click="open = !open"
-                                    class="inline-flex items-center gap-1.5 border px-2 py-1 text-[10px] font-semibold uppercase tracking-wider transition-colors hover:bg-white/[0.04]"
-                                    :style="`color: ${taskStatusMeta(task.status).color}; border-color: ${taskStatusMeta(task.status).color}59`"
+                                    title="Change status"
+                                    class="inline-flex items-center gap-1.5 px-2 py-1 -mx-2 rounded-md text-xs font-medium transition-colors hover:bg-fg/[0.06]"
+                                    :style="`color: ${taskStatusMeta(task.status).color}`"
                                 >
-                                    <span class="w-1.5 h-1.5 shrink-0" :style="`background: ${taskStatusMeta(task.status).color}`"></span>
+                                    <span class="w-1.5 h-1.5 rounded-full shrink-0" :style="`background: ${taskStatusMeta(task.status).color}`"></span>
                                     <span x-text="taskStatusMeta(task.status).label"></span>
-                                    <svg width="9" height="9" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-150" :class="open ? '-rotate-180' : ''"><path d="M5 8l5 5 5-5"/></svg>
+                                    <svg width="9" height="9" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="opacity-60 transition-transform duration-150" :class="open ? '-rotate-180' : ''"><path d="M5 8l5 5 5-5"/></svg>
                                 </button>
 
                                 <div
@@ -798,17 +935,17 @@
                                     x-transition:leave="transition ease-in duration-75"
                                     x-transition:leave-start="opacity-100"
                                     x-transition:leave-end="opacity-0"
-                                    class="absolute left-0 top-full mt-1 w-36 bg-ink-800 border border-white/[0.08] shadow-popover py-1 z-20"
+                                    class="absolute right-0 top-full mt-1 w-40 rounded-lg bg-surface border border-fg/[0.1] shadow-popover py-1 z-20"
                                 >
                                     <template x-for="option in taskStatuses" :key="option.key">
                                         <button
                                             type="button"
                                             @click="updateTaskStatus(task, option.key); open = false"
-                                            class="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-left transition-colors hover:bg-white/[0.06]"
-                                            :class="task.status === option.key ? '' : 'text-ink-400'"
+                                            class="w-full flex items-center gap-2 px-3 py-2 text-xs text-left transition-colors hover:bg-fg/[0.06]"
+                                            :class="task.status === option.key ? 'font-semibold' : 'text-ink-400'"
                                             :style="task.status === option.key ? `color: ${option.color}` : ''"
                                         >
-                                            <span class="w-1.5 h-1.5 shrink-0" :style="`background: ${option.color}`"></span>
+                                            <span class="w-1.5 h-1.5 rounded-full shrink-0" :style="`background: ${option.color}`"></span>
                                             <span x-text="option.label"></span>
                                             <svg x-show="task.status === option.key" width="10" height="10" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="ml-auto"><path d="M4 10l4 4 8-8"/></svg>
                                         </button>
@@ -817,23 +954,32 @@
                             </div>
 
                             <span
-                                class="font-mono text-[11px] text-ink-500"
+                                class="w-9 text-right font-mono text-[11px] text-ink-500 shrink-0"
                                 :title="task.created_at ? 'Added ' + new Date(task.created_at).toLocaleString() : ''"
                                 x-text="taskAge(task.created_at)"
                             ></span>
 
                             <button
+                                type="button"
                                 @click="deleteTask(task)"
                                 title="Delete task"
-                                class="w-7 h-7 flex items-center justify-center text-ink-500 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 hover:text-red-400 hover:bg-red-500/10 transition-all"
+                                class="w-7 h-7 shrink-0 flex items-center justify-center rounded-md text-ink-500 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 hover:text-red-400 hover:bg-red-500/10 transition-all"
                             >
                                 <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h12M8 6V4a1 1 0 011-1h2a1 1 0 011 1v2m3 0-.7 9.1a2 2 0 01-2 1.9H7.7a2 2 0 01-2-1.9L5 6h10z"/></svg>
                             </button>
                         </div>
                     </template>
+                        </div>
+
+                        <div
+                            x-show="taskCount(statusGroup.key) === 0"
+                            class="h-11 rounded-[9px] border border-dashed border-fg/[0.16] flex items-center justify-center text-xs text-ink-500"
+                        >Drop here</div>
+                    </section>
+                    </template>
                 </div>
 
-                <div x-show="!taskLoading && visibleTasks().length === 0" class="flex flex-col items-center justify-center py-20 text-center border border-dashed border-white/[0.1]">
+                <div x-show="!taskLoading && visibleTasks().length === 0" class="py-16 text-center">
                     <p
                         class="text-sm text-ink-500"
                         x-text="taskStatusFilter ? 'No ' + taskStatusMeta(taskStatusFilter).label.toLowerCase() + ' tasks.' : 'No tasks here yet. Add one above to get started.'"
@@ -860,10 +1006,10 @@
             class="card w-full max-w-md p-7 shadow-popover"
         >
             <div class="flex items-center justify-between mb-5">
-                <h2 class="text-base font-semibold text-white tracking-tight" x-text="renamingFolderId ? 'Rename Folder' : 'New Folder'"></h2>
+                <h2 class="text-base font-semibold text-fg tracking-tight" x-text="renamingFolderId ? 'Rename Folder' : 'New Folder'"></h2>
                 <span
                     class="text-[11px] font-semibold px-2.5 py-1 rounded-full"
-                    :class="'bg-[#A23E4C]/10 text-[#D98A96]'"
+                    :class="'bg-accent/10 text-accent-soft'"
                     x-text="activeCategory === 'office' ? '💼 Work' : '🏠 Personal'"
                 ></span>
             </div>
@@ -880,6 +1026,31 @@
                     <button type="submit" class="btn-secondary" x-text="renamingFolderId ? 'Save' : 'Create'"></button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Confirm dialog. Used instead of the browser's confirm(), which in the desktop app leaves the
+         page unable to take keyboard input after it closes. -->
+    <div
+        x-show="confirmDialog.show"
+        x-cloak
+        x-transition.opacity
+        x-effect="if (confirmDialog.show) $nextTick(() => $refs.confirmOk.focus())"
+        @keydown.escape.window="if (confirmDialog.show) answerConfirm(false)"
+        class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+        style="display: none;"
+    >
+        <div
+            @click.outside="answerConfirm(false)"
+            role="alertdialog"
+            aria-modal="true"
+            class="card w-full max-w-sm p-6 shadow-popover"
+        >
+            <p class="text-sm text-fg leading-relaxed" x-text="confirmDialog.message"></p>
+            <div class="flex justify-end gap-2 pt-5">
+                <button type="button" @click="answerConfirm(false)" class="btn-ghost">Cancel</button>
+                <button type="button" x-ref="confirmOk" @click="answerConfirm(true)" class="btn-secondary text-red-400" x-text="confirmDialog.okLabel"></button>
+            </div>
         </div>
     </div>
 </div>
@@ -909,20 +1080,30 @@
     })();
 
     function notesApp() {
+        // Resolves the open confirm dialog's promise; kept outside Alpine's reactive state.
+        let pendingConfirm = null;
+        // Where keyboard focus was before the confirm dialog opened, so it can go back there.
+        let focusBeforeConfirm = null;
+
         return {
             showSplash: true,
-            activeApp: 'notes',
+            confirmDialog: { show: false, message: '', okLabel: 'Delete' },
+            activeApp: 'task',
             activeCategory: localStorage.getItem('activeCategory') || 'office',
             tasks: [],
             taskStatusFilter: null,
             taskForm: { title: '' },
             taskLoading: false,
             taskStatuses: [
-                { key: 'critical', label: 'Critical', color: '#ef4444' },
-                { key: 'active', label: 'Active', color: '#60a5fa' },
-                { key: 'upcoming', label: 'Upcoming', color: '#fbbf24' },
-                { key: 'completed', label: 'Completed', color: '#34d399' },
+                { key: 'critical', label: 'Critical', color: 'rgb(var(--st-critical))', border: 'rgb(var(--st-critical) / 0.35)', ring: 'rgb(var(--st-critical) / 0.7)' },
+                { key: 'active', label: 'Active', color: 'rgb(var(--st-active))', border: 'rgb(var(--st-active) / 0.35)', ring: 'rgb(var(--st-active) / 0.7)' },
+                { key: 'upcoming', label: 'Upcoming', color: 'rgb(var(--st-upcoming))', border: 'rgb(var(--st-upcoming) / 0.35)', ring: 'rgb(var(--st-upcoming) / 0.7)' },
+                { key: 'completed', label: 'Completed', color: 'rgb(var(--st-completed))', border: 'rgb(var(--st-completed) / 0.35)', ring: 'rgb(var(--st-completed) / 0.7)' },
             ],
+            draggingTaskId: null,
+            dragOverKey: null,
+            // Completed tasks are folded away under their heading until shown; remembered per browser.
+            showCompleted: (() => { try { return localStorage.getItem('showCompleted') === '1'; } catch (e) { return false; } })(),
             folderTree: [],
             nodesById: {},
             selectedFolderId: null,
@@ -930,6 +1111,8 @@
             subfolders: [],
             notes: [],
             selectedNote: null,
+            noteTool: { show: false, x: 0, y: 0, linkMode: false, url: '', code: false, link: false, red: false },
+            noteRange: null,
             isEditingDetail: false,
             isNewNote: false,
             detailForm: { title: '', content: '' },
@@ -946,7 +1129,40 @@
             errors: {},
 
             init() {
-                this.loadContent(null);
+                // Tasks is the first tab, so the app opens on it; Notes and Comms load when you switch to them.
+                this.loadTasks();
+            },
+
+            // In-page replacement for confirm(): resolves true if the person confirms.
+            askConfirm(message, okLabel = 'Delete') {
+                if (pendingConfirm) {
+                    pendingConfirm(false);
+                }
+
+                focusBeforeConfirm = document.activeElement;
+                this.confirmDialog = { show: true, message, okLabel };
+
+                return new Promise((resolve) => { pendingConfirm = resolve; });
+            },
+
+            answerConfirm(ok) {
+                if (!this.confirmDialog.show) {
+                    return;
+                }
+
+                this.confirmDialog.show = false;
+                const resolve = pendingConfirm;
+                pendingConfirm = null;
+
+                const previous = focusBeforeConfirm;
+                focusBeforeConfirm = null;
+                if (previous && previous.isConnected && typeof previous.focus === 'function') {
+                    previous.focus();
+                }
+
+                if (resolve) {
+                    resolve(ok);
+                }
             },
 
             escapeHtml(str) {
@@ -956,6 +1172,26 @@
                     .replace(/>/g, '&gt;')
                     .replace(/"/g, '&quot;')
                     .replace(/'/g, '&#39;');
+            },
+
+            // Copies text to the clipboard; resolves true only if it worked. Falls back to the old
+            // execCommand route where the clipboard API is missing or refused.
+            async copyText(text) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    return true;
+                } catch (e) {
+                    const field = document.createElement('textarea');
+                    field.value = text;
+                    field.setAttribute('readonly', '');
+                    field.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+                    document.body.appendChild(field);
+                    field.select();
+                    let ok = false;
+                    try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+                    document.body.removeChild(field);
+                    return ok;
+                }
             },
 
             toggleCategory() {
@@ -1028,6 +1264,44 @@
                     .sort((a, b) => order[a.status] - order[b.status]);
             },
 
+            // The visible tasks split into one group per status (Critical, Active, Upcoming, Completed).
+            // Every group is always returned; the page hides empty ones unless a task is being dragged,
+            // so the groups never get added or removed mid-drag (which would cancel it). The page reads
+            // counts with taskCount(key), not group.tasks.length: Alpine can evaluate x-show before it
+            // refreshes a reused group's data, which left a group hidden after a drop.
+            taskGroups() {
+                return this.taskStatuses
+                    .filter((s) => !this.taskStatusFilter || s.key === this.taskStatusFilter)
+                    .map((s) => ({ ...s, tasks: this.tasks.filter((t) => t.status === s.key) }));
+            },
+
+            startTaskDrag(event, task) {
+                event.dataTransfer.effectAllowed = 'move';
+                // A private type, so dropping onto a text field doesn't paste anything.
+                event.dataTransfer.setData('application/x-cove-task', String(task.id));
+                // Changing the page during dragstart can cancel the drag, so the empty groups appear a tick later.
+                setTimeout(() => { this.draggingTaskId = task.id; }, 0);
+            },
+
+            endTaskDrag() {
+                this.draggingTaskId = null;
+                this.dragOverKey = null;
+            },
+
+            dropTask(status) {
+                const task = this.tasks.find((t) => t.id === this.draggingTaskId);
+                this.endTaskDrag();
+
+                if (task) {
+                    this.updateTaskStatus(task, status);
+                }
+            },
+
+            toggleShowCompleted() {
+                this.showCompleted = !this.showCompleted;
+                try { localStorage.setItem('showCompleted', this.showCompleted ? '1' : '0'); } catch (e) {}
+            },
+
             taskCount(status) {
                 return this.tasks.filter((t) => t.status === status).length;
             },
@@ -1071,19 +1345,32 @@
                 this.tasks.push(task);
             },
 
+            // Moves the task straight away and puts it back if the server refuses.
             async updateTaskStatus(task, status) {
-                const response = await fetch(`/api/tasks/${task.id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({ status }),
-                });
-
-                if (!response.ok) {
+                if (task.status === status) {
                     return;
                 }
 
-                const updated = await response.json();
-                task.status = updated.status;
+                const previous = task.status;
+                task.status = status;
+
+                try {
+                    const response = await fetch(`/api/tasks/${task.id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify({ status }),
+                    });
+
+                    if (!response.ok) {
+                        task.status = previous;
+                        return;
+                    }
+
+                    const updated = await response.json();
+                    task.status = updated.status;
+                } catch (e) {
+                    task.status = previous;
+                }
             },
 
             toggleTaskCompleted(task) {
@@ -1091,7 +1378,7 @@
             },
 
             async deleteTask(task) {
-                if (!confirm(`Delete "${task.title}"?`)) {
+                if (!(await this.askConfirm(`Delete "${task.title}"?`))) {
                     return;
                 }
 
@@ -1101,7 +1388,7 @@
             },
 
             async clearTasks() {
-                if (!confirm(`Delete all ${this.activeCategory} tasks? This cannot be undone.`)) {
+                if (!(await this.askConfirm(`Delete all ${this.activeCategory === 'office' ? 'Work' : 'Personal'} tasks? This cannot be undone.`, 'Delete all'))) {
                     return;
                 }
 
@@ -1203,8 +1490,48 @@
                 this.isNewNote = false;
             },
 
+            // Opens a note straight into edit mode from the list.
+            async editNoteFromList(note) {
+                await this.viewNote(note);
+                this.startEditNote();
+            },
+
+            // "just now", "3 days ago", "2 months ago" for the note cards.
+            noteAgo(date) {
+                if (!date) {
+                    return '';
+                }
+
+                const minutes = (Date.now() - new Date(date).getTime()) / 60000;
+                const plural = (n, unit) => `${n} ${unit}${n === 1 ? '' : 's'} ago`;
+
+                if (minutes < 1) return 'just now';
+                if (minutes < 60) return plural(Math.round(minutes), 'minute');
+                if (minutes < 1440) return plural(Math.round(minutes / 60), 'hour');
+                if (minutes < 43200) return plural(Math.round(minutes / 1440), 'day');
+                if (minutes < 525600) return plural(Math.round(minutes / 43200), 'month');
+
+                return plural(Math.round(minutes / 525600), 'year');
+            },
+
+            // Name of the folder a note lives in, for the chip in the note header.
+            noteFolderName(note) {
+                const id = note.folder_id || null;
+
+                return id && this.nodesById[id] ? this.nodesById[id].name : 'All Notes';
+            },
+
+            // True once a note has been changed after it was created (a minute of slack, since both stamps are set on creation).
+            noteWasEdited(note) {
+                if (!note.created_at || !note.updated_at) {
+                    return false;
+                }
+
+                return new Date(note.updated_at).getTime() - new Date(note.created_at).getTime() > 60000;
+            },
+
             async deleteNote(note) {
-                if (!confirm(`Delete "${note.title || 'this note'}"? This cannot be undone.`)) {
+                if (!(await this.askConfirm(`Delete "${note.title || 'this note'}"? This cannot be undone.`))) {
                     return;
                 }
 
@@ -1270,6 +1597,334 @@
 
                     return html;
                 }).join('');
+            },
+
+            // ---- Rich notes ----
+            // Formatted notes are saved as HTML wrapped in <div class="nr"> (the server re-cleans it).
+            // Older notes are plain text; they are shown escaped and converted when edited.
+
+            noteIsRich(content) {
+                return typeof content === 'string' && content.startsWith('<div class="nr">');
+            },
+
+            // Inner HTML for the editor and the read view.
+            noteBodyHtml(content) {
+                content = content ?? '';
+                if (this.noteIsRich(content)) {
+                    return content.slice('<div class="nr">'.length, -'</div>'.length);
+                }
+                return this.escapeHtml(content).replace(/\r?\n/g, '<br>');
+            },
+
+            // Plain-text version for the note cards.
+            notePlain(content) {
+                content = content ?? '';
+                if (!this.noteIsRich(content)) return content;
+
+                const doc = new DOMParser().parseFromString(content, 'text/html');
+                doc.querySelectorAll('br').forEach((b) => b.replaceWith('\n'));
+                doc.querySelectorAll('li').forEach((li) => li.prepend('• '));
+                doc.querySelectorAll('div, p, li').forEach((el) => el.append('\n'));
+                return doc.body.textContent.replace(/\n{2,}/g, '\n').trim();
+            },
+
+            // Read-view HTML: every <code> gets a Copy button on its right, inside one rectangle.
+            // (Saved code has no attributes - the server strips them - so this match is exact.)
+            noteViewHtml(content) {
+                return this.noteBodyHtml(content).replace(
+                    /<code>([\s\S]*?)<\/code>/g,
+                    '<span class="code-block"><code>$1</code><button type="button" class="code-copy" title="Copy" aria-label="Copy">' + this.noteCopyIcon + '</button></span>'
+                );
+            },
+
+            noteCopyIcon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15V6a2 2 0 012-2h9"/></svg>',
+            noteCheckIcon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+
+            noteViewClick(e) {
+                const button = e.target.closest ? e.target.closest('.code-copy') : null;
+                if (!button) return;
+
+                const code = button.parentElement.querySelector('code');
+                if (!code) return;
+
+                this.copyText(code.textContent).then((ok) => {
+                    if (!ok) return;
+                    button.classList.add('is-copied');
+                    button.innerHTML = this.noteCheckIcon;
+                    setTimeout(() => {
+                        button.classList.remove('is-copied');
+                        button.innerHTML = this.noteCopyIcon;
+                    }, 1500);
+                });
+            },
+
+            noteInitEditor(ed) {
+                ed.innerHTML = this.noteBodyHtml(this.detailForm.content);
+                this.noteTool.show = false;
+                this.noteTool.linkMode = false;
+                this.noteRange = null;
+                this.noteMarkEmpty(ed);
+                if (this.isNewNote) ed.focus();
+            },
+
+            noteMarkEmpty(ed) {
+                const empty = ed.textContent.trim() === '' && !ed.querySelector('li');
+                ed.classList.toggle('is-empty', empty);
+                return empty;
+            },
+
+            // Copies the editor's HTML into the form (an empty editor saves as '' so "required" still applies).
+            noteSync() {
+                const ed = this.$refs.noteEditor;
+                if (!ed) return;
+                this.detailForm.content = this.noteMarkEmpty(ed)
+                    ? ''
+                    : '<div class="nr">' + ed.innerHTML.replace(/​/g, '') + '</div>';
+            },
+
+            noteClosest(node, selector) {
+                const ed = this.$refs.noteEditor;
+                const el = node && node.nodeType === 3 ? node.parentElement : node;
+                const found = el && el.closest ? el.closest(selector) : null;
+                return found && ed && ed.contains(found) ? found : null;
+            },
+
+            noteEditorInput(e) {
+                const ed = this.$refs.noteEditor;
+                if (e.inputType === 'insertText' && e.data === ' ') this.noteAutoList(ed);
+                this.noteSync();
+            },
+
+            // ". " / "- " / "* " at the start of a line makes a bullet list, "1. " a numbered list.
+            noteAutoList(ed) {
+                const sel = window.getSelection();
+                if (!sel.rangeCount || !sel.isCollapsed) return;
+
+                const node = sel.anchorNode;
+                if (!node || node.nodeType !== 3 || !ed.contains(node) || this.noteClosest(node, 'li')) return;
+
+                const prev = node.previousSibling;
+                if (prev && prev.nodeName !== 'BR') return;
+
+                const before = node.textContent.slice(0, sel.anchorOffset);
+                let command = null;
+                let start = 1;
+
+                if (/^[.\-*][  ]$/.test(before)) {
+                    command = 'insertUnorderedList';
+                } else if (/^\d{1,4}\.[  ]$/.test(before)) {
+                    command = 'insertOrderedList';
+                    start = parseInt(before, 10);
+                }
+                if (!command) return;
+
+                const range = document.createRange();
+                range.setStart(node, 0);
+                range.setEnd(node, before.length);
+                sel.removeAllRanges();
+                sel.addRange(range);
+                document.execCommand('delete');
+                document.execCommand(command);
+
+                if (command === 'insertOrderedList' && start !== 1) {
+                    const list = this.noteClosest(window.getSelection().anchorNode, 'ol');
+                    if (list) list.setAttribute('start', String(start));
+                }
+            },
+
+            noteEditorKeydown(e) {
+                // Tab nests a list item under the one above it; Shift+Tab moves it back out.
+                if (e.key !== 'Tab' || e.ctrlKey || e.metaKey || e.altKey || e.isComposing) return;
+
+                const sel = window.getSelection();
+                if (!sel.rangeCount || !this.noteClosest(sel.anchorNode, 'li')) return;
+
+                e.preventDefault();
+                document.execCommand(e.shiftKey ? 'outdent' : 'indent');
+                this.noteSync();
+            },
+
+            // Pasting always inserts plain text, so no foreign styles sneak in.
+            noteEditorPaste(e) {
+                e.preventDefault();
+                const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+                if (text) document.execCommand('insertText', false, text);
+            },
+
+            // ---- Floating toolbar (code / link / red) ----
+
+            noteSelectionOk() {
+                const ed = this.$refs.noteEditor;
+                const sel = window.getSelection();
+                return !!ed && sel.rangeCount > 0 && !sel.isCollapsed && ed.contains(sel.anchorNode) && ed.contains(sel.focusNode);
+            },
+
+            noteIsRed() {
+                try {
+                    return /239,\s*68,\s*68/.test(document.queryCommandValue('foreColor'));
+                } catch (err) {
+                    return false;
+                }
+            },
+
+            noteUpdateToolbar() {
+                const t = this.noteTool;
+                if (t.linkMode) return; // stay open while the link is typed
+
+                if (!this.noteSelectionOk()) {
+                    t.show = false;
+                    return;
+                }
+
+                const sel = window.getSelection();
+                const rect = sel.getRangeAt(0).getBoundingClientRect();
+                if (!rect.width && !rect.height) {
+                    t.show = false;
+                    return;
+                }
+
+                t.code = !!this.noteClosest(sel.anchorNode, 'code') && !!this.noteClosest(sel.focusNode, 'code');
+                t.link = !!this.noteClosest(sel.anchorNode, 'a');
+                t.red = this.noteIsRed();
+
+                const width = 300;
+                t.x = Math.max(8, Math.min(rect.left + rect.width / 2 - 60, window.innerWidth - width - 8));
+                t.y = rect.top - 46 < 8 ? rect.bottom + 8 : rect.top - 46;
+                t.show = true;
+            },
+
+            noteToggleCode() {
+                if (!this.noteSelectionOk()) return;
+                const sel = window.getSelection();
+                const existing = this.noteClosest(sel.anchorNode, 'code');
+
+                if (existing) {
+                    // Turn the whole code span back into plain text (done on the DOM so no
+                    // leftover monospace styling is carried over by the browser).
+                    const text = document.createTextNode(existing.textContent);
+                    existing.replaceWith(text);
+                    const range = document.createRange();
+                    range.selectNodeContents(text);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                } else {
+                    document.execCommand('insertHTML', false, '<code>' + this.escapeHtml(sel.toString()) + '</code>');
+
+                    // Put the caret after the new code span so typing carries on as normal text.
+                    // The browser snaps a caret at the edge back into <code>, so park it behind an
+                    // invisible spacer character (stripped again in noteSync).
+                    const code = this.noteClosest(window.getSelection().anchorNode, 'code')
+                        || this.noteClosest(window.getSelection().anchorNode?.previousSibling, 'code');
+                    if (code) {
+                        let next = code.nextSibling;
+                        if (next && next.nodeType === 3) {
+                            next.insertData(0, '​');
+                        } else {
+                            next = document.createTextNode('​');
+                            code.after(next);
+                        }
+                        const after = document.createRange();
+                        after.setStart(next, 1);
+                        after.collapse(true);
+                        window.getSelection().removeAllRanges();
+                        window.getSelection().addRange(after);
+                    }
+                }
+
+                this.noteSync();
+                this.noteUpdateToolbar();
+            },
+
+            noteToggleRed() {
+                if (!this.noteSelectionOk()) return;
+                const ed = this.$refs.noteEditor;
+                const wasRed = this.noteTool.red;
+
+                document.execCommand('styleWithCSS', false, true);
+
+                if (!wasRed) {
+                    document.execCommand('foreColor', false, '#ef4444');
+                } else {
+                    // Clearing: colour the selection with a marker value, then unwrap those spans.
+                    document.execCommand('foreColor', false, '#000001');
+
+                    const sel = window.getSelection();
+                    const saved = sel.rangeCount
+                        ? { sc: sel.anchorNode, so: sel.anchorOffset, ec: sel.focusNode, eo: sel.focusOffset }
+                        : null;
+
+                    ed.querySelectorAll('span').forEach((span) => {
+                        if (!/^rgb\(0,\s*0,\s*1\)$/.test(span.style.color)) return;
+                        while (span.firstChild) span.parentNode.insertBefore(span.firstChild, span);
+                        span.remove();
+                    });
+
+                    if (saved) {
+                        try {
+                            const range = document.createRange();
+                            range.setStart(saved.sc, saved.so);
+                            range.setEnd(saved.ec, saved.eo);
+                            sel.removeAllRanges();
+                            sel.addRange(range);
+                        } catch (err) { /* selection collapsed; fine */ }
+                    }
+                }
+
+                this.noteSync();
+                this.noteUpdateToolbar();
+            },
+
+            noteOpenLink() {
+                if (!this.noteSelectionOk()) return;
+                const sel = window.getSelection();
+                const link = this.noteClosest(sel.anchorNode, 'a');
+
+                this.noteRange = sel.getRangeAt(0).cloneRange();
+                this.noteTool.url = link ? link.getAttribute('href') : '';
+                this.noteTool.linkMode = true;
+                setTimeout(() => this.$refs.noteLinkInput && this.$refs.noteLinkInput.focus(), 0);
+            },
+
+            noteRestoreRange() {
+                const ed = this.$refs.noteEditor;
+                if (!ed || !this.noteRange) return false;
+                ed.focus();
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(this.noteRange);
+                return true;
+            },
+
+            noteCloseLink() {
+                this.noteTool.linkMode = false;
+                this.noteRestoreRange();
+                this.noteUpdateToolbar();
+            },
+
+            noteApplyLink() {
+                let url = (this.noteTool.url || '').trim();
+                if (!url) {
+                    this.noteCloseLink();
+                    return;
+                }
+                if (!/^https?:\/\//i.test(url)) url = 'https://' + url.replace(/^\/+/, '');
+
+                this.noteTool.linkMode = false;
+                if (this.noteRestoreRange()) {
+                    const existing = this.noteClosest(this.noteRange.commonAncestorContainer, 'a');
+                    if (existing) existing.setAttribute('href', url);
+                    else document.execCommand('createLink', false, url);
+                }
+
+                this.noteSync();
+                this.noteUpdateToolbar();
+            },
+
+            noteRemoveLink() {
+                this.noteTool.linkMode = false;
+                if (this.noteRestoreRange()) document.execCommand('unlink');
+                this.noteSync();
+                this.noteUpdateToolbar();
             },
 
             startNewNote() {
@@ -1436,7 +2091,7 @@
             },
 
             async deleteCommand(cmd) {
-                if (!confirm(`Delete "${cmd.title || 'this command set'}"? This cannot be undone.`)) {
+                if (!(await this.askConfirm(`Delete "${cmd.title || 'this command set'}"? This cannot be undone.`))) {
                     return;
                 }
 
@@ -1519,7 +2174,7 @@
             },
 
             async deleteFolder(folder) {
-                if (!confirm(`Delete "${folder.name}" and everything inside it? This cannot be undone.`)) {
+                if (!(await this.askConfirm(`Delete "${folder.name}" and everything inside it? This cannot be undone.`))) {
                     return;
                 }
 

@@ -20,3 +20,8 @@ yarn-error.log
 /.vscode
 /Screenshots
 start-server-hidden.vbs
+
+# Desktop app build output
+/build-stage
+/dist-desktop
+/release
